@@ -1,0 +1,209 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en" xmlns:https="http://www.w3.org/1999/xhtml" xmlns="http://www.w3.org/1999/html">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <head>
+        <link href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/themes/smoothness/jquery-ui.css"></link>
+
+        <link href='http://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css'>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css"
+              integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T"
+              crossorigin="anonymous">
+        <link rel='stylesheet'
+              href='https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css'>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
+              integrity="sha512-9usAa10IRO0HhonpyAIVpjrylPvoDwiPUiKdWk5t3PyolY1cOd4DSE0Ga+ri4AuTroPR5aQvXU9xC6qOPnzFeg=="
+              crossorigin="anonymous" referrerpolicy="no-referrer"/>
+
+        <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+
+
+    </head>
+<body class="container-fluid">
+{% csrf_token %}
+
+<!--TOP BAR-->
+<div class="top-bar d-flex flex-row  mt-3 ">
+    <div class=" mt-3 mr-1">
+
+        <div class="dropdown">
+            <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton"
+                    data-toggle="dropdown"
+                    aria-haspopup="true" aria-expanded="false">
+                <i class='fa fa-question-circle-o'></i>
+                Question
+            </button>
+            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                <a class="dropdown-item" href="#">
+                    <i class="fa fa-remove"></i>/<i class="fa fa-check"></i> true/false</a>
+                <a class="dropdown-item" href="#">Another action</a>
+                <a class="dropdown-item" href="#">Something else here</a>
+            </div>
+        </div>
+
+    </div>
+    <div class="mt-3 mr-1 "><a href="#" class="btn btn-secondary  " role="button" aria-disabled="true">
+        <i class='fa-solid fa-rectangle-list'></i> Question Group
+    </a></div>
+    <div class="mt-3 mr-1 ">
+        <a href="#" class="btn btn-secondary  " role="button" aria-disabled="true">
+            <i class='fa-solid fa-file-export'></i> Publish
+        </a></div>
+    <div class="mt-3 mr-1 ">
+        <a href="#" class="btn btn-secondary  " role="button" aria-disabled="true">
+            <i class="fa fa-cog" aria-hidden="true"></i> Publish
+        </a></div>
+</div>
+<div id="mmenu_screen" class="container-fluid" style="height: 100%">
+    <div class="row flex-fill modal-body flex-lg-nowrap">
+        <!--LEFT BAR-->
+        <div class="left-bar col-12 col-md-3 col-lg-3 bd-sidebar   border-secondary">
+
+            <div class="container">
+                <div class=" justify-content-center">
+
+                    <div class=" mt-5">
+                        <form class="form-inline justify-content-center" data-url="{% url 'formList' %}" id="createQuestionGroupForm" method="post">
+                            {% csrf_token %}
+
+                            {% for field in question_qroups_form %}
+
+                            {{field}}
+                            {% endfor %}
+
+                            <button type="button" id="createQuestionGroupButton" class="btn btn-outline-success mx-1">create</button>
+
+
+                        </form>
+                    </div>
+<!--                    <div class="col-12 mt-5" id="questionGroupList">-->
+<!--                        {% for question_group  in question_qroups %}-->
+<!--                        <div class="card mb-1" id="questionGroupCard" data-id="{{question_group.id}}">-->
+<!--                            <div class="card-body ">-->
+<!--                                {{ question_group.name }}-->
+
+<!--                            <button type="button" class="close float-right" data-id="{{question_group.id}}">-->
+<!--                                <span aria-hidden="true">&times;</span>-->
+<!--                            </button>-->
+<!--                        </div>-->
+<!--                            </div>-->
+<!--                        {% endfor %}-->
+
+
+<!--                    </div>-->
+
+
+                    <div class="menu-box">
+                    <ul class="menu-list sortable question-group-list mx-1 accordion" id="question-group-list-id">
+                        {% for question_group in question_qroups %}
+                        <li class="question-group " data-id="{{question_group.id}}" > <div class="d-flex tag-btn"><a class="nest" >{{question_group.name}}</a>
+                        <button type="button" class="close float-right" data-id="{{question_group.id}}">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+
+
+
+                            <ul class="question-list mr-2 inner" data-id="{{question_group.id}}">
+                                <li class="question"></li>
+                                {% for question in question_group.question_group_questions.all %}
+                                <li class="question" data-id="{{question.id}}">
+                                    <a >{{question.description}}</a>
+                                </li>
+                                {% endfor %}
+
+                            </ul>
+                        </li>
+                        {% endfor %}
+                    </ul>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+        <!--MIDDLE BAR-->
+        <div class="card middle-bar col-12 col-md-9 col-lg-6 py-md-3  bd-content background-border" role="main">
+            <div class="card-body bg-light full_height shadow   rounded" style="z-index: 100">
+
+
+             mikham
+                <div class="container">
+                        <form class=" " method="post" id="createQuestionForm" >
+
+
+                                    {% csrf_token %}
+
+                                        {{question_true_false_form}}
+
+                                    <button type="button" id="create_question_button" class="btn btn-primary my-2">create</button>
+
+                        </form>
+
+                </div>
+            </div>
+
+        </div>
+        <!--RIGHT BAR-->
+        <div class="right-bar d-none d-lg-block col-lg-3 bd-toc   border-secondary">
+            Question Group Options
+
+            <div class=" border-secondary border-bottom mt-2 mb-2"></div>
+
+            <div class="form-check">
+                <input class="form-check-input" type="radio" name="exampleRadios" id="exampleRadios1"
+                       value="option1" checked>
+                <label class="form-check-label" for="exampleRadios1">
+                    <small class="text-muted">include all question from the group</small>
+
+                </label>
+            </div>
+            <div class="form-check">
+                <input class="form-check-input" type="radio" name="exampleRadios" id="exampleRadios2"
+                       value="option2">
+                <label class="form-check-label" for="exampleRadios2">
+                    <small class="text-muted">select random questions</small>
+
+                    <select class="form-select form-select-sm" aria-label=".form-select-sm example">
+                        <option selected>1</option>
+                        <option value="1">One</option>
+                        <option value="2">Two</option>
+                        <option value="3">Three</option>
+                    </select>
+
+
+                </label>
+            </div>
+            <div class="form-check">
+                <input class="form-check-input" type="radio" name="exampleRadios" id="exampleRadios3"
+                       value="option3" disabled>
+                <label class="form-check-label" for="exampleRadios3">
+                    <small class="text-muted">Do not use question of group</small>
+
+
+                </label>
+            </div>
+        </div>
+
+    </div>
+
+</div>
+
+<!-- Load our React component. -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/jquery-ui.min.js"></script>
+    <script src="https://ilikenwf.github.io/jquery.mjs.nestedSortable.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.14.7/dist/umd/popper.min.js"
+        integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
+        crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/js/bootstrap.min.js"
+        integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
+        crossorigin="anonymous"></script>
+
+<script src="{% static 'js/designexam.js' %}"></script>
+
+</body>
+</html>
