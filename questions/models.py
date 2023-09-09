@@ -14,7 +14,7 @@ class QuestionGroup(models.Model):
 class Question(models.Model):
     description = models.TextField(blank=True)
     image = models.ImageField(blank=True, upload_to=image_path)
-    audio = models.FileField(upload_to=audio_path, blank=True)
+    audio = models.FileField(upload_to=audio_path, blank=True,)
     barm = models.PositiveIntegerField(default=0)
     queston_group = models.ForeignKey(
         QuestionGroup, blank=True, null=True, on_delete=models.CASCADE,
@@ -23,8 +23,5 @@ class Question(models.Model):
 
 class QuestionTrueFalse(Question):
     true_false = models.BooleanField(default=False)
-    # QUSETION_TRUE_FALSE_CHOICE = (('True', 'True'),
-    #                  ('False', 'False'))
-    # choice = models.ChoiceField(choices=QUSETION_TRUE_FALSE_CHOICE)
 
 

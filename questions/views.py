@@ -1,29 +1,18 @@
+from django.core.files.storage import FileSystemStorage
 from django.forms.models import model_to_dict
 from django.http import JsonResponse, HttpResponse
 from django.shortcuts import render, redirect
 from .forms import QustionTrueFalseForm, QuestionGroupForm
 from django.views.generic import CreateView, View
 from .models import QuestionTrueFalse, QuestionGroup,Question
+from rest_framework.views import APIView
+from django.views.decorators.csrf import csrf_exempt
+
 
 # Create your views here.
 
 def index(request):
-    return render(request, 'index.html')
-
-
-
-def update_ordering(model, order):
-    """ order is in the form [id,id,id,id] for example: [8,4,5,1,3] """
-    original_order = model.objects.value_list('id', flat=True).order_by('order')
-    order = filter( lambda x: x[1]!=x[2], zip(xrange(len(order)), order, original_order))
-    for i in order:
-        model.objects.filter(id=i[1]).update(order=i[0])
-
-def question_truefalse_post(request):
-    form = QustionTrueFalseForm(request.POST)
-    if form.is_valid():
-        form.save()
-        form = QustionTrueFalseForm()
+    return render(request, 'builder.html')
 
 
 class MyForm(View):
@@ -32,14 +21,9 @@ class MyForm(View):
         question_true_false_form = QustionTrueFalseForm()
 
         question_qroups = QuestionGroup.objects.prefetch_related('question_group_questions').all()
-        # for q in question_qroupss:
 
-            # print(q.question_group_questions)
 
-        form = QustionTrueFalseForm()
-        print('get')
-        return render(request, 'index.html', context={
-        #
+        return render(request, 'builder.html', context={
             'question_qroups': question_qroups,
             'question_true_false_form': question_true_false_form,
             'question_qroups_form': question_qroups_form})
@@ -48,25 +32,55 @@ class MyForm(View):
         print('salam123')
         question_qroups_form = QuestionGroupForm(request.POST)
         question_form = QustionTrueFalseForm(request.POST)
-        print('2')
-        print(question_form)
 
         if question_qroups_form.is_valid():
 
             new_question_group = question_qroups_form.save()
-            print(type(new_question_group))
             return JsonResponse({'new_question_group': model_to_dict(new_question_group)}, status=200)
 
         elif question_form.is_valid():
-            print('9090')
             new_question = question_form.save()
-            print('dsf')
 
             return JsonResponse({'new_question': model_to_dict(new_question)}, status=200)
 
         else:
+            return redirect('base.html')
+
+# TODO
+@csrf_exempt
+def createQuestion(request):
+    if request.method=='POST':
+        file=request.FILES.get("file")
+        print(request.POST.dict())
+        print('salam')
+        print(file)
+        fss=FileSystemStorage()
+        filename=fss.save('file',file)
+        url=fss.url(filename)
+
+        new_question = request.POST.dict()
+        question_form = QustionTrueFalseForm(request.POST)
+
+
+
+        if new_question:
+            print('shodddddddddddddddd')
+            # print(new_question['true_false'])
+            true_false_maker = trueFalseMaker(new_question['true_false'])
+
+            new = QuestionTrueFalse.objects.create(
+                description=new_question['description'],
+                image=new_question['image'],
+                audio=url,
+                true_false= true_false_maker
+            )
+            print('321')
+
+            return JsonResponse({'new_question': url}, status=200)
+
+        else:
             print('redirect')
-            return redirect('index.html')
+            return redirect('base.html')
 
 
 
@@ -77,6 +91,7 @@ class QuestionGroupDelete(View):
         qg.delete();
         return JsonResponse({'result':'ok'}, status=200)
 
+# TODO
 class QuestionSort(View):
     def post(self, request, id):
 
@@ -87,6 +102,10 @@ class QuestionSort(View):
         )
         return JsonResponse({'result':'ok'}, status=200)
 
-def dashboard(request):
-    form = QuestionTrueFalse
-    return render(request, "dwitter/dashboard.html", {"form": form})
+
+
+def trueFalseMaker(request):
+    if request:
+        return True
+    else:
+        return False

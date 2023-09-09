@@ -2,7 +2,9 @@ from django import forms
 from .models import QuestionTrueFalse, QuestionGroup
 
 class QustionTrueFalseForm(forms.ModelForm):
+
     class Meta:
+
         model=QuestionTrueFalse
         fields= ['description','audio', 'image','barm','true_false']
 

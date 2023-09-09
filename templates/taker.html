@@ -1,0 +1,46 @@
+{% extends 'base.html' %}
+
+{% block title %}
+
+
+Exam Session
+
+{% endblock title %}
+{% block body_content %}
+{% csrf_token %}
+
+<div id="mmenu_screen" class="container-fluid my-1 taker-color" style="height: 100%"
+     xmlns="http://www.w3.org/1999/html">
+    <div class="row flex-fill modal-body flex-lg-nowrap">
+        <!--LEFT BAR-->
+        <div class="left-bar col-12 col-md-3 col-lg-3 bd-sidebar   border-secondary">
+
+        </div>
+
+        <!--MIDDLE BAR-->
+        <div class="card middle-bar col-12 col-md-9 col-lg-6 py-md-3  shadow " role="main">
+            <div class="mt-3 mr-1 "><a href="#" class="btn btn-light btn-sm  btn-outline-secondary" role="button"
+                                       aria-disabled="true">
+                <i class='fa-solid fa-rectangle-list'></i> Question Group
+            </a></div>
+            <hr>
+            <div class="card-body  rounded" style="z-index: 100">
+
+                <div class="container">
+                    <form class=" " method="post" id="createQuestionForm">
+
+                        {% csrf_token %}
+
+                        {{question_true_false_form}}
+
+                        <button type="button" id="create_question_button" class="btn btn-primary my-2">create</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <!--RIGHT BAR-->
+    </div>
+
+</div>
+
+{% endblock body_content %}

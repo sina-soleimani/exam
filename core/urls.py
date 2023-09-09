@@ -21,9 +21,11 @@ from taker import urls as taker_url
 
 
 
+
 urlpatterns = [
     path('tasks/', include(urls)),
-    # path('taker/', include(taker_url)),
+    path('taker/', include(taker_url)),
+    path('create_question/', views.createQuestion, name='createQuestion'),
 
     path('admin/', admin.site.urls),
     path('form', views.MyForm.as_view(), name='formList'),

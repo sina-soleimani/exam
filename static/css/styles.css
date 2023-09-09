@@ -1,6 +1,14 @@
 body {
     font-family: 'Open Sans', sans-serif;
+}
+.builder-color{
     background: #F5F5F5;
+
+}
+
+.taker-color{
+    background: #DCDCDC;
+
 }
 
 #mmenu_screen > .row {
@@ -24,7 +32,6 @@ body {
     margin: 0 20px;
 }
 .menu-box {
-  /*border: 1px solid #a1a1a1;*/
   margin: 10px;
   padding: 10px;
 }
@@ -58,15 +65,12 @@ body {
 .menu-box ul.menu-list ul li a {
   color: black;
 }
-.menu-box li.menu-highlight {
-  /*background: #f5f5f5;*/
-}
+
 li a.nest {
  width: 100%;
  display: block;
  margin: 0;
  padding: 1%;
- /*background: #212121;*/
  color: white;
  cursor: pointer;
 }

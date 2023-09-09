@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'django_bootstrap_icons',
 
+    'rest_framework',
 
     'questions',
     'taker',
@@ -90,6 +91,11 @@ DATABASES = {
     }
 }
 
+REST_FRAMEWORK = {
+    'DEFAULT_PARSER_CLASSES': (
+        'rest_framework.parsers.JSONParser',
+    )
+}
 
 # Password validation
 # https://docs.djangoproject.com/en/1.11/ref/settings/#auth-password-validators
@@ -121,13 +127,18 @@ USE_I18N = True
 
 USE_L10N = True
 
+DATA_UPLOAD_MAX_MEMORY_SIZE = None
 
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.11/howto/static-files/
 
+
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 STATIC_ROOT = ''
 
 STATIC_URL = '/static/'
+
 
 STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
