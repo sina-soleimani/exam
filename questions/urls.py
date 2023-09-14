@@ -1,5 +1,5 @@
 # from django.conf.urls import path
-from .views import QuestionGroupDelete, QuestionSort, createQuestion
+from .views import QuestionGroupDelete, QuestionSort
 from django.conf import settings
 from django.conf.urls.static import static
 from django.urls import path, include

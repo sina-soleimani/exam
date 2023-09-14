@@ -8,12 +8,18 @@ $(document).ready(function () {
     createQuestionGroup();
     createQuestion();
     chooseImage();
+// $('#dropdown-menu-id').change(function(){
+//     console.log('dropdown-menu')
+// })
+
 
 });
 
 deleteAudio();
 deleteImage();
 questionAudioListener();
+showQuestions();
+deleteQuestionAndQuestionGroup();
 
 
 
@@ -27,17 +33,17 @@ function createQuestion(){
             var questionFalseId=$( "#questionFalseId" ).is( ":checked" );
 
             var trueFalseChoicer = questionTrueFalseChoicer(questionTrueId,questionFalseId)
-        console.log($("#audioQuestionBase").children('audio')[0].src)
+        // console.log($("#audioQuestionBase").children('audio')[0].src)
             // $( "#customRadio1" ).is( "checked", true );
             console.log(audioFile)
             console.log(document.getElementById("showImageId").src)
             var question_form= new FormData();
-            question_form.append("file" ,audioFile);
+            // question_form.append("file" ,audioFile);
 
             question_form.append("csrfmiddlewaretoken", csrfToken);
 
             question_form.append("description" ,$("#questionTextarea").val());
-            question_form.append("image" ,document.getElementById("showImageId").src);
+            // question_form.append("image" ,document.getElementById("showImageId").src);
             question_form.append("true_false" ,trueFalseChoicer);
             //
              for (var key of question_form.entries()) {
@@ -74,7 +80,7 @@ function createQuestion(){
                 var question_group_list_id=$("#question-group-list-id");
                 question_group_list_id.append('<li class="question-group" data-id="' +
                     response.new_question_group.id + '"><div class="d-flex tag-btn"><a class="nest">'+
-                    response.new_question_group.name +'</a><button type="button" class="close float-right" data-id="' +
+                    response.new_question_group.name +'</a><button type="button" class="close float-right" name="qu" data-id="' +
                     response.new_question_group.id +
                     '"><span aria-hidden="true">&times;</span></button></div><ul class="question-list mr-2 inner "  data-id="' +
                     response.new_question_group.id + '">' +'<li class="question"></li></ul></li>');
@@ -104,7 +110,7 @@ function createQuestionGroup(){
                 var question_group_list_id=$("#question-group-list-id");
                 question_group_list_id.append('<li class="question-group" data-id="' +
                     response.new_question_group.id + '"><div class="d-flex tag-btn"><a class="nest">'+
-                    response.new_question_group.name +'</a><button type="button" class="close float-right" data-id="' +
+                    response.new_question_group.name +'</a><button type="button" class="close float-right" name="question_group" data-id="' +
                     response.new_question_group.id +
                     '"><span aria-hidden="true">&times;</span></button></div><ul class="question-list mr-2 inner "  data-id="' +
                     response.new_question_group.id + '">' +'<li class="question"></li></ul></li>');
@@ -134,7 +140,7 @@ function sortQuestions(){
 
                 console.log(qg);
                 console.log();
-                // TODO
+
                 if (qg_list         // if it's a group...
                     && !q_list && !qg)// but moved within another group
                 {
@@ -180,19 +186,40 @@ function chooseImage(){
       });
 }
 
-// TODO
-$(document).on('click', 'button.close', function(event){
+function findAncestor (el, cls) {
+    while ((el = el.parentElement) && !el.classList.contains(cls))
+    return el;
+}
+$(document).on('click', 'button.remove-option', function (event) {
+    // console.log(findAncestor($(this),'q-option'))
+    // console.log(event.closest('.q-option'));
+    // console.log(event.target);
+    // console.log(event);
+    // const child = document.getElementById('child');
+
+// const parentWithClass = child.closest('.parent');
+    $(this).parent().parent().parent().parent().remove();
+    // $(this).parent('tr').innerHTML='';
+    event.stopPropagation();
+    // var dateId = $(this).data('id');
+})
+
+function deleteQuestionAndQuestionGroup() {
+    $(document).on('click', 'button.close', function (event) {
         console.log('close');
         event.stopPropagation();
         var dateId = $(this).data('id');
 
         console.log('close 2');
-        console.log(dateId);
+        var del_el_name = $(this).attr('name')
+        console.log($(this).attr('name'));
+        console.log($(this).attr('name').indexOf("question-group"));
         $.ajax({
             url: '/tasks/' + dateId + '/delete/',
             data: {
                 csrfmiddlewaretoken: csrfToken,
-                id: dateId
+                id: dateId,
+                name: $(this).attr('name')
             },
             type: 'post',
             dataType: 'json',
@@ -202,12 +229,19 @@ $(document).on('click', 'button.close', function(event){
                 //     $('#questionGroupCard[data-id="' + dateId + '"]').parent().remove();
                 //
                 // } else {
+                console.log(del_el_name)
+                if (del_el_name === 'question') {
+                    $('.question[data-id="' + dateId + '"]').remove();
+                } else if (del_el_name === 'question_group') {
                     $('.question-group[data-id="' + dateId + '"]').remove();
+
+                }
                 // }
             }
         })
-})
-// TODO I DONT REMMEBER
+    })
+}
+function showQuestions(){
 $(document).on('click', '.nest', function(){
     console.log($(this).parent().next())
 
@@ -223,6 +257,7 @@ $(document).on('click', '.nest', function(){
             $(this).parent().next().slideToggle(300);
         }
 });
+}
 
 
 function changeHandler({
@@ -298,7 +333,34 @@ function questionTrueFalseChoicer(questionTrueId,questionFalseId){
             else
                 return true
         }
-function deleteImage(){
+
+$(document).on('click', '#matchingDropDown', function (event) {
+    $('#multiQuestionTable').attr('hidden', 'hidden')
+    $('#TrueFalseQuestionTable').attr('hidden', 'hidden')
+    $('#multiLableId').attr('hidden', 'hidden')
+    $('#tfLableId').attr('hidden', 'hidden')
+    $('#MathingQuestionTable').removeAttr('hidden')
+
+})
+
+$(document).on('click', '#trueFalseDropDown', function (event) {
+    $('#TrueFalseQuestionTable').removeAttr('hidden')
+    $('#multiQuestionTable').attr('hidden', 'hidden')
+    $('#tfLableId').removeAttr('hidden')
+    $('#multiLableId').attr('hidden', 'hidden')
+    $('#MathingQuestionTable').attr('hidden', 'hidden')
+})
+
+$(document).on('click','#multipleDropDown', function (event){
+          $('#multiQuestionTable').removeAttr('hidden')
+          $('#TrueFalseQuestionTable').attr('hidden','hidden')
+    $('#tfLableId').attr('hidden','hidden')
+    $('#multiLableId').removeAttr('hidden')
+        $('#MathingQuestionTable').attr('hidden', 'hidden')
+
+
+        })
+        function deleteImage(){
     $(document).on('click', '#deleteImageId', function(event){
         $('#showImageId').removeAttr('src')
 
@@ -308,3 +370,22 @@ function deleteImage(){
 
 })
 }
+
+    $(document).on('click', '#addOptionId', function(event){
+        console.log('sala')
+        $('#tbodyMultiQ').append('<tr class="q-option"><th scope="row"><div class="custom-control custom-radio">' +
+            '<input type="radio" id="questionFalseId4" name="questionTrueFalse" class="custom-control-input">' +
+            '<label class="custom-control-label" for="questionFalseId4"></label></div></th><td><div class="input-group">' +
+            '<input type="text" class="form-control" aria-label="Text input with segmented dropdown button"> ' +
+            '<div class="input-group-append"> <button type="button" class="btn btn-outline-danger  remove-option">' +
+            '<i class=\'fa fa-trash\'></i></button> </div> </div> </td> </tr>')
+    })
+
+ $(document).on('click', '#addMatchingId', function(event){
+        console.log('sala')
+        $('#tbodyMatchingQ').append('<tr class="q-option"><td><div class="input-group"><input type="text" class="form-control" ' +
+            'aria-label="Text input with segmented dropdown button"></div></td><td><div class="input-group"><input type="text" ' +
+            'class="form-control" aria-label="Text input with segmented dropdown button">' +
+            '<div class="input-group-append"> <button type="button" class="btn btn-outline-danger  remove-option">' +
+            '<i class=\'fa fa-trash\'></i></button> </div> </div> </td> </tr>')
+    })

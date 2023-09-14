@@ -74,6 +74,14 @@ li a.nest {
  color: white;
  cursor: pointer;
 }
+li a.sub-nest{
+    width: 10%;
+ display: block;
+ margin: 0;
+ padding: 1%;
+ color: white;
+ cursor: pointer;
+}
 
 ul.accordion .inner {
  padding-left: 1em;

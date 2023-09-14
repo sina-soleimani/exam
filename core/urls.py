@@ -18,6 +18,7 @@ from django.contrib import admin
 from core import views as project_views
 from questions import views, urls
 from taker import urls as taker_url
+from exams.views import ExamList, ExamSubmit
 
 
 
@@ -25,8 +26,14 @@ from taker import urls as taker_url
 urlpatterns = [
     path('tasks/', include(urls)),
     path('taker/', include(taker_url)),
-    path('create_question/', views.createQuestion, name='createQuestion'),
+    path('create_question/', views.CreateQuestion.as_view(), name='createQuestion'),
+    path('exam_submit/', ExamSubmit.as_view(), name='createQuestion'),
+    #
+    path('exams', ExamList.as_view(), name='examlist'),
 
     path('admin/', admin.site.urls),
     path('form', views.MyForm.as_view(), name='formList'),
+    # Django admin route
+    path("", include("authentication.urls")),  # Auth routes - login / register
+    path("", include("home.urls")),
 ]

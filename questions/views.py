@@ -47,48 +47,71 @@ class MyForm(View):
             return redirect('base.html')
 
 # TODO
-@csrf_exempt
-def createQuestion(request):
-    if request.method=='POST':
+# @csrf_exempt
+class CreateQuestion(View):
+    def post(self,request):
         file=request.FILES.get("file")
-        print(request.POST.dict())
-        print('salam')
-        print(file)
-        fss=FileSystemStorage()
-        filename=fss.save('file',file)
-        url=fss.url(filename)
+        print(request.POST['description'])
+        print(request.POST['true_false'])
+        # QuestionTrueFalse.objects.create()
+
+        # print('salam')
+        # print(file)
+        # fss=FileSystemStorage()
+        # filename=fss.save('file',file)
+        # url=fss.url(filename)
+
+
+        # response = validate_request(request)
 
         new_question = request.POST.dict()
-        question_form = QustionTrueFalseForm(request.POST)
+        intial = {
+            'description': new_question['description'],
+            'true_false': trueFalseMaker(new_question['true_false']),
+        }
+        questiontf=QustionTrueFalseForm(description=new_question['description'])
+        print('befor if')
+        print(questiontf)
+        # question_form = QustionTrueFalseForm(request.POST)
 
 
 
-        if new_question:
+        if questiontf.is_valid():
             print('shodddddddddddddddd')
-            # print(new_question['true_false'])
             true_false_maker = trueFalseMaker(new_question['true_false'])
+            print(new_question['true_false'])
 
-            new = QuestionTrueFalse.objects.create(
-                description=new_question['description'],
-                image=new_question['image'],
-                audio=url,
-                true_false= true_false_maker
+            newQ = QuestionTrueFalse(
+                # description=new_question['description'],
+                # image=new_question['image'],
+                # audio=url,
+                # true_false= true_false_maker
             )
+            newQ.description=new_question['description']
+
+
             print('321')
 
-            return JsonResponse({'new_question': url}, status=200)
+            questiontf.save()
+            print('321')
+            return JsonResponse({'result':'ok'}, status=200)
 
-        else:
-            print('redirect')
-            return redirect('base.html')
+        # else:
+        #     print('redirect')
+        #     return redirect('base.html')
 
 
 
 class QuestionGroupDelete(View):
     def post(self, request, id):
-        print("back of delete")
-        qg= QuestionGroup.objects.get(id=id)
-        qg.delete();
+        print(request.POST['name'])
+        if request.POST['name']=='question':
+            q = Question.objects.get(id=id)
+            q.delete()
+        elif request.POST['name']=='question_group':
+            qg= QuestionGroup.objects.get(id=id)
+            qg.delete()
+
         return JsonResponse({'result':'ok'}, status=200)
 
 # TODO
