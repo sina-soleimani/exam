@@ -1,18 +1,18 @@
 version: '3'
 services:
   db:
+    container_name: postgres_db
     image: postgres
     volumes:
-      - ./data/db:/var/lib/postgresql/data
+      - postgres_data:/var/lib/postgresql/data   # Use a named volume here
     environment:
       - POSTGRES_DB=postgres
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=postgres
-    container_name: postgres_db
-
 
 
   web:
+    container_name: rest_api
     build:
       context: .
       dockerfile: Dockerfile
@@ -24,6 +24,9 @@ services:
     depends_on:
       - db
     links:
-        - redis
+      - redis
   redis:
     image: redis
+
+volumes:
+  postgres_data:
