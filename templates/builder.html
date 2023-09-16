@@ -1,4 +1,5 @@
 {% extends 'base.html' %}
+{% load static %}
 
 {% block title %}
 
@@ -51,7 +52,7 @@ Exam Creator
                 <div class=" justify-content-center">
 
                     <div class=" mt-5">
-                        <form class="form-inline justify-content-center" data-url="{% url 'formList' %}"
+                        <form class="form-inline justify-content-center"
                               id="createQuestionGroupForm" method="post">
                             {% csrf_token %}
 
@@ -73,7 +74,8 @@ Exam Creator
                             <li class="question-group " data-id="{{question_group.id}}">
                                 <div class="d-flex tag-btn">
                                     <a class="nest">{{question_group.name}}</a>
-                                    <button type="button" class="close float-right" name="question_group" data-id="{{question_group.id}}">
+                                    <button type="button" class="close float-right" name="question_group"
+                                            data-id="{{question_group.id}}">
                                         <span aria-hidden="true">&times;</span>
                                     </button>
                                 </div>
@@ -83,10 +85,11 @@ Exam Creator
                                     {% for question in question_group.question_group_questions.all %}
                                     <li class="question" data-id="{{question.id}}">
                                         <div class="d-flex tag-btn">
-                                        <a class="flex-grow-1 ">{{question.description}}</a>
-                                        <button type="button" class="close float-right" name="question" data-id="{{question.id}}">
-                                            <span aria-hidden="true">&times;</span>
-                                        </button>
+                                            <a class="flex-grow-1 ">{{question.description}}</a>
+                                            <button type="button" class="close float-right" name="question"
+                                                    data-id="{{question.id}}">
+                                                <span aria-hidden="true">&times;</span>
+                                            </button>
                                         </div>
 
                                     </li>
@@ -134,165 +137,177 @@ Exam Creator
                         </div>
                         <hr>
 
-                        <div id="MathingQuestionTable"  hidden="hidden">
-     <div class="row">
-                            <div class=" col-auto mr-auto font-weight-bold ">
-                                Choices:
+                        <div id="MathingQuestionTable" hidden="hidden">
+                            <div class="row">
+                                <div class=" col-auto mr-auto font-weight-bold ">
+                                    Choices:
+                                </div>
+                                <div class="col-auto">
+                                    <button type="button" class="btn btn-outline-success" id="addMatchingId">
+                                        <i class="fa fa-plus" aria-hidden="true"></i>
+                                    </button>
+                                </div>
                             </div>
-                            <div class="col-auto">
-                                <button type="button" class="btn btn-outline-success" id="addMatchingId">
-                                    <i class="fa fa-plus" aria-hidden="true"></i>
-                                </button>
-                            </div>
-                        </div>
 
-                        <table class="table table-striped table-bordered mt-1" >
-                            <thead>
-                            <tr>
-                                <th scope="col" >Item</th>
-                                <th scope="col">Match</th>
-                            </tr>
-                            </thead>
-                            <tbody id="tbodyMatchingQ">
-                            <tr class="q-option">
-                                <td >
+                            <table class="table table-striped table-bordered mt-1">
+                                <thead>
+                                <tr>
+                                    <th scope="col">Item</th>
+                                    <th scope="col">Match</th>
+                                </tr>
+                                </thead>
+                                <tbody id="tbodyMatchingQ">
+                                <tr class="q-option">
+                                    <td>
 
                                         <div class="input-group">
-  <input type="text" class="form-control" aria-label="Text input with segmented dropdown button">
-                                    </div>
+                                            <input type="text" class="form-control"
+                                                   aria-label="Text input with segmented dropdown button">
+                                        </div>
 
-                                </td>
-                                <td><div class="input-group">
-  <input type="text" class="form-control" aria-label="Text input with segmented dropdown button">
-  <div class="input-group-append">
-    <button type="button" class="btn btn-outline-danger remove-option"><i class='fa fa-trash'></i></button>
-  </div></div></td>
-                            </tr>
-                            <tr class="q-option">
-                                <td>
+                                    </td>
+                                    <td>
+                                        <div class="input-group">
+                                            <input type="text" class="form-control"
+                                                   aria-label="Text input with segmented dropdown button">
+                                            <div class="input-group-append">
+                                                <button type="button" class="btn btn-outline-danger remove-option"><i
+                                                        class='fa fa-trash'></i></button>
+                                            </div>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr class="q-option">
+                                    <td>
 
 
                                         <div class="input-group">
-  <input type="text" class="form-control" aria-label="Text input with segmented dropdown button">
-                                    </div>
-
-                                </td>
-                                <td>
-                                    <div class="input-group">
-                                        <input type="text" class="form-control"
-                                               aria-label="Text input with segmented dropdown button">
-                                        <div class="input-group-append">
-                                            <button type="button" class="btn btn-outline-danger  remove-option"><i
-                                                    class='fa fa-trash'></i></button>
-
+                                            <input type="text" class="form-control"
+                                                   aria-label="Text input with segmented dropdown button">
                                         </div>
-                                    </div>
-                                </td>
-                            </tr>
-                            </tbody>
-                        </table>
 
-</div>
+                                    </td>
+                                    <td>
+                                        <div class="input-group">
+                                            <input type="text" class="form-control"
+                                                   aria-label="Text input with segmented dropdown button">
+                                            <div class="input-group-append">
+                                                <button type="button" class="btn btn-outline-danger  remove-option"><i
+                                                        class='fa fa-trash'></i></button>
 
+                                            </div>
+                                        </div>
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
 
-                        <div  id="TrueFalseQuestionTable">
-                        <div class="font-weight-bold">Choices:</div>
-
-
-                        <table class="table table-striped table-bordered mt-1">
-                            <thead>
-                            <tr>
-                                <th scope="col" style="width: 16.66%">Correct</th>
-                                <th scope="col">Choice</th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            <tr>
-                                <th scope="row">
-                                    <div class="custom-control custom-radio">
-                                        <input type="radio" id="questionTrueId" name="questionTrueFalse"
-                                               class="custom-control-input">
-                                        <label class="custom-control-label" for="questionTrueId"></label>
-                                    </div>
-                                </th>
-                                <td>
-
-                                </td>
-                            </tr>
-                            <tr>
-                                <th scope="row">
-                                    <div class="custom-control custom-radio">
-                                        <input type="radio" id="questionFalseId" name="questionTrueFalse"
-                                               class="custom-control-input">
-                                        <label class="custom-control-label" for="questionFalseId"></label>
-                                    </div>
-
-                                </th>
-                                <th>False</th>
-                            </tr>
-                            </tbody>
-                        </table>
                         </div>
 
-<div id="multiQuestionTable"  hidden="hidden">
-     <div class="row">
-                            <div class=" col-auto mr-auto font-weight-bold ">
-                                Choices:
-                            </div>
-                            <div class="col-auto">
-                                <button type="button" class="btn btn-outline-success" id="addOptionId">
-                                    <i class="fa fa-plus" aria-hidden="true"></i>
-                                </button>
-                            </div>
+
+                        <div id="TrueFalseQuestionTable">
+                            <div class="font-weight-bold">Choices:</div>
+
+
+                            <table class="table table-striped table-bordered mt-1">
+                                <thead>
+                                <tr>
+                                    <th scope="col" style="width: 16.66%">Correct</th>
+                                    <th scope="col">Choice</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr>
+                                    <th scope="row">
+                                        <div class="custom-control custom-radio">
+                                            <input type="radio" id="questionTrueId" name="questionTrueFalse"
+                                                   class="custom-control-input">
+                                            <label class="custom-control-label" for="questionTrueId"></label>
+                                        </div>
+                                    </th>
+                                    <td>
+
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th scope="row">
+                                        <div class="custom-control custom-radio">
+                                            <input type="radio" id="questionFalseId" name="questionTrueFalse"
+                                                   class="custom-control-input">
+                                            <label class="custom-control-label" for="questionFalseId"></label>
+                                        </div>
+
+                                    </th>
+                                    <th>False</th>
+                                </tr>
+                                </tbody>
+                            </table>
                         </div>
 
-                        <table class="table table-striped table-bordered mt-1" >
-                            <thead>
-                            <tr>
-                                <th scope="col" style="width: 16.66%">Correct</th>
-                                <th scope="col">multipleEE</th>
-                            </tr>
-                            </thead>
-                            <tbody id="tbodyMultiQ">
-                            <tr class="q-option">
-                                <th scope="row">
-                                    <div class="custom-control custom-radio">
-                                        <input type="radio" id="questionTrueId2" name="questionTrueFalse"
-                                               class="custom-control-input">
-                                        <label class="custom-control-label" for="questionTrueId2"></label>
-                                    </div>
-                                </th>
-                                <td><div class="input-group">
-  <input type="text" class="form-control" aria-label="Text input with segmented dropdown button">
-  <div class="input-group-append">
-    <button type="button" class="btn btn-outline-danger remove-option"><i class='fa fa-trash'></i></button>
-  </div></div></td>
-                            </tr>
-                            <tr class="q-option">
-                                <th scope="row">
-                                    <div class="custom-control custom-radio">
-                                        <input type="radio" id="questionFalseId3" name="questionTrueFalse"
-                                               class="custom-control-input">
-                                        <label class="custom-control-label" for="questionFalseId3"></label>
-                                    </div>
+                        <div id="multiQuestionTable" hidden="hidden">
+                            <div class="row">
+                                <div class=" col-auto mr-auto font-weight-bold ">
+                                    Choices:
+                                </div>
+                                <div class="col-auto">
+                                    <button type="button" class="btn btn-outline-success" id="addOptionId">
+                                        <i class="fa fa-plus" aria-hidden="true"></i>
+                                    </button>
+                                </div>
+                            </div>
 
-                                </th>
-                                <td>
-                                    <div class="input-group">
-                                        <input type="text" class="form-control"
-                                               aria-label="Text input with segmented dropdown button">
-                                        <div class="input-group-append">
-                                            <button type="button" class="btn btn-outline-danger  remove-option"><i
-                                                    class='fa fa-trash'></i></button>
-
+                            <table class="table table-striped table-bordered mt-1">
+                                <thead>
+                                <tr>
+                                    <th scope="col" style="width: 16.66%">Correct</th>
+                                    <th scope="col">multipleEE</th>
+                                </tr>
+                                </thead>
+                                <tbody id="tbodyMultiQ">
+                                <tr class="q-option">
+                                    <th scope="row">
+                                        <div class="custom-control custom-radio">
+                                            <input type="radio" id="questionTrueId2" name="questionTrueFalse"
+                                                   class="custom-control-input">
+                                            <label class="custom-control-label" for="questionTrueId2"></label>
                                         </div>
-                                    </div>
-                                </td>
-                            </tr>
-                            </tbody>
-                        </table>
+                                    </th>
+                                    <td>
+                                        <div class="input-group">
+                                            <input type="text" class="form-control"
+                                                   aria-label="Text input with segmented dropdown button">
+                                            <div class="input-group-append">
+                                                <button type="button" class="btn btn-outline-danger remove-option"><i
+                                                        class='fa fa-trash'></i></button>
+                                            </div>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr class="q-option">
+                                    <th scope="row">
+                                        <div class="custom-control custom-radio">
+                                            <input type="radio" id="questionFalseId3" name="questionTrueFalse"
+                                                   class="custom-control-input">
+                                            <label class="custom-control-label" for="questionFalseId3"></label>
+                                        </div>
 
-</div>
+                                    </th>
+                                    <td>
+                                        <div class="input-group">
+                                            <input type="text" class="form-control"
+                                                   aria-label="Text input with segmented dropdown button">
+                                            <div class="input-group-append">
+                                                <button type="button" class="btn btn-outline-danger  remove-option"><i
+                                                        class='fa fa-trash'></i></button>
+
+                                            </div>
+                                        </div>
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+
+                        </div>
 
 
                         <hr>
@@ -351,10 +366,11 @@ Exam Creator
 
                 <img src="#" class="img-thumbnail" id="showImageId">
                 <div class="mt-3 mr-1 ">
-                    <button type="button"  id="deleteImageId" class="btn    btn-outline-danger " role="button"
-                       aria-disabled="true">
+                    <button type="button" id="deleteImageId" class="btn    btn-outline-danger " role="button"
+                            aria-disabled="true">
                         <i class='fa fa-trash'></i>
-                    </button></div>
+                    </button>
+                </div>
 
             </div>
 
@@ -366,7 +382,7 @@ Exam Creator
 
                     </div>
                     <div class="mt-3 mr-1 ">
-                        <button type="button"  id="deleteAudioId" class="btn  btn-outline-danger " >
+                        <button type="button" id="deleteAudioId" class="btn  btn-outline-danger ">
                             <i class='fa fa-trash'></i>
                         </button>
                     </div>
@@ -380,3 +396,10 @@ Exam Creator
 </div>
 
 {% endblock body_content %}
+
+
+{% block javascripts %}
+
+<script src="{% static 'js/builder.js' %}"></script>
+{% endblock javascripts %}
+
