@@ -32,7 +32,7 @@ urlpatterns = [
     path('exams', ExamList.as_view(), name='examlist'),
 
     path('admin/', admin.site.urls),
-    path('form', views.MyForm.as_view(), name='formList'),
+    path('<str:id>/form', views.MyForm.as_view(), name='formList'),
     # Django admin route
     path("", include("authentication.urls")),  # Auth routes - login / register
     path("", include("home.urls")),

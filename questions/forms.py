@@ -6,14 +6,14 @@ class QustionTrueFalseForm(forms.ModelForm):
     class Meta:
 
         model=QuestionTrueFalse
-        fields= ['description','audio', 'image','barm','true_false']
+        fields= ['description','audio', 'image','score','true_false']
 
         widgets = {
             'description': forms.Textarea(attrs={'class': 'form-control'}),
             'image': forms.FileInput(attrs={'class': 'form-control'}),
             'audio': forms.FileInput(attrs={'class':'form-control question-audio'}),
             # 'audio': forms.FileInput(attrs={'class':'form-control form-label'}),
-            'barm': forms.NumberInput(attrs={'class': 'form-control'}),
+            'score': forms.NumberInput(attrs={'class': 'form-control'}),
             'true_false': forms.CheckboxInput(attrs={'class': 'form-control'})
         }
 
@@ -24,5 +24,10 @@ class QuestionGroupForm(forms.ModelForm):
         fields=['name']
 
         widgets = {
-            'name': forms.TextInput(attrs={'class': 'form-control'})
+            'name': forms.TextInput(attrs={'class': 'form-control'}),
         }
+
+    # exam = forms.ModelMultipleChoiceField(
+    #     queryset=Exam.objects.all(),
+    #     widget=forms.CheckboxSelectMultiple
+    # )

@@ -3,6 +3,9 @@ from django.forms.models import model_to_dict
 from django.http import JsonResponse, HttpResponse
 from django.shortcuts import render, redirect
 from .forms import QustionTrueFalseForm, QuestionGroupForm
+from exams.models import Exam
+# from exams.forms import ExamForm
+from django.core import serializers
 from django.views.generic import CreateView, View
 from .models import QuestionTrueFalse, QuestionGroup,Question
 from rest_framework.views import APIView
@@ -16,11 +19,12 @@ def index(request):
 
 
 class MyForm(View):
-    def get(self,request):
+    def get(self,request, id):
+        print('gettttttttttttt')
         question_qroups_form = QuestionGroupForm()
         question_true_false_form = QustionTrueFalseForm()
 
-        question_qroups = QuestionGroup.objects.prefetch_related('question_group_questions').all()
+        question_qroups = QuestionGroup.objects.filter(exam__pk=id).prefetch_related('question_group_questions').all()
 
 
         return render(request, 'builder.html', context={
@@ -28,15 +32,34 @@ class MyForm(View):
             'question_true_false_form': question_true_false_form,
             'question_qroups_form': question_qroups_form})
 
-    def post(self,request):
-        print('salam123')
+    def post(self,request,id):
+        print('iddddddddddddddd')
+        print(request.POST)
         question_qroups_form = QuestionGroupForm(request.POST)
+        # question_qroups_form.exam.add(Exam.objects.get(pk=id))
         question_form = QustionTrueFalseForm(request.POST)
 
         if question_qroups_form.is_valid():
+            print('334')
 
             new_question_group = question_qroups_form.save()
-            return JsonResponse({'new_question_group': model_to_dict(new_question_group)}, status=200)
+            print(new_question_group)
+            print(new_question_group.id)
+            # exam=serializers.serialize('json', Exam.objects.get(pk=id))
+            # print(ExamForm())
+            print('sinasol')
+            qg=QuestionGroup.objects.get(pk=new_question_group.id)
+            #     # .update(exam=exam)
+            qg.exam=(Exam.objects.get(pk=id))
+            # qg('exam__pk'== id)
+            qg.save()
+            print(new_question_group)
+            # new_question_group.exam = serializers.serialize('json', new_question_group.exam.all())
+            # for item in qg['exam']:
+            #     item = model_to_dict(item)
+            # qg.exam=model_to_dict(qg.exam)
+            # print(QuestionGroup.objects.filter(pk=new_question_group.id).first())
+            return JsonResponse({'new_question_group': new_question_group.id, 'new_question_group_name': new_question_group.name }, status=200)
 
         elif question_form.is_valid():
             new_question = question_form.save()

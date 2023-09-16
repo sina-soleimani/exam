@@ -5,15 +5,17 @@ from rest_framework.parsers import MultiPartParser
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from django.views.generic import CreateView, View
-from questions.forms import QustionTrueFalseForm
+from questions.models import QuestionTrueFalse
+from django.db.models import Sum
 
 
 class examSession(View):
     def get(self, request):
-        question_true_false_form = QustionTrueFalseForm()
+        questions=QuestionTrueFalse.objects.all()
+        sum_bar= questions.aggregate(Sum('score'))
 
         return render(request, 'taker.html', context={
-            'question_true_false_form': question_true_false_form})
+            'questions': questions, 'sum_bar': sum_bar})
 
 # TODO
 # class d(APIView):
