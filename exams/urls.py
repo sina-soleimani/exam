@@ -16,12 +16,12 @@ Including another URLconf
 from django.urls import path, include
 from django.contrib import admin
 from core import views as project_views
-from .views import ExamList
+from .views import ExamList, ExamSubmit
 from taker import urls as taker_url
 
-
-
+app_name = 'exams'
 
 urlpatterns = [
-    path('list/', ExamList.as_view(), name='formList'),
+    path('list', ExamList.as_view(), name='examlist'),
+    path('exam_submit/', ExamSubmit.as_view(), name='createQuestion'),
 ]
