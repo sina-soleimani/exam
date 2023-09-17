@@ -1,13 +1,12 @@
 {% extends "layouts/base.html" %}
+{% load static %}
 
 {% block title %} Transactions {% endblock %}
 
-<!-- Specific Page CSS goes HERE  -->
+<!-- Specific Page CSS goes HERE -->
 {% block stylesheets %}{% endblock stylesheets %}
 
 {% block content %}
-
-
 <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center py-4">
     <div class="d-block mb-4 mb-md-0">
         <nav aria-label="breadcrumb" class="d-none d-md-inline-block">
@@ -15,90 +14,52 @@
         <h2 class="h4">All Exams</h2>
     </div>
     <div class="btn-toolbar mb-2 mb-md-0">
-        <button type="button" class="btn btn-outline-success" id="addOptionId" data-bs-toggle="modal"
-                data-bs-target="#modal-form">
+        <button type="button" class="btn btn-outline-success" data-bs-toggle="modal" data-bs-target="#modal-form">
             <i class="fa fa-plus" aria-hidden="true"></i> New Exam
         </button>
+    </div>
+</div>
 
-        <!-- Button Modal -->
-        <!-- Modal Content -->
-        <div class="modal fade" id="modal-form" tabindex="-1" role="dialog" aria-labelledby="modal-form"
-             aria-hidden="true">
-            <div class="modal-dialog modal-dialog-centered" role="document">
-                <div class="modal-content">
-                    <div class="modal-body p-0">
-                        <div class="card p-3 p-lg-4">
-                            <button type="button" class="btn-close ms-auto" data-bs-dismiss="modal"
-                                    aria-label="Close"></button>
-                            <div class="text-center text-md-center mb-4 mt-md-0">
-                                <h1 class="mb-0 h4">Create New Exam</h1>
-                            </div>
-                            <form id="examForm" class="mt-4">
-                                {% csrf_token %}
-                                <!-- Form -->
-                                <div class="form-group">
-                                    <div class="mb-3">
-                                        <label for="examLabel">label</label>
-                                        <input type="text" class="form-control " id="examLabel" required>
-                                        <div class="valid-feedback">
-                                            Looks good!
-                                        </div>
-                                    </div>
-                                    <div class="mb-3">
-                                        <label for="datePicker">date of exam</label>
-                                        <div class="input-group">
-                                  <span class="input-group-text">
-                                      <svg class="icon icon-xs text-gray-600" fill="currentColor" viewBox="0 0 20 20"
-                                           xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd"
-                                                                                    d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z"
-                                                                                    clip-rule="evenodd"></path></svg>
-                                  </span>
-                                            <input data-datepicker="" class="form-control datePicker"
-                                                   placeholder="dd/mm/yyyy" id="datePicker" type="text">
-                                        </div>
-                                    </div>
-                                    <div class="mb-3">
-                                        <!--            <div class="row">-->
-                                        <!--                <div class="form-group ">-->
-                                        <label for="startExam">Start</label>
-                                        <div class="input-group date">
-
-                                            <span class="input-group-text"><i class="fa fa-clock-o"
-                                                                              aria-hidden="true"></i></span>
-                                            <input type="text" id="timePicker" class="form-control timePicker">
-                                        </div>
-                                        <!--            </div>-->
-                                        <!--            </div>-->
-                                    </div>
-
-                                    <div class="mb-3">
-                                        <!--            <div class="row">-->
-                                        <!--                <div class="form-group ">-->
-                                        <label for="endExam">End</label>
-                                        <div class="input-group date">
-
-                                            <span class="input-group-text"><i class="fa fa-clock-o"
-                                                                              aria-hidden="true"></i></span>
-                                            <input type="text" id="endExam" class="form-control timePicker">
-                                        </div>
-                                        <!--            </div>-->
-                                        <!--            </div>-->
-                                    </div>
-                                    <!-- End of Form -->
-
-                                    <!-- Form -->
-
-                                    <!-- End of Form -->
-
-                                </div>
-                                <div class="d-grid">
-                                    <button type="submit" id="submitExam" class="btn  btn-outline-success">Submit
-                                    </button>
-                                </div>
-                            </form>
-
-                        </div>
+<div class="modal fade" id="modal-form" tabindex="-1" role="dialog" aria-labelledby="modal-form" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-body p-0">
+                <div class="card p-3 p-lg-4">
+                    <button type="button" class="btn-close ms-auto" data-bs-dismiss="modal" aria-label="Close"></button>
+                    <div class="text-center text-md-center mb-4 mt-md-0">
+                        <h2 class="mb-0 h4">Create New Exam</h2>
                     </div>
+                    <form id="examForm" class="mt-4">
+                        {% csrf_token %}
+                        <div class="form-group">
+                            <div class="mb-3">
+                                <label for="label">Label</label>
+                                <input type="text" class="form-control" id="label" required>
+                                <div class="valid-feedback">Looks good!</div>
+                            </div>
+                            <div class="mb-3">
+                                <label for="datePicker">Date of Exam</label>
+                                <div class="input-group">
+                                    <span class="input-group-text">
+                                        <svg class="icon icon-xs text-gray-600" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                                            <path fill-rule="evenodd" d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z" clip-rule="evenodd"></path>
+                                        </svg>
+                                    </span>
+                                    <input data-datepicker="" class="form-control datePicker" placeholder="dd/mm/yyyy" id="datePicker" type="text" required>
+                                </div>
+                            </div>
+                            <div class="mb-3">
+                                <label for="durationInput">End</label>
+                                <div class="input-group date">
+                                    <span class="input-group-text"><i class="fa fa-clock-o" aria-hidden="true"></i></span>
+                                    <input type="text" id="durationInput" class="form-control timePicker" required>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="d-grid">
+                            <button type="submit" id="submitButton" class="btn btn-outline-success">Submit</button>
+                        </div>
+                    </form>
                 </div>
             </div>
         </div>
@@ -106,138 +67,34 @@
 </div>
 
 <div class="table-settings mb-4">
-
-    <table id="example" class="table table-striped" style="width:100%">
+    <table id="examTable" class="table table-striped" style="width:100%">
         <thead>
-        <tr>
-            <th>Label</th>
-            <th>Date</th>
-            <th>Start</th>
-            <th>End</th>
-            <th>Duration</th>
-            <th>Action</th>
-        </tr>
+            <tr>
+                <th>Label</th>
+                <th>Date</th>
+                <th>Duration</th>
+                <th>Design Page</th>
+            </tr>
         </thead>
-
-
         <tbody>
-        {% for field in exams %}
-        <tr>
-            <td>{{ field.label }}</td>
-            <td>{{field.deadline}}</td>
-            <td>{{field.start}}</td>
-            <td>{{field.end}}</td>
-            <td>
-                <!--                <button type="button" class="btn btn-outline-primary"  id="designExam">-->
-                <!--            <i class="fa fa-link" aria-hidden="true"></i> Design Exam-->
-                <!--        </button>-->
-                <a href="/{{field.id}}/form" class="nav-link">
-                  <span class="sidebar-icon">
-<!--                    <svg class="icon icon-xs me-2" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M4 4a2 2 0 00-2 2v1h16V6a2 2 0 00-2-2H4z"></path><path fill-rule="evenodd" d="M18 9H2v5a2 2 0 002 2h12a2 2 0 002-2V9zM4 13a1 1 0 011-1h1a1 1 0 110 2H5a1 1 0 01-1-1zm5-1a1 1 0 100 2h1a1 1 0 100-2H9z" clip-rule="evenodd"></path></svg>-->
-
-                  <i class='fas fa-book-open'></i>
-                  </span>
-                    <span class="ml-1 sidebar-text">Exams</span>
-                </a>
-            </td>
-            <td>$320,800</td>
-        </tr>
-        {% endfor %}
-
+            {% for field in exams %}
+            <tr>
+                <td>{{ field.label }}</td>
+                <td>{{ field.deadline }}</td>
+                <td>{{ field.duration }}</td>
+                <td>
+                    <button type="button" class="btn btn-outline-success showqbtn" onclick="window.location.href='/builder/{{ field.id }}/form'">
+                        <i class="fa fa-eye" aria-hidden="true"></i>
+                    </button>
+                </td>
+            </tr>
+            {% endfor %}
         </tbody>
     </table>
 </div>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"
-        integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm"
-        crossorigin="anonymous"></script>
-<script>
-    new DataTable('#example');
-</script>
 {% endblock content %}
 
-<!-- Specific Page JS goes HERE  -->
+<!-- Specific Page JS goes HERE -->
 {% block javascripts %}
-
-<script>
-    $(document).ready(function () {
-            $('#example').DataTable();
-        }
-    )
-    const csrfToken = $("input[name=csrfmiddlewaretoken]").val();
-    var firstOpen = true;
-    var time;
-    var date;
-
-    $(document).on('click', '#designExam', function (event) {
-        console.log('234')
-        $.ajax({
-            url: '/form/',
-            type: "post",
-            data: {
-                'csrfmiddlewaretoken': csrfToken,
-            },
-            success(res) {
-                console.log('like')
-            }
-        });
-
-    })
-    $('#endExam').datetimepicker({
-
-        useCurrent: false,
-        format: "hh:mm:ss"
-    }).on('dp.show', function () {
-        if (firstOpen) {
-            console.log('show')
-            time = moment().startOf('day');
-            firstOpen = false;
-        } else {
-            time = "01:00 PM"
-        }
-        $(this).data('DateTimePicker').date(time);
-    });
-
-    $('#timePicker').datetimepicker({
-
-        useCurrent: false,
-        format: "hh:mm:ss"
-    }).on('dp.show', function () {
-        if (firstOpen) {
-            console.log('show')
-            time = moment().startOf('day');
-            firstOpen = false;
-        } else {
-            time = "01:00 PM"
-        }
-        $(this).data('DateTimePicker').date(time);
-    });
-
-    $('#submitExam').click(function (event) {
-        var str = $('#datePicker').val().replaceAll('/', '-')
-        var endstr = str.substring(str.length - 5, str.length);
-        var startstr = str.substring(0, str.length - 5);
-        str = endstr.substring(1, endstr.length).concat('-').concat(startstr)
-        console.log(str)
-        console.log(Date.parse(str + $('#timePicker').val()))
-
-        var formData = {
-            'csrfmiddlewaretoken': csrfToken,
-            'examLabel': $('#examLabel').val(),
-            'examDate': str,
-            'timePicker': $('#timePicker').val(),
-            'endExam': $('#endExam').val(),
-        }
-
-        // event.preventDefault(); //so that we stop normal form submit.
-        $.ajax({
-                url: '/exam_submit/',
-                type: 'post',
-                dataType: 'json',
-                data: formData,
-                success: function (response) {
-                    console.log(response)
-                }
-            }
-        )
-    });
-</script>    {% endblock javascripts %}
+<script src="{% static 'js/exam.js' %}"></script>
+{% endblock javascripts %}

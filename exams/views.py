@@ -1,37 +1,20 @@
 from django.shortcuts import render
-from django.views.generic import CreateView, View
+from django.views.generic import CreateView, ListView
 from .models import Exam
 from .forms import ExamForm
 
 
 # Create your views here.
 
-class ExamList(View):
+class ExamListView(ListView):
+    model = Exam
     template_name = 'home/exams.html'
-
-    def get(self, request):
-        exams = Exam.objects.all()
-        return render(request, self.template_name, context={
-            'exams': exams})
+    context_object_name = 'exams'
 
 
-class ExamSubmit(View):
+
+class ExamCreateView(CreateView):
+    model = Exam
+    form_class = ExamForm
     template_name = 'home/exams.html'
-
-    def post(self, request):
-        # Create an instance of the ExamForm with POST data
-        form = ExamForm(request.POST)
-
-        if form.is_valid():
-            form.save()
-
-        exams = Exam.objects.all()
-
-        return render(request, self.template_name, context={'exams': exams})
-
-    def get(self, request):
-        form = ExamForm()
-
-        exams = Exam.objects.all()
-
-        return render(request, self.template_name, context={'exams': exams, 'form': form})
+    success_url = '/success/'

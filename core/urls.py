@@ -18,7 +18,6 @@ from django.contrib import admin
 from questions import urls as q_urls
 from taker import urls as taker_url
 from exams import urls as exam_urls
-from exams.views import ExamList, ExamSubmit
 
 urlpatterns = [
     path('builder/', include(q_urls)),
