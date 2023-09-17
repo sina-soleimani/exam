@@ -1,38 +1,37 @@
 from django.shortcuts import render
 from django.views.generic import CreateView, View
 from .models import Exam
+from .forms import ExamForm
 
 
 # Create your views here.
 
 class ExamList(View):
+    template_name = 'home/exams.html'
 
-    def get(self,request):
-        print('321')
+    def get(self, request):
         exams = Exam.objects.all()
-        print('123')
-
-        return render(request, 'home/exams.html', context={
+        return render(request, self.template_name, context={
             'exams': exams})
+
 
 class ExamSubmit(View):
+    template_name = 'home/exams.html'
+
     def post(self, request):
-        print('aliiireza')
-        posted_exam=request.POST
-        print(request.POST)
-        exam=Exam()
-        print(request.POST.get('examDate'))
-        # print(posted_exam['examDate'])
-        exam.label=posted_exam['examLabel']
-        exam.deadline=posted_exam.get('examDate',None)
-        exam.start=posted_exam.get('timePicker',None)
-        exam.end=posted_exam.get('endExam',None)
-        exam.save()
+        # Create an instance of the ExamForm with POST data
+        form = ExamForm(request.POST)
+
+        if form.is_valid():
+            form.save()
 
         exams = Exam.objects.all()
-        print('123')
 
-        return render(request, 'home/exams.html', context={
-            'exams': exams})
+        return render(request, self.template_name, context={'exams': exams})
 
+    def get(self, request):
+        form = ExamForm()
 
+        exams = Exam.objects.all()
+
+        return render(request, self.template_name, context={'exams': exams, 'form': form})
