@@ -11,7 +11,6 @@ class BaseModel(models.Model):
         abstract = True
 
 
-# from rest
 # Create your models here.
 # todo: rename question group
 class QuestionGroup(BaseModel):

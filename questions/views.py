@@ -1,15 +1,17 @@
-from django.core.files.storage import FileSystemStorage
-from django.forms.models import model_to_dict
-from django.http import JsonResponse, HttpResponse
+from django.http import JsonResponse
 from django.shortcuts import render, redirect
-from .forms import QustionTrueFalseForm, QuestionGroupForm
+from .forms import QustionTrueFalseForm, QuestionGroupForm, TrueFalseModelForm
 from exams.models import Exam
-# from exams.forms import ExamForm
-from django.core import serializers
 from django.views.generic import CreateView, View
-from .models import QuestionTrueFalse, QuestionGroup,Question
-from rest_framework.views import APIView
+from .models import QuestionTrueFalse, QuestionGroup, Question, Answer
+
+import json
+from django.shortcuts import get_object_or_404
+
+# TODO check wich import is need
 from django.views.decorators.csrf import csrf_exempt
+from django.views.generic.edit import FormView
+from django.urls import reverse_lazy
 
 
 # Create your views here.
@@ -19,61 +21,41 @@ def index(request):
 
 
 class MyForm(View):
-    def get(self,request, id):
-        print('gettttttttttttt')
-        question_qroups_form = QuestionGroupForm()
-        question_true_false_form = QustionTrueFalseForm()
+    template_name = 'builder.html'
 
+    def get(self, request, id):
+        print('GET request')
+        question_qroups_form = QuestionGroupForm()
         question_qroups = QuestionGroup.objects.filter(exam__pk=id).prefetch_related('question_group_questions').all()
 
-
-        return render(request, 'builder.html', context={
+        return render(request, self.template_name, context={
             'question_qroups': question_qroups,
-            'question_true_false_form': question_true_false_form,
-            'question_qroups_form': question_qroups_form})
+            'question_qroups_form': question_qroups_form
+        })
 
-    def post(self,request,id):
-        print('iddddddddddddddd')
-        print(request.POST)
+    def post(self, request, id):
         question_qroups_form = QuestionGroupForm(request.POST)
-        # question_qroups_form.exam.add(Exam.objects.get(pk=id))
-        question_form = QustionTrueFalseForm(request.POST)
 
         if question_qroups_form.is_valid():
-            print('334')
+            print('POST request')
 
-            new_question_group = question_qroups_form.save()
-            print(new_question_group)
-            print(new_question_group.id)
-            # exam=serializers.serialize('json', Exam.objects.get(pk=id))
-            # print(ExamForm())
-            print('sinasol')
-            qg=QuestionGroup.objects.get(pk=new_question_group.id)
-            #     # .update(exam=exam)
-            qg.exam=(Exam.objects.get(pk=id))
-            # qg('exam__pk'== id)
-            qg.save()
-            print(new_question_group)
-            # new_question_group.exam = serializers.serialize('json', new_question_group.exam.all())
-            # for item in qg['exam']:
-            #     item = model_to_dict(item)
-            # qg.exam=model_to_dict(qg.exam)
-            # print(QuestionGroup.objects.filter(pk=new_question_group.id).first())
-            return JsonResponse({'new_question_group': new_question_group.id, 'new_question_group_name': new_question_group.name }, status=200)
+            new_question_group = question_qroups_form.save(commit=False)
+            new_question_group.exam = Exam.objects.get(pk=id)
+            new_question_group.save()
 
-        elif question_form.is_valid():
-            new_question = question_form.save()
+            return JsonResponse({
+                'new_question_group': new_question_group.id,
+                'new_question_group_name': new_question_group.name
+            }, status=200)
 
-            return JsonResponse({'new_question': model_to_dict(new_question)}, status=200)
+        return redirect('base.html')
 
-        else:
-            return redirect('base.html')
 
 # TODO
 # @csrf_exempt
 class CreateQuestion(View):
-    def post(self,request):
-        file=request.FILES.get("file")
+    def post(self, request):
+        file = request.FILES.get("file")
         print(request.POST['description'])
         print(request.POST['true_false'])
         # QuestionTrueFalse.objects.create()
@@ -84,7 +66,6 @@ class CreateQuestion(View):
         # filename=fss.save('file',file)
         # url=fss.url(filename)
 
-
         # response = validate_request(request)
 
         new_question = request.POST.dict()
@@ -92,12 +73,10 @@ class CreateQuestion(View):
             'description': new_question['description'],
             'true_false': trueFalseMaker(new_question['true_false']),
         }
-        questiontf=QustionTrueFalseForm(description=new_question['description'])
+        questiontf = QustionTrueFalseForm(description=new_question['description'])
         print('befor if')
         print(questiontf)
         # question_form = QustionTrueFalseForm(request.POST)
-
-
 
         if questiontf.is_valid():
             print('shodddddddddddddddd')
@@ -110,48 +89,87 @@ class CreateQuestion(View):
                 # audio=url,
                 # true_false= true_false_maker
             )
-            newQ.description=new_question['description']
-
+            newQ.description = new_question['description']
 
             print('321')
 
             questiontf.save()
             print('321')
-            return JsonResponse({'result':'ok'}, status=200)
+            return JsonResponse({'result': 'ok'}, status=200)
 
         # else:
         #     print('redirect')
         #     return redirect('base.html')
 
 
-
 class QuestionGroupDelete(View):
-    def post(self, request, id):
-        print(request.POST['name'])
-        if request.POST['name']=='question':
-            q = Question.objects.get(id=id)
-            q.delete()
-        elif request.POST['name']=='question_group':
-            qg= QuestionGroup.objects.get(id=id)
-            qg.delete()
+    def delete(self, request, id):
+        try:
+            data = json.loads(request.body.decode('utf-8'))
+            name = data.get('name')
 
-        return JsonResponse({'result':'ok'}, status=200)
+            if name == 'question':
+                question = get_object_or_404(Question, id=id)
+                question.delete()
+            elif name == 'question_group':
+                question_group = get_object_or_404(QuestionGroup, id=id)
+                question_group.delete()
+            else:
+                return JsonResponse({'error': 'Invalid name'}, status=400)
+
+            return JsonResponse({'result': 'ok'}, status=200)
+        except json.JSONDecodeError:
+            return JsonResponse({'error': 'Invalid JSON data'}, status=400)
+
 
 # TODO
 class QuestionSort(View):
     def post(self, request, id):
-
         print(request.POST["question_id"])
         qg = QuestionGroup.objects.get(id=request.POST["question_group_id"])
         Question.objects.filter(id=request.POST["question_id"]).update(
             queston_group=qg
         )
-        return JsonResponse({'result':'ok'}, status=200)
+        return JsonResponse({'result': 'ok'}, status=200)
 
 
-
+# TODO check this method is need
 def trueFalseMaker(request):
     if request:
         return True
     else:
         return False
+
+
+# TODO
+class CreateUpdateTrueFalseQuestionView(FormView):
+    template_name = 'builder.html'
+    form_class = TrueFalseModelForm
+    success_url = reverse_lazy('success_page')
+
+    # @csrf_exempt
+    def post(self, request, *args, **kwargs):
+        print(request.POST)
+        form = self.get_form()
+        if form.is_valid():
+            return self.form_valid(form)
+        else:
+            print(form.errors)
+            return self.form_invalid(form)
+
+    def form_valid(self, form):
+        print('form valid')
+        # Create the question with the question_type automatically set to 'TRUE_FALSE'
+        question = form.save()
+        print(question)
+        # question = form.save(commit=False)
+        # question.question_type = Question.QuestionType.TRUE_FALSE
+        # question.save()
+
+        # Create the answer
+        Answer.objects.create(
+            question=question,
+            is_true=form.cleaned_data['is_true'],
+        )
+
+        return super().form_valid(form)
