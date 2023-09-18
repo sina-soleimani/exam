@@ -1,23 +1,20 @@
-const csrfToken = $("input[name=csrfmiddlewaretoken]").val();
-var audio = '';
-var audioFile;
+const csrfToken = getCookie('csrftoken');
+let audio = '';
+let audioFile;
 
 $(document).ready(function () {
-
     sortQuestions();
     createQuestionGroup();
     createQuestion();
     chooseImage();
-    document.getElementById('id_exam').setAttribute('hidden', 'hidden')
-// $('#dropdown-menu-id').change(function(){
-//     console.log('dropdown-menu')
-// })
 
+    deleteImage();
+    addMatchingOption();
+    addMultipleOption();
 
 });
 
 deleteAudio();
-deleteImage();
 questionAudioListener();
 showQuestions();
 deleteQuestionAndQuestionGroup();
@@ -26,47 +23,44 @@ deleteQuestionAndQuestionGroup();
 // TODO
 function createQuestion() {
     $("#createQuestionForm").submit(function (event) {
-        console.log('213')
 
         var questionTrueId = $("#questionTrueId").is(":checked");
         var questionFalseId = $("#questionFalseId").is(":checked");
 
         var trueFalseChoicer = questionTrueFalseChoicer(questionTrueId, questionFalseId)
-        // console.log($("#audioQuestionBase").children('audio')[0].src)
-        // $( "#customRadio1" ).is( "checked", true );
-        console.log(audioFile)
-        console.log(document.getElementById("showImageId").src)
+        var formData = {
+            'csrfmiddlewaretoken': csrfToken,
+            'description': $("#questionTextarea").val(),
+            'image': document.getElementById("showImageId").src,
+            'is_true': trueFalseChoicer,
+            'score': 5,
+            'question_group': $(".question-group-list li:first").attr("id"),
+        }
+
         var question_form = new FormData();
         // question_form.append("file" ,audioFile);
 
         question_form.append("csrfmiddlewaretoken", csrfToken);
 
         question_form.append("description", $("#questionTextarea").val());
-        // question_form.append("image" ,document.getElementById("showImageId").src);
-        question_form.append("true_false", trueFalseChoicer);
-        //
-        for (var key of question_form.entries()) {
-            console.log(key[0] + ', ' + key[1]);
-        }
+        question_form.append("image", document.getElementById("showImageId").src);
+        question_form.append("is_true", trueFalseChoicer);
+        question_form.append("score", 5);
+        question_form.append("question_group", $(".question-group-list li:first").attr("id"));
 
-        if (question_form.length === 0) {
-            console.log('shod')
-        } else
-            console.log('nashod')
+        //
 
 
         var createQuestionForm = $("#createQuestionForm");
-        console.log('start')
-        console.log(question_form)
 
 
         $.ajax({
-            url: '/create_question/',
+            url: $(this).data("url"),
             type: 'post',
             processData: false,
             contentType: false,
             // mimeType: "multipart/form-data",
-            data: question_form,
+            data: formData,
 
             success: function (response) {
                 console.log(response.new_question_group.id);
@@ -94,14 +88,11 @@ function createQuestionGroup() {
         var createQuestionGroupForm = $("#createQuestionGroupForm");
         var serializedData = createQuestionGroupForm.serialize();
 
-        console.log(createQuestionGroupForm);
         $.ajax({
             url: this.url,
             data: serializedData,
             type: 'post',
             success: function (response) {
-                console.log('createQuestionGroup success');
-                console.log(response.new_question_group);
 
                 var question_group_list_id = $("#question-group-list-id");
                 question_group_list_id.append('<li class="question-group" data-id="' +
@@ -118,8 +109,7 @@ function createQuestionGroup() {
     })
 }
 
-console.log()
-
+//TODO
 function sortQuestions() {
     $('.sortable').nestedSortable({
         forcePlaceholderSize: true,
@@ -156,7 +146,7 @@ function sortQuestions() {
             var q_id = ui.item.attr('data-id');
             if (qg_id && q_id) {
                 $.ajax({
-                    url: '/tasks/' + qg_id + '/sort_questions/',
+                    url: '/builder/' + qg_id + '/sort_questions/',
                     type: 'post',
                     data: {csrfmiddlewaretoken: csrfToken, question_group_id: qg_id, question_id: q_id},
                     success: function (request) {
@@ -172,85 +162,109 @@ function sortQuestions() {
 function chooseImage() {
     $('#questionImageId').change(function () {
         const file = this.files[0];
-        console.log(file);
+        const invalidImageAlert = $('#invalidImageAlert');
         if (file) {
-            let reader = new FileReader();
-            reader.onload = function (event) {
-                console.log(event.target.result);
-                $('#imageHandler').removeAttr('hidden');
-                $('#showImageId').attr('src', event.target.result);
+            // Check if the selected file is an image
+            if (isValidImageType(file.type)) {
+                const reader = new FileReader();
+                reader.onload = function (event) {
+                    $('#imageHandler').removeAttr('hidden');
+                    $('#showImageId').attr('src', event.target.result);
+                    invalidImageAlert.hide(); // Hide the alert if it was previously shown
+                };
+                reader.onerror = function () {
+                    // Handle errors, e.g., display an error message
+                    console.error('Error reading the image file.');
+                };
+                reader.readAsDataURL(file);
+            } else {
+                // Display the Bootstrap alert for invalid image file
+                invalidImageAlert.show();
+                // Hide the image if it was previously displayed
+                $('#imageHandler').attr('hidden', 'hidden');
+                setTimeout(function () {
+                    invalidImageAlert.hide();
+                }, 3000);
             }
-            reader.readAsDataURL(file);
+        } else {
+            // Handle the case where no file is selected
+            console.error('No image file selected.');
         }
     });
 }
 
-function findAncestor(el, cls) {
-    while ((el = el.parentElement) && !el.classList.contains(cls))
-        return el;
+// Function to check if the file type is an image
+function isValidImageType(fileType) {
+    return /^image\//.test(fileType);
 }
 
-$(document).on('click', 'button.remove-option', function (event) {
-    // console.log(findAncestor($(this),'q-option'))
-    // console.log(event.closest('.q-option'));
-    // console.log(event.target);
-    // console.log(event);
-    // const child = document.getElementById('child');
 
-// const parentWithClass = child.closest('.parent');
-    $(this).parent().parent().parent().parent().remove();
-    // $(this).parent('tr').innerHTML='';
-    event.stopPropagation();
-    // var dateId = $(this).data('id');
+$(document).on('click', 'button.remove-option', function (event) {
+    $(this).closest('tr.q-option').remove();
 })
 
 function deleteQuestionAndQuestionGroup() {
     $(document).on('click', 'button.close', function (event) {
-        console.log('close');
         event.stopPropagation();
         var dateId = $(this).data('id');
+        var del_el_name = $(this).attr('name');
 
-        console.log('close 2');
-        var del_el_name = $(this).attr('name')
-        console.log($(this).attr('name'));
-        console.log($(this).attr('name').indexOf("question-group"));
+        // Get the CSRF token from the cookie
+
         $.ajax({
-            url: '/tasks/' + dateId + '/delete/',
-            data: {
-                csrfmiddlewaretoken: csrfToken,
-                id: dateId,
-                name: $(this).attr('name')
+            url: '/builder/' + dateId + '/delete/',
+            type: 'DELETE',  // Use DELETE as the HTTP method
+            headers: {
+                'X-CSRFToken': csrfToken, // Include the CSRF token in headers
             },
-            type: 'post',
+            data: JSON.stringify({
+                'csrfmiddlewaretoken': csrfToken,
+                'name': del_el_name,
+                'id': dateId,
+            }),
             dataType: 'json',
             success: function () {
-                console.log('aksdjlas')
-                // if ($('#questionGroupCard[data-id="' + dateId + '"]').attr('class').indexOf("witJs") >= 0) {
-                //     $('#questionGroupCard[data-id="' + dateId + '"]').parent().remove();
-                //
-                // } else {
-                console.log(del_el_name)
+                console.log('Success: The item has been deleted.');
+
+                // You can remove the corresponding HTML element here based on `del_el_name` and `dateId`.
                 if (del_el_name === 'question') {
                     $('.question[data-id="' + dateId + '"]').remove();
                 } else if (del_el_name === 'question_group') {
                     $('.question-group[data-id="' + dateId + '"]').remove();
-
                 }
-                // }
+            },
+            error: function (xhr, textStatus, errorThrown) {
+                console.log('Error: The DELETE request failed.');
+                console.log(xhr.responseText); // Log any error response from the server
             }
-        })
-    })
+        });
+    });
 }
+
+// Function to get the CSRF token from cookies
+function getCookie(name) {
+    var cookieValue = null;
+    if (document.cookie && document.cookie !== '') {
+        var cookies = document.cookie.split(';');
+        for (var i = 0; i < cookies.length; i++) {
+            var cookie = cookies[i].trim();
+            if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                break;
+            }
+        }
+    }
+    return cookieValue;
+}
+
 
 function showQuestions() {
     $(document).on('click', '.nest', function () {
-        console.log($(this).parent().next())
 
         if (
             $(this).parent().next()
                 .hasClass("show")
         ) {
-            console.log('allow')
             $(this).parent().next().removeClass("show");
             $(this).parent().next().slideUp(300);
         } else {
@@ -261,35 +275,35 @@ function showQuestions() {
 }
 
 
-function changeHandler({
-                           target
-                       }) {
-    console.log('asasallll')
-    // Make sure we have files to use
+function changeHandler({target}) {
     if (!target.files.length) return;
-    // console.log(target[0].files[0])
+    const allowedAudioTypes = ['audio/mpeg', 'audio/wav', 'audio/mp3', 'audio/ogg', 'audio/flac']; // Add more audio types if needed
 
     const file = target.files[0];
-    console.log(file);
+    const invalidAudioAlert = $('#invalidAudioAlert');
+
+    if (!allowedAudioTypes.includes(file.type)) {
+        const alertDiv = document.createElement('div');
+        alertDiv.classList.add('alert', 'alert-danger');
+        alertDiv.innerHTML = 'Invalid file type. Please select an audio file.';
+        invalidAudioAlert.show();
+        setTimeout(function () {
+            invalidAudioAlert.hide();
+        }, 3000);
+
+
+        console.log('Invalid file type');
+        return;
+    }
     if (file) {
-        console.log(file.result)
         let reader = new FileReader();
-        console.log(file)
         reader.onload = function (event) {
-            console.log(event.target.result);
             audioFile = event.target.result;
-            // audioFile=file;
-            console.log(audioFile);
-
-
-            // $('#imageHandler').removeAttr('hidden');
-            // $('#showImageId').attr('src', event.target.result);
         }
         reader.readAsDataURL(file);
     }
     // Create a blob that we can use as an src for our audio element
     const urlObj = URL.createObjectURL(target.files[0]);
-    console.log('ssas')
 
     document.getElementById("audioQuestionBase").innerHTML = '';
     // Create an audio element
@@ -305,8 +319,6 @@ function changeHandler({
     // Append the audio element
     document.getElementById("audioHidden").removeAttribute('hidden')
     document.getElementById("audioQuestionBase").appendChild(audio);
-    // document.getElementById('questionAudioId').value = null;
-
     // Allow us to control the audio
     audio.controls = "true";
 
@@ -321,11 +333,12 @@ function questionAudioListener() {
 
 function deleteAudio() {
     $(document).on('click', '#deleteAudioId', function (event) {
-        document.getElementById("audioQuestionBase").innerHTML = '';
-        $('#audioHidden').attr('hidden', 'hidden')
+        $('#audioQuestionBase').empty();
+        $('#audioHidden').prop('hidden', true);
     })
 }
 
+//TODO
 function questionTrueFalseChoicer(questionTrueId, questionFalseId) {
     if (questionTrueId)
         return questionTrueId
@@ -360,36 +373,68 @@ $(document).on('click', '#multipleDropDown', function (event) {
     $('#tfLableId').attr('hidden', 'hidden')
     $('#multiLableId').removeAttr('hidden')
     $('#MathingQuestionTable').attr('hidden', 'hidden')
-
-
 })
 
 function deleteImage() {
-    $(document).on('click', '#deleteImageId', function (event) {
-        $('#showImageId').removeAttr('src')
-
-        $('#imageHandler').attr('hidden', 'hidden');
-        $('#showImageId').attr('src', event.target.result);
-
-
+    $('#deleteImageId').on('click', function () {
+        $('#showImageId').removeAttr('src');
+        $('#imageHandler').attr('hidden', true);
     })
 }
 
-$(document).on('click', '#addOptionId', function (event) {
-    console.log('sala')
-    $('#tbodyMultiQ').append('<tr class="q-option"><th scope="row"><div class="custom-control custom-radio">' +
-        '<input type="radio" id="questionFalseId4" name="questionTrueFalse" class="custom-control-input">' +
-        '<label class="custom-control-label" for="questionFalseId4"></label></div></th><td><div class="input-group">' +
-        '<input type="text" class="form-control" aria-label="Text input with segmented dropdown button"> ' +
-        '<div class="input-group-append"> <button type="button" class="btn btn-outline-danger  remove-option">' +
-        '<i class=\'fa fa-trash\'></i></button> </div> </div> </td> </tr>')
-})
 
-$(document).on('click', '#addMatchingId', function (event) {
-    console.log('sala')
-    $('#tbodyMatchingQ').append('<tr class="q-option"><td><div class="input-group"><input type="text" class="form-control" ' +
-        'aria-label="Text input with segmented dropdown button"></div></td><td><div class="input-group"><input type="text" ' +
-        'class="form-control" aria-label="Text input with segmented dropdown button">' +
-        '<div class="input-group-append"> <button type="button" class="btn btn-outline-danger  remove-option">' +
-        '<i class=\'fa fa-trash\'></i></button> </div> </div> </td> </tr>')
-})
+function addMatchingOption() {
+    $(document).on('click', '#addMatchingId', function (event) {
+
+        const newRowHtml = `
+        <tr class="q-option">
+            <td>
+                <div class="input-group">
+                    <input type="text" class="form-control" aria-label="Text input with segmented dropdown button">
+                </div>
+            </td>
+            <td>
+                <div class="input-group">
+                    <input type="text" class="form-control" aria-label="Text input with segmented dropdown button">
+                    <div class="input-group-append">
+                        <button type="button" class="btn btn-outline-danger remove-option">
+                            <i class="fa fa-trash"></i>
+                        </button>
+                    </div>
+                </div>
+            </td>
+        </tr>`;
+
+        $('#tbodyMatchingQ').append(newRowHtml);
+
+    })
+
+}
+
+function addMultipleOption() {
+
+    $(document).on('click', '#addOptionId', function (event) {
+        const newRowHtml = `
+        <tr class="q-option">
+            <th scope="row">
+                <div class="custom-control custom-radio">
+                    <input type="radio" name="questionTrueFalse" class="custom-control-input">
+                    <label class="custom-control-label"></label>
+                </div>
+            </th>
+            <td>
+                <div class="input-group">
+                    <input type="text" class="form-control" aria-label="Text input with segmented dropdown button">
+                    <div class="input-group-append">
+                        <button type="button" class="btn btn-outline-danger remove-option">
+                            <i class="fa fa-trash"></i>
+                        </button>
+                    </div>
+                </div>
+            </td>
+        </tr>`;
+
+        $('#tbodyMultiQ').append(newRowHtml);
+    })
+
+}
