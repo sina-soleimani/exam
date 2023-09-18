@@ -95,3 +95,8 @@ ul.accordion .inner {
 .tag-btn {
     background: #DFDFDF;
 }
+
+.custom-alert {
+    padding: 0.5rem 1rem; /* Adjust padding as needed */
+    font-size: 0.875rem; /* Adjust font size as needed */
+}
