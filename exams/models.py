@@ -16,6 +16,7 @@ class Exam(BaseModel):
     label = models.CharField(max_length=200)
     deadline = models.DateField(blank=True)
     duration = models.DurationField(default=None)
+    action = models.BooleanField(default=False)
 
     def __str__(self):
         return self.label
