@@ -5,5 +5,5 @@ from django.urls import path, include
 from .views import examSession
 
 urlpatterns = [
-    path('exam_session', examSession.as_view(), name='examSession'),
+    path('<str:id>/exam_session', examSession.as_view(), name='examSession'),
 ]
