@@ -1,0 +1,13 @@
+.custom-card {
+        background-color: #dcdcdc; /* Set your desired background color for the card */
+        border: none; /* Remove the card border */
+        border-radius: 15px;/* Add rounded corners for a nicer look */
+    }
+    .custom-card .card-header {
+        background-color: #c0c0c0;
+        border-radius: 15px 15px 0 0;/* Set your desired background color for the card title */
+    }
+
+    .custom-card .card-body {
+        padding: 20px; /* Add some padding to the card body */
+    }

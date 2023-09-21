@@ -74,6 +74,7 @@
                 <th>Date</th>
                 <th>Duration</th>
                 <th>Design Page</th>
+                <th>Preview</th>
             </tr>
         </thead>
         <tbody>
@@ -84,6 +85,11 @@
                 <td>{{ field.duration }}</td>
                 <td>
                     <button type="button" class="btn btn-outline-success showqbtn" onclick="window.location.href='/builder/{{ field.id }}/form'">
+                        <i class="fas fa-paperclip"></i>
+                    </button>
+                </td>
+                <td>
+                    <button type="button" class="btn btn-outline-success showqbtn" onclick="window.location.href='/taker/{{ field.id }}/exam_session'">
                         <i class="fa fa-eye" aria-hidden="true"></i>
                     </button>
                 </td>

@@ -56,6 +56,7 @@
                                 {% for field in question_qroups_form %}
 
                                     {{ field }}
+
                                 {% endfor %}
 
                                 <button type="button" id="createQuestionGroupButton"
@@ -63,15 +64,20 @@
                                     create
                                 </button>
 
+
                             </form>
                         </div>
 
+                        <div class="alert alert-danger custom-alert mt-2 mx-4" id="invalidQGNameAlert"
+                             style="display: none;">
+                            please fill feild
+                        </div>
                         <div class="menu-box">
                             <ul class="menu-list sortable question-group-list mx-1 accordion"
                                 id="question-group-list-id">
                                 {% for question_group in question_qroups %}
-                                    <li class="question-group " data-id="{{ question_group.id }}">
-                                        <div class="d-flex tag-btn">
+                                    <li class="question-group" data-id="{{ question_group.id }}">
+                                        <div class="d-flex tag-btn select-btn">
                                             <a class="nest">{{ question_group.name }}</a>
                                             <button type="button" class="close float-right" name="question_group"
                                                     data-id="{{ question_group.id }}">
@@ -82,8 +88,8 @@
                                         <ul class="question-list mr-2 inner" data-id="{{ question_group.id }}">
                                             <li class="question"></li>
                                             {% for question in question_group.question_group_questions.all %}
-                                                <li class="question" data-id="{{ question.id }}">
-                                                    <div class="d-flex tag-btn">
+                                                <li class="question " data-id="{{ question.id }}">
+                                                    <div class="d-flex tag-btn select-btn">
                                                         <a class="flex-grow-1 ">{{ question.description }}</a>
                                                         <button type="button" class="close float-right" name="question"
                                                                 data-id="{{ question.id }}">
@@ -108,7 +114,6 @@
                     <div class="container">
                         <form data-url="{% url  'question:true_false_question' %}" method="post" id="createQuestionForm"
                               enctype="multipart/form-data">
-
                             {% csrf_token %}
 
                             <div class="font-weight-bold mb-2" id="tfLableId"> True/ False Question:</div>
@@ -118,6 +123,10 @@
                             <textarea class="form-control" id="questionTextarea" placeholder="Description"
                                       rows="4"></textarea>
                                 <label class="form-label" for="questionTextarea"></label>
+                                <div class="alert alert-danger custom-alert" id="invalidDescriptionAlert"
+                                     style="display: none;">
+                                    please fill descriptiion before submit
+                                </div>
                             </div>
                             <div class="row">
                                 <div class="col-sm-5 col-md-6">
@@ -255,6 +264,11 @@
                                     </tr>
                                     </tbody>
                                 </table>
+
+                                <div class="alert alert-danger custom-alert" id="invalidTFAlert"
+                                     style="display: none;">
+                                    please choose True or False
+                                </div>
                             </div>
 
                             <div id="multiQuestionTable" hidden="hidden">

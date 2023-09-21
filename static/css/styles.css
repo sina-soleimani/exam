@@ -2,6 +2,24 @@ body {
     font-family: 'Open Sans', sans-serif;
 }
 
+.card {
+    border: 1px solid #ddd;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.card-body {
+    padding: 20px; /* Adjust as needed */
+
+}
+
+
+.q_selected {
+    border: 3px dashed transparent; /* Set the initial border to transparent */
+    background-clip: padding-box; /* Ensure the background doesn't extend into the border area */
+    border-image: linear-gradient(45deg, #3498db, #8e44ad); /* Gradient border */
+    border-image-slice: 1; /* Slice the gradient border */
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+}
 .builder-color {
     background: #F5F5F5;
 
@@ -40,8 +58,8 @@ body {
 .menu-box ul.menu-list li {
     display: block;
     margin-bottom: 5px;
-    border: 1px solid #eee;
-    background: darkgray;
+    /*border: 1px solid #eee;*/
+    background:#888888;
 }
 
 .menu-box ul.menu-list > li a {
@@ -99,4 +117,23 @@ ul.accordion .inner {
 .custom-alert {
     padding: 0.5rem 1rem; /* Adjust padding as needed */
     font-size: 0.875rem; /* Adjust font size as needed */
+}
+.btn {
+    font-weight: bold;
+    border-radius: 5px; /* Rounded corners */
+    /* Add more button styling as needed */
+}
+
+.custom-file-label::after {
+    content: "Upload"; /* Adjust label text as needed */
+}
+/*.alert {*/
+/*    margin-top: 10px; !* Adjust spacing *!*/
+/*    border-radius: 5px; !* Rounded corners *!*/
+/*}*/
+
+hr {
+    border: none;
+    border-top: 3px solid #888; /* Adjust the color and thickness as needed */
+    margin: 20px 0; /* Adjust spacing */
 }
