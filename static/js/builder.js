@@ -1,6 +1,7 @@
 const csrfToken = getCookie('csrftoken');
 let audio = '';
 let audioFile;
+let qg_selected_id = null;
 
 $(document).ready(function () {
     sortQuestions();
@@ -11,6 +12,7 @@ $(document).ready(function () {
     deleteImage();
     addMatchingOption();
     addMultipleOption();
+    findSelectedQG();
 
 });
 
@@ -20,66 +22,113 @@ showQuestions();
 deleteQuestionAndQuestionGroup();
 
 
+function findSelectedQG(){
+    let selectedElement = null;
+
+    // Click event handler for li.question elements
+    $(document).on("click", "div.select-btn", function () {
+        console.log('salam')
+        // Remove the "q_selected" class from the previously selected element (if any)
+        if (selectedElement) {
+            $(selectedElement).removeClass("q_selected");
+        }
+        var lastQuestion = $(this).find('ul.question-list li.question:last');
+        qg_selected_id = $(this).closest('li.question-group').data('id')
+        $(this).addClass("q_selected");
+
+        selectedElement = this;
+    });
+
+}
 // TODO
 function createQuestion() {
-    $("#createQuestionForm").submit(function (event) {
+    $("#createQuestionForm").on("submit", function (event) {
+        event.preventDefault(); // Prevent the default form submission
 
-        var questionTrueId = $("#questionTrueId").is(":checked");
-        var questionFalseId = $("#questionFalseId").is(":checked");
-
-        var trueFalseChoicer = questionTrueFalseChoicer(questionTrueId, questionFalseId)
-        var formData = {
-            'csrfmiddlewaretoken': csrfToken,
-            'description': $("#questionTextarea").val(),
-            'image': document.getElementById("showImageId").src,
-            'is_true': trueFalseChoicer,
-            'score': 5,
-            'question_group': $(".question-group-list li:first").attr("id"),
+        const isTrue = $("#questionTrueId").is(":checked");
+        const isFalse = $("#questionFalseId").is(":checked");
+        const trueFalseChoice = isTrue ? "true" : (isFalse ? "false" : null);
+        var score = $("#baremId").val();
+        var description = $("#questionTextarea").val()
+        const isTFValid = handleFormValidation("#invalidTFAlert", trueFalseChoice);
+        const isValid = handleFormValidation("#invalidDescriptionAlert", "#questionTextarea");
+        if (!isValid) {
+            // Validation failed, do not proceed with form submission
+            return;
+        }
+        if (!isTFValid) {
+            // Validation failed, do not proceed with form submission
+            return;
         }
 
-        var question_form = new FormData();
-        // question_form.append("file" ,audioFile);
+        var question_group__id = (qg_selected_id === null) ? $('.menu-list li:first').attr('data-id') : qg_selected_id;
+        console.log(qg_selected_id)
+        console.log($('.menu-list li:first'))
 
-        question_form.append("csrfmiddlewaretoken", csrfToken);
-
-        question_form.append("description", $("#questionTextarea").val());
-        question_form.append("image", document.getElementById("showImageId").src);
-        question_form.append("is_true", trueFalseChoicer);
-        question_form.append("score", 5);
-        question_form.append("question_group", $(".question-group-list li:first").attr("id"));
-
-        //
-
-
-        var createQuestionForm = $("#createQuestionForm");
-
+        const formData = new FormData(this);
+        formData.append("is_true", trueFalseChoice);
+        formData.append("csrfmiddlewaretoken", csrfToken);
+        formData.append("description", description);
+        formData.append("question_group__id", question_group__id);
+        formData.append("score", score);
+        formData.append("question_type", "TF");
+        formData.forEach(function (value, key) {
+            console.log(key + ": " + value);
+        });
+        console.log(formData)
 
         $.ajax({
             url: $(this).data("url"),
             type: 'post',
+            headers: {
+                'X-CSRFToken': csrfToken, // Include the CSRF token in headers
+            },
             processData: false,
             contentType: false,
-            // mimeType: "multipart/form-data",
             data: formData,
-
             success: function (response) {
-                console.log(response.new_question_group.id);
-                console.log(response.new_question.id);
+                console.log('done')
+                console.log(description)
+                var $questionGroup = $('li.question-group[data-id=' + question_group__id + ']');
 
-                var question_group_list_id = $("#question-group-list-id");
-                question_group_list_id.append('<li class="question-group" data-id="' +
-                    response.new_question_group.id + '"><div class="d-flex tag-btn"><a class="nest">' +
-                    response.new_question_group.name + '</a><button type="button" class="close float-right" name="qu" data-id="' +
-                    response.new_question_group.id +
-                    '"><span aria-hidden="true">&times;</span></button></div><ul class="question-list mr-2 inner "  data-id="' +
-                    response.new_question_group.id + '">' + '<li class="question"></li></ul></li>');
-                console.log('444')
+                // Check if the element was found
+
+                // Create a new nested li element
+                // Append the new nested li to the found question-group li
+
+                var $newNestedLi = $('<li class="question"><div class="d-flex tag-btn select-btn">\<a class="flex-grow-1 ">' + description +
+                    '</a><button type="button" class="close float-right" name="question" ' +
+                    'data-id="{{ question.id }}"><span aria-hidden="true">&times;</span></button></div></li></li>');
+                $questionGroup.find('ul.question-list').append($newNestedLi);
+
+
             },
+            error: function (xhr, textStatus, errorThrown) {
+                // Handle errors here
+                console.log('not done')
+            }
 
         });
-        $("#createQuestionGroupForm")[0].reset();
+        this.reset();
 
     })
+}
+
+function handleFormValidation(alertSelector, fieldName) {
+    const field = $(fieldName);
+    console.log(field);
+
+    if (!field || field.val() === undefined || field.val().length === 0) {
+        const alert = $(alertSelector);
+        alert.show();
+        // Hide the alert if it was previously displayed
+        setTimeout(function () {
+            alert.hide();
+        }, 3000);
+        return false; // Return false to indicate validation failed
+    }
+
+    return true; // Return true to indicate validation passed
 }
 
 
@@ -87,6 +136,11 @@ function createQuestionGroup() {
     $("#createQuestionGroupButton").click(function () {
         var createQuestionGroupForm = $("#createQuestionGroupForm");
         var serializedData = createQuestionGroupForm.serialize();
+        const isValid = handleFormValidation("#invalidQGNameAlert", "#id_name");
+        if (!isValid) {
+            return;
+        }
+
 
         $.ajax({
             url: this.url,
@@ -96,7 +150,7 @@ function createQuestionGroup() {
 
                 var question_group_list_id = $("#question-group-list-id");
                 question_group_list_id.append('<li class="question-group" data-id="' +
-                    response.new_question_group + '"><div class="d-flex tag-btn"><a class="nest">' +
+                    response.new_question_group + '"><div class="d-flex tag-btn select-btn"><a class="nest">' +
                     response.new_question_group_name + '</a><button type="button" class="close float-right" name="question_group" data-id="' +
                     response.new_question_group +
                     '"><span aria-hidden="true">&times;</span></button></div><ul class="question-list mr-2 inner "  data-id="' +
@@ -338,17 +392,6 @@ function deleteAudio() {
     })
 }
 
-//TODO
-function questionTrueFalseChoicer(questionTrueId, questionFalseId) {
-    if (questionTrueId)
-        return questionTrueId
-    if (questionFalseId)
-        return !questionFalseId
-
-    //TODO
-    else
-        return true
-}
 
 $(document).on('click', '#matchingDropDown', function (event) {
     $('#multiQuestionTable').attr('hidden', 'hidden')

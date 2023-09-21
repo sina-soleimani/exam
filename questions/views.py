@@ -1,6 +1,6 @@
 from django.http import JsonResponse
 from django.shortcuts import render, redirect
-from .forms import QustionTrueFalseForm, QuestionGroupForm, TrueFalseModelForm
+from .forms import  QuestionGroupForm, TrueFalseModelForm
 from exams.models import Exam
 from django.views.generic import View
 from .models import QuestionTrueFalse, QuestionGroup, Question, Answer
@@ -80,9 +80,6 @@ class QuestionSort(View):
             queston_group=qg
         )
         return JsonResponse({'result': 'ok'}, status=200)
-
-
-
 
 
 # TODO
