@@ -2,14 +2,12 @@ from django.http import JsonResponse
 from django.shortcuts import render, redirect
 from .forms import QustionTrueFalseForm, QuestionGroupForm, TrueFalseModelForm
 from exams.models import Exam
-from django.views.generic import CreateView, View
+from django.views.generic import View
 from .models import QuestionTrueFalse, QuestionGroup, Question, Answer
 
 import json
 from django.shortcuts import get_object_or_404
 
-# TODO check wich import is need
-from django.views.decorators.csrf import csrf_exempt
 from django.views.generic.edit import FormView
 from django.urls import reverse_lazy
 
@@ -51,55 +49,6 @@ class MyForm(View):
         return redirect('base.html')
 
 
-# TODO
-# @csrf_exempt
-class CreateQuestion(View):
-    def post(self, request):
-        file = request.FILES.get("file")
-        print(request.POST['description'])
-        print(request.POST['true_false'])
-        # QuestionTrueFalse.objects.create()
-
-        # print('salam')
-        # print(file)
-        # fss=FileSystemStorage()
-        # filename=fss.save('file',file)
-        # url=fss.url(filename)
-
-        # response = validate_request(request)
-
-        new_question = request.POST.dict()
-        intial = {
-            'description': new_question['description'],
-            'true_false': trueFalseMaker(new_question['true_false']),
-        }
-        questiontf = QustionTrueFalseForm(description=new_question['description'])
-        print('befor if')
-        print(questiontf)
-        # question_form = QustionTrueFalseForm(request.POST)
-
-        if questiontf.is_valid():
-            print('shodddddddddddddddd')
-            true_false_maker = trueFalseMaker(new_question['true_false'])
-            print(new_question['true_false'])
-
-            newQ = QuestionTrueFalse(
-                # description=new_question['description'],
-                # image=new_question['image'],
-                # audio=url,
-                # true_false= true_false_maker
-            )
-            newQ.description = new_question['description']
-
-            print('321')
-
-            questiontf.save()
-            print('321')
-            return JsonResponse({'result': 'ok'}, status=200)
-
-        # else:
-        #     print('redirect')
-        #     return redirect('base.html')
 
 
 class QuestionGroupDelete(View):
@@ -133,33 +82,29 @@ class QuestionSort(View):
         return JsonResponse({'result': 'ok'}, status=200)
 
 
-# TODO check this method is need
-def trueFalseMaker(request):
-    if request:
-        return True
-    else:
-        return False
+
 
 
 # TODO
 class CreateUpdateTrueFalseQuestionView(FormView):
     template_name = 'builder.html'
     form_class = TrueFalseModelForm
-    success_url = reverse_lazy('success_page')
-
-    # @csrf_exempt
-    def post(self, request, *args, **kwargs):
-        print(request.POST)
-        form = self.get_form()
-        if form.is_valid():
-            return self.form_valid(form)
-        else:
-            print(form.errors)
-            return self.form_invalid(form)
+    success_url = reverse_lazy('question:true_false_question')
+    http_method_names = ['post']  # Only allow POST requests
 
     def form_valid(self, form):
-        print('form valid')
-        # Create the question with the question_type automatically set to 'TRUE_FALSE'
+
+        question_group_id = self.request.POST.get('question_group__id')
+
+        try:
+            question_group = QuestionGroup.objects.get(id=question_group_id)
+        except QuestionGroup.DoesNotExist:
+            form.add_error('question_group', 'Selected QuestionGroup does not exist')
+            return self.form_invalid(form)
+
+        form.instance.question_group = question_group
+
+        print(form)
         question = form.save()
         print(question)
         # question = form.save(commit=False)
@@ -167,9 +112,10 @@ class CreateUpdateTrueFalseQuestionView(FormView):
         # question.save()
 
         # Create the answer
+
         Answer.objects.create(
             question=question,
             is_true=form.cleaned_data['is_true'],
         )
-
-        return super().form_valid(form)
+        response_data = {'question_id': question.id}
+        return JsonResponse(response_data)

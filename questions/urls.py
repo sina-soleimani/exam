@@ -1,5 +1,5 @@
 # from django.conf.urls import path
-from .views import QuestionGroupDelete, QuestionSort, CreateUpdateTrueFalseQuestionView, MyForm, CreateQuestion
+from .views import QuestionGroupDelete, QuestionSort, CreateUpdateTrueFalseQuestionView, MyForm
 from django.conf import settings
 from django.conf.urls.static import static
 from django.urls import path, include
@@ -12,7 +12,6 @@ urlpatterns = [
 
     path('<str:id>/form', MyForm.as_view(), name='formList'),
 
-    path('create_question/', CreateQuestion.as_view(), name='createQuestion'),
 ]
 
 
