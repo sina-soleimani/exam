@@ -6,6 +6,7 @@ from django.views.generic import View
 from .models import QuestionTrueFalse, QuestionGroup, Question, Answer
 
 import json
+from django.db.models import OuterRef, Subquery
 from django.shortcuts import get_object_or_404
 
 from django.views.generic.edit import FormView
@@ -24,11 +25,46 @@ class MyForm(View):
     def get(self, request, id):
         print('GET request')
         question_qroups_form = QuestionGroupForm()
-        question_qroups = QuestionGroup.objects.filter(exam__pk=id).prefetch_related('question_group_questions').all()
 
+        question_qroups = QuestionGroup.objects.filter(exam__pk=id).prefetch_related('question_group_questions')
+
+        # Subquery to fetch 'is_true' for each question
+        subquery = Subquery(
+            Answer.objects.filter(
+                question=OuterRef('id')
+            ).values('is_true')[:1]
+        )
+
+        # Annotate 'is_true' for each Question
+        question_qroups = question_qroups.annotate(
+            question_group_questions__is_true=subquery
+        )
+
+        data = []
+        for group in question_qroups:
+            group_data = {
+                'id': group.id,
+                'name': group.name,
+                'questions': [],
+            }
+
+            # Fetch the required fields from questions and answers
+            questions = group.question_group_questions.values(
+                'id', 'description', 'score', 'question_type',
+                'question_answer__is_true',  # Include the 'is_true' field from answers
+            )
+
+            for question in questions:
+                # Add other answer-related fields here if needed
+                group_data['questions'].append(question)
+
+            data.append(group_data)
+
+        json_data = json.dumps(data)
         return render(request, self.template_name, context={
             'question_qroups': question_qroups,
-            'question_qroups_form': question_qroups_form
+            'question_qroups_form': question_qroups_form,
+            'questionGroupsData': json_data,
         })
 
     def post(self, request, id):

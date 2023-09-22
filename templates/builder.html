@@ -429,6 +429,9 @@
 
 {% block javascripts %}
 
+    <script>
+        var questionGroupsData = JSON.parse('{{ questionGroupsData|safe }}');
+    </script>
     <script src="{% static 'js/builder.js' %}"></script>
 {% endblock javascripts %}
 

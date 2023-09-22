@@ -75,6 +75,10 @@
                 <th>Duration</th>
                 <th>Design Page</th>
                 <th>Preview</th>
+{#                TODO#}
+                <th>Active</th>
+                <th>Delete</th>
+
             </tr>
         </thead>
         <tbody>
@@ -89,6 +93,16 @@
                     </button>
                 </td>
                 <td>
+                    <button type="button" class="btn btn-outline-success showqbtn" onclick="window.location.href='/taker/{{ field.id }}/exam_session'">
+                        <i class="fa fa-eye" aria-hidden="true"></i>
+                    </button>
+                </td>
+            <td>
+                    <button type="button" class="btn btn-outline-danger showqbtn" onclick="window.location.href='/taker/{{ field.id }}/exam_session'">
+                        <i class='fa fa-trash'></i>
+                    </button>
+                </td>
+            <td>
                     <button type="button" class="btn btn-outline-success showqbtn" onclick="window.location.href='/taker/{{ field.id }}/exam_session'">
                         <i class="fa fa-eye" aria-hidden="true"></i>
                     </button>

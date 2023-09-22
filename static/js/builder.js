@@ -16,13 +16,30 @@ $(document).ready(function () {
 
 });
 
+function findQuestionById(questionGroupsData, questionId) {
+    for (let i = 0; i < questionGroupsData.length; i++) {
+        const group = questionGroupsData[i];
+
+        for (let j = 0; j < group.questions.length; j++) {
+            const question = group.questions[j];
+
+            if (question.id === questionId) {
+                return question;
+            }
+        }
+    }
+
+    // If the question is not found, return null
+    return null;
+}
+
 deleteAudio();
 questionAudioListener();
 showQuestions();
 deleteQuestionAndQuestionGroup();
 
 
-function findSelectedQG(){
+function findSelectedQG() {
     let selectedElement = null;
 
     // Click event handler for li.question elements
@@ -34,12 +51,34 @@ function findSelectedQG(){
         }
         var lastQuestion = $(this).find('ul.question-list li.question:last');
         qg_selected_id = $(this).closest('li.question-group').data('id')
+        var el_selected_id = $(this).parent().data('id')
+        if (qg_selected_id !== el_selected_id) {
+            const question = findQuestionById(questionGroupsData, el_selected_id);
+            $('#questionTextarea').val(question.description);
+            if (question.question_answer__is_true === true) {
+                $('#questionTrueId').prop('checked', true);
+            } else {
+                $('#questionFalseId').prop('checked', true);
+            }
+
+            $('#baremId').val(question.score);
+            if (question) {
+                console.log("Found question:", question);
+            } else {
+                console.log("Question not found.");
+            }
+
+        } else {
+
+        }
+
         $(this).addClass("q_selected");
 
         selectedElement = this;
     });
 
 }
+
 // TODO
 function createQuestion() {
     $("#createQuestionForm").on("submit", function (event) {
@@ -50,15 +89,18 @@ function createQuestion() {
         const trueFalseChoice = isTrue ? "true" : (isFalse ? "false" : null);
         var score = $("#baremId").val();
         var description = $("#questionTextarea").val()
-        const isTFValid = handleFormValidation("#invalidTFAlert", trueFalseChoice);
         const isValid = handleFormValidation("#invalidDescriptionAlert", "#questionTextarea");
         if (!isValid) {
             // Validation failed, do not proceed with form submission
             return;
         }
-        if (!isTFValid) {
-            // Validation failed, do not proceed with form submission
-            return;
+
+        if (trueFalseChoice === null) {
+            $("#invalidTFAlert").show();
+            setTimeout(function () {
+                $("#invalidTFAlert").hide();
+            }, 3000);
+            return false;
         }
 
         var question_group__id = (qg_selected_id === null) ? $('.menu-list li:first').attr('data-id') : qg_selected_id;
@@ -87,6 +129,7 @@ function createQuestion() {
             contentType: false,
             data: formData,
             success: function (response) {
+                //TODO ADD RESPONSE TO DATASET
                 console.log('done')
                 console.log(description)
                 var $questionGroup = $('li.question-group[data-id=' + question_group__id + ']');
