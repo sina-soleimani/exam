@@ -12,7 +12,7 @@ class TrueFalseModelForm(forms.ModelForm):
     question_type = forms.CharField(initial=Question.QuestionType.TRUE_FALSE, widget=forms.HiddenInput())
 
     is_true = forms.BooleanField(
-        required=True,
+        required=False,
         initial=True,
         label="True or False"
     )

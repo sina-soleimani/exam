@@ -1,6 +1,6 @@
 from django.http import JsonResponse
 from django.shortcuts import render, redirect
-from .forms import  QuestionGroupForm, TrueFalseModelForm
+from .forms import QuestionGroupForm, TrueFalseModelForm
 from exams.models import Exam
 from django.views.generic import View
 from .models import QuestionTrueFalse, QuestionGroup, Question, Answer
@@ -85,8 +85,6 @@ class MyForm(View):
         return redirect('base.html')
 
 
-
-
 class QuestionGroupDelete(View):
     def delete(self, request, id):
         try:
@@ -125,10 +123,27 @@ class CreateUpdateTrueFalseQuestionView(FormView):
     success_url = reverse_lazy('question:true_false_question')
     http_method_names = ['post']  # Only allow POST requests
 
+    def get_form_kwargs(self):
+        kwargs = super().get_form_kwargs()
+        question_id = self.kwargs.get('question_id')  # Assuming you pass question_id in URL
+        if question_id:
+            question = get_object_or_404(Question, id=question_id)
+            kwargs['instance'] = question
+        return kwargs
+
+    # will be use for test
+    #
+    # def post(self, request, *args, **kwargs):
+    #     form = self.get_form()
+    #     if form.is_valid():
+    #         return self.form_valid(form)
+    #     else:
+    #         print('Form is not valid. Errors:', form.errors)
+    #         return self.form_invalid(form)
+
     def form_valid(self, form):
 
         question_group_id = self.request.POST.get('question_group__id')
-
         try:
             question_group = QuestionGroup.objects.get(id=question_group_id)
         except QuestionGroup.DoesNotExist:
@@ -137,18 +152,10 @@ class CreateUpdateTrueFalseQuestionView(FormView):
 
         form.instance.question_group = question_group
 
-        print(form)
         question = form.save()
-        print(question)
-        # question = form.save(commit=False)
-        # question.question_type = Question.QuestionType.TRUE_FALSE
-        # question.save()
-
-        # Create the answer
-
-        Answer.objects.create(
+        answer=Answer.objects.update_or_create(
             question=question,
-            is_true=form.cleaned_data['is_true'],
+            defaults={'is_true': form.cleaned_data['is_true']},
         )
         response_data = {'question_id': question.id}
         return JsonResponse(response_data)

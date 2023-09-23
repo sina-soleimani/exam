@@ -2,6 +2,7 @@ const csrfToken = getCookie('csrftoken');
 let audio = '';
 let audioFile;
 let qg_selected_id = null;
+let create_question_flag = null;
 
 $(document).ready(function () {
     sortQuestions();
@@ -33,6 +34,36 @@ function findQuestionById(questionGroupsData, questionId) {
     return null;
 }
 
+function updateQuestionInQuestionGroupsData(qu, qId) {
+    for (let i = 0; i < questionGroupsData.length; i++) {
+        const group = questionGroupsData[i];
+
+        for (let j = 0; j < group.questions.length; j++) {
+            const question = group.questions[j];
+
+            if (question.id === qId) {
+                group.questions[j] = qu;
+                return question;
+            }
+        }
+    }
+
+    // If the question is not found, return null
+    return null;
+}
+
+function addQuestionToQuestionGroupsData(qu, qgId) {
+    for (let i = 0; i < questionGroupsData.length; i++) {
+        const group = questionGroupsData[i];
+        if (group.id.toString() === qgId) {
+            group.questions.push(qu)
+            return group;
+        }
+    }
+    // If the question is not found, return null
+    return null;
+}
+
 deleteAudio();
 questionAudioListener();
 showQuestions();
@@ -44,7 +75,6 @@ function findSelectedQG() {
 
     // Click event handler for li.question elements
     $(document).on("click", "div.select-btn", function () {
-        console.log('salam')
         // Remove the "q_selected" class from the previously selected element (if any)
         if (selectedElement) {
             $(selectedElement).removeClass("q_selected");
@@ -52,7 +82,10 @@ function findSelectedQG() {
         var lastQuestion = $(this).find('ul.question-list li.question:last');
         qg_selected_id = $(this).closest('li.question-group').data('id')
         var el_selected_id = $(this).parent().data('id')
+
         if (qg_selected_id !== el_selected_id) {
+            //handle selected question element
+            create_question_flag = el_selected_id
             const question = findQuestionById(questionGroupsData, el_selected_id);
             $('#questionTextarea').val(question.description);
             if (question.question_answer__is_true === true) {
@@ -60,6 +93,7 @@ function findSelectedQG() {
             } else {
                 $('#questionFalseId').prop('checked', true);
             }
+
 
             $('#baremId').val(question.score);
             if (question) {
@@ -86,7 +120,8 @@ function createQuestion() {
 
         const isTrue = $("#questionTrueId").is(":checked");
         const isFalse = $("#questionFalseId").is(":checked");
-        const trueFalseChoice = isTrue ? "true" : (isFalse ? "false" : null);
+        const trueFalseChoice = isTrue ? "True" : (isFalse ? "False" : null);
+        const tFChoiced = isTrue ? true : (isFalse ? false : null);
         var score = $("#baremId").val();
         var description = $("#questionTextarea").val()
         const isValid = handleFormValidation("#invalidDescriptionAlert", "#questionTextarea");
@@ -104,23 +139,25 @@ function createQuestion() {
         }
 
         var question_group__id = (qg_selected_id === null) ? $('.menu-list li:first').attr('data-id') : qg_selected_id;
-        console.log(qg_selected_id)
-        console.log($('.menu-list li:first'))
 
         const formData = new FormData(this);
+        formData.append("question__id", create_question_flag);
         formData.append("is_true", trueFalseChoice);
         formData.append("csrfmiddlewaretoken", csrfToken);
         formData.append("description", description);
         formData.append("question_group__id", question_group__id);
         formData.append("score", score);
         formData.append("question_type", "TF");
-        formData.forEach(function (value, key) {
-            console.log(key + ": " + value);
-        });
-        console.log(formData)
+        var update_url;
+        if (create_question_flag)
+            update_url = '/builder/true_false_question/' + create_question_flag + '/';
+        else {
+            update_url = $(this).data("url");
+
+        }
 
         $.ajax({
-            url: $(this).data("url"),
+            url: update_url,
             type: 'post',
             headers: {
                 'X-CSRFToken': csrfToken, // Include the CSRF token in headers
@@ -129,21 +166,31 @@ function createQuestion() {
             contentType: false,
             data: formData,
             success: function (response) {
-                //TODO ADD RESPONSE TO DATASET
-                console.log('done')
-                console.log(description)
-                var $questionGroup = $('li.question-group[data-id=' + question_group__id + ']');
+                var q_input_questionGroupsData = {
+                    'id': response.question_id,
+                    'description': description,
+                    'question_answer__is_true': tFChoiced,
+                    'question_type': "TF",
+                    'score': parseInt(score, 10),
+                }
+                if (create_question_flag) {
+                    updateQuestionInQuestionGroupsData(q_input_questionGroupsData, create_question_flag)
+                } else {
+                    addQuestionToQuestionGroupsData(q_input_questionGroupsData, question_group__id);
 
-                // Check if the element was found
 
-                // Create a new nested li element
-                // Append the new nested li to the found question-group li
+                    var $questionGroup = $('li.question-group[data-id=' + question_group__id + ']');
 
-                var $newNestedLi = $('<li class="question"><div class="d-flex tag-btn select-btn">\<a class="flex-grow-1 ">' + description +
-                    '</a><button type="button" class="close float-right" name="question" ' +
-                    'data-id="{{ question.id }}"><span aria-hidden="true">&times;</span></button></div></li></li>');
-                $questionGroup.find('ul.question-list').append($newNestedLi);
+                    // Check if the element was found
 
+                    // Create a new nested li element
+                    // Append the new nested li to the found question-group li
+                    var q_type = 'True/False'
+                    var $newNestedLi = $('<li class="question" data-id=' + response.question_id + '><div class="d-flex tag-btn select-btn">\<a class="flex-grow-1 ">' + q_type +
+                        '</a><button type="button" class="close float-right" name="question" ' +
+                        'data-id=' + response.question_id + '><span aria-hidden="true">&times;</span></button></div></li></li>');
+                    $questionGroup.find('ul.question-list').append($newNestedLi);
+                }
 
             },
             error: function (xhr, textStatus, errorThrown) {
@@ -159,7 +206,6 @@ function createQuestion() {
 
 function handleFormValidation(alertSelector, fieldName) {
     const field = $(fieldName);
-    console.log(field);
 
     if (!field || field.val() === undefined || field.val().length === 0) {
         const alert = $(alertSelector);
@@ -224,8 +270,6 @@ function sortQuestions() {
 
             var q = ui.item.attr('class').indexOf("question") >= 0;
 
-            console.log(qg);
-            console.log();
 
             if (qg_list         // if it's a group...
                 && !q_list && !qg)// but moved within another group
@@ -435,8 +479,14 @@ function deleteAudio() {
     })
 }
 
+function globalDropDownfunc() {
+    $("#questionTextarea").val('')
+    $("#baremId").val('')
+    create_question_flag = null;
+}
 
 $(document).on('click', '#matchingDropDown', function (event) {
+    globalDropDownfunc()
     $('#multiQuestionTable').attr('hidden', 'hidden')
     $('#TrueFalseQuestionTable').attr('hidden', 'hidden')
     $('#multiLableId').attr('hidden', 'hidden')
@@ -446,6 +496,9 @@ $(document).on('click', '#matchingDropDown', function (event) {
 })
 
 $(document).on('click', '#trueFalseDropDown', function (event) {
+    globalDropDownfunc()
+    $('#questionTrueId').prop('checked', false);
+    $('#questionFalseId').prop('checked', false);
     $('#TrueFalseQuestionTable').removeAttr('hidden')
     $('#multiQuestionTable').attr('hidden', 'hidden')
     $('#tfLableId').removeAttr('hidden')
@@ -454,6 +507,7 @@ $(document).on('click', '#trueFalseDropDown', function (event) {
 })
 
 $(document).on('click', '#multipleDropDown', function (event) {
+    globalDropDownfunc()
     $('#multiQuestionTable').removeAttr('hidden')
     $('#TrueFalseQuestionTable').attr('hidden', 'hidden')
     $('#tfLableId').attr('hidden', 'hidden')
