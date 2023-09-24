@@ -72,6 +72,11 @@
                              style="display: none;">
                             please fill feild
                         </div>
+
+                        <div class="alert alert-danger custom-alert mt-2 mx-4" id="notExistQGAlert"
+                             style="display: none;">
+                            please add new question group first
+                        </div>
                         <div class="menu-box">
                             <ul class="menu-list sortable question-group-list mx-1 accordion"
                                 id="question-group-list-id">
@@ -430,7 +435,7 @@
 {% block javascripts %}
 
     <script>
-        var questionGroupsData = JSON.parse('{{ questionGroupsData|safe }}');
+        var questionGroupsData = JSON.parse('{{ questionGroupsData|escapejs }}');
     </script>
     <script src="{% static 'js/builder.js' %}"></script>
 {% endblock javascripts %}
