@@ -85,6 +85,76 @@ class MyForm(View):
         return redirect('base.html')
 
 
+
+#project Will be go in this api
+
+class QBank(View):
+    template_name = 'builder.html'
+
+    def get(self, request):
+        print('GET request')
+        question_qroups_form = QuestionGroupForm()
+
+        question_qroups = QuestionGroup.objects.all().prefetch_related('question_group_questions')
+
+        # Subquery to fetch 'is_true' for each question
+        subquery = Subquery(
+            Answer.objects.filter(
+                question=OuterRef('id')
+            ).values('is_true')[:1]
+        )
+
+        # Annotate 'is_true' for each Question
+        question_qroups = question_qroups.annotate(
+            question_group_questions__is_true=subquery
+        )
+
+        data = []
+        for group in question_qroups:
+            group_data = {
+                'id': group.id,
+                'name': group.name,
+                'questions': [],
+            }
+
+            # Fetch the required fields from questions and answers
+            questions = group.question_group_questions.values(
+                'id', 'description', 'score', 'question_type',
+                'question_answer__is_true',  # Include the 'is_true' field from answers
+            )
+
+            for question in questions:
+                # Add other answer-related fields here if needed
+                group_data['questions'].append(question)
+
+            data.append(group_data)
+
+        json_data = json.dumps(data)
+        return render(request, self.template_name, context={
+            'question_qroups': question_qroups,
+            'question_qroups_form': question_qroups_form,
+            'questionGroupsData': json_data,
+        })
+
+    def post(self, request, id):
+        question_qroups_form = QuestionGroupForm(request.POST)
+
+        if question_qroups_form.is_valid():
+            print('POST request')
+
+            new_question_group = question_qroups_form.save(commit=False)
+            new_question_group.exam = Exam.objects.get(pk=id)
+            new_question_group.save()
+
+            return JsonResponse({
+                'new_question_group': new_question_group.id,
+                'new_question_group_name': new_question_group.name
+            }, status=200)
+
+        return redirect('base.html')
+
+
+
 class QuestionGroupDelete(View):
     def delete(self, request, id):
         try:

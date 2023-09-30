@@ -1,5 +1,5 @@
 # from django.conf.urls import path
-from .views import QuestionGroupDelete, QuestionSort, CreateUpdateTrueFalseQuestionView, MyForm
+from .views import QuestionGroupDelete, QuestionSort, CreateUpdateTrueFalseQuestionView, MyForm, QBank
 from django.conf import settings
 from django.conf.urls.static import static
 from django.urls import path, include
@@ -16,6 +16,7 @@ urlpatterns = [
          name='true_false_question'),
 
     path('<str:id>/form', MyForm.as_view(), name='formList'),
+    path('q_bank', QBank.as_view(), name='qBank'),
 
 ]
 
