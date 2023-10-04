@@ -11,3 +11,48 @@
     .custom-card .card-body {
         padding: 20px; /* Add some padding to the card body */
     }
+
+    .modal-content {
+         height: 600px; /* Set the desired height */
+    border: none;
+
+}
+
+.tab-pills .nav-link {
+    color: #800080; /* Tab text color */
+    background-color: #001f3f; /* Tab background color */
+
+}
+
+.tab-pills .nav-link.active {
+    background-color: #FFF5E1; /* Active tab background color */
+    color: #333366; /* Active tab text color */
+    font-weight: bold;
+}
+
+.modal-lg {
+    max-width: 90%; /* Adjust modal width as needed */
+}
+
+.modal-dialog {
+    max-height: 90vh; /* Adjust modal height as needed */
+}
+
+.modal-body {
+    padding: 2rem;
+}
+
+.btn-close {
+    color: #333; /* Close button color */
+}
+
+.btn-close:hover {
+    color: #007bff; /* Close button hover color */
+}
+.custom-modal {
+    max-width: 50%; /* Adjust the max-width to your desired size */
+}
+.custom-alert {
+    padding: 0.5rem 1rem; /* Adjust padding as needed */
+    font-size: 0.875rem; /* Adjust font size as needed */
+}
