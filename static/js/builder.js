@@ -3,6 +3,7 @@ let audio = '';
 let audioFile;
 let qg_selected_id = null;
 let create_question_flag = null;
+let file=null
 
 $(document).ready(function () {
     sortQuestions();
@@ -147,6 +148,8 @@ function createQuestion() {
             return false;
         }
 
+        const imageInput = document.querySelector("#showImageId");
+        console.log(imageInput)
         const formData = new FormData(this);
         formData.append("question__id", create_question_flag);
         formData.append("is_true", trueFalseChoice);
@@ -155,6 +158,8 @@ function createQuestion() {
         formData.append("question_group__id", question_group__id);
         formData.append("score", score);
         formData.append("question_type", "TF");
+        formData.append("image", file);
+
         var update_url;
         if (create_question_flag)
             update_url = '/builder/true_false_question/' + create_question_flag + '/';
@@ -309,7 +314,7 @@ function sortQuestions() {
 
 function chooseImage() {
     $('#questionImageId').change(function () {
-        const file = this.files[0];
+         file = this.files[0];
         const invalidImageAlert = $('#invalidImageAlert');
         if (file) {
             // Check if the selected file is an image
