@@ -67,7 +67,8 @@
 
 .sidebar-modal {
     border-radius: 10px;
-    background-color: #001f3f
+    background-color: #001f3f;
+    height: 40em;
 }
 
 .incorrect-penalty {
