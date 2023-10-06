@@ -30,8 +30,9 @@ class examSession(View):
             }
 
             # Fetch the required fields from questions and answers
+            # TODO IMAGE
             questions = group.question_group_questions.values(
-                'id', 'description', 'score', 'question_type',
+                'id', 'description', 'score', 'question_type', 'image',
                 'question_answer__is_true',  # Include the 'is_true' field from answers
             )
 
