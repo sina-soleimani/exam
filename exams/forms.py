@@ -5,4 +5,8 @@ from .models import Exam
 class ExamForm(forms.ModelForm):
     class Meta:
         model = Exam
-        fields = ['label', 'deadline', 'duration']
+        fields = ['label', 'deadline', 'duration',
+                  'score_type',
+                  'point_passing_score', 'percent_passing_score',
+                  'incorrect_penalty', 'unanswered_penalty', 'shuffle_answer'
+                  ]

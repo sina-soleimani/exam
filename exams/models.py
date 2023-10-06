@@ -15,7 +15,7 @@ class BaseModel(models.Model):
 
 class Exam(BaseModel):
     label = models.CharField(max_length=200)
-    deadline = models.DateField(blank=True)
+    deadline = models.DateField(blank=True, null=True)
     duration = models.DurationField(default=None)
     action = models.BooleanField(default=False)
 
