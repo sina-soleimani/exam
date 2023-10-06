@@ -22,7 +22,6 @@ from exams import urls as exam_urls
 urlpatterns = [
     path('builder/', include(q_urls)),
     path('taker/', include(taker_url)),
-    path('taker/', include(taker_url)),
     path('exams/', include(exam_urls)),
 
     path('admin/', admin.site.urls),
