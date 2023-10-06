@@ -22,6 +22,7 @@ class Exam(BaseModel):
     class ScoreType(models.TextChoices):
         PERCENT = 'PE', 'PERCENT'
         POINT = 'PO', 'POINT'
+
     score_type = models.CharField(
         max_length=2,
         choices=ScoreType.choices,
