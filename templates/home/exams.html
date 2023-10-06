@@ -7,114 +7,218 @@
 {% block stylesheets %}{% endblock stylesheets %}
 
 {% block content %}
-<div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center py-4">
-    <div class="d-block mb-4 mb-md-0">
-        <nav aria-label="breadcrumb" class="d-none d-md-inline-block">
-        </nav>
-        <h2 class="h4">All Exams</h2>
+    <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center py-4">
+        <div class="d-block mb-4 mb-md-0">
+            <nav aria-label="breadcrumb" class="d-none d-md-inline-block">
+            </nav>
+            <h2 class="h4">All Exams</h2>
+        </div>
+        <div class="btn-toolbar mb-2 mb-md-0">
+            <button type="button" class="btn btn-outline-success" data-bs-toggle="modal" data-bs-target="#modal-form">
+                <i class="fa fa-plus" aria-hidden="true"></i> New Exam
+            </button>
+        </div>
     </div>
-    <div class="btn-toolbar mb-2 mb-md-0">
-        <button type="button" class="btn btn-outline-success" data-bs-toggle="modal" data-bs-target="#modal-form">
-            <i class="fa fa-plus" aria-hidden="true"></i> New Exam
-        </button>
-    </div>
-</div>
 
-<div class="modal fade" id="modal-form" tabindex="-1" role="dialog" aria-labelledby="modal-form" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered" role="document">
-        <div class="modal-content">
-            <div class="modal-body p-0">
-                <div class="card p-3 p-lg-4">
-                    <button type="button" class="btn-close ms-auto" data-bs-dismiss="modal" aria-label="Close"></button>
-                    <div class="text-center text-md-center mb-4 mt-md-0">
-                        <h2 class="mb-0 h4">Create New Exam</h2>
+    <div class="modal fade" id="modal-form" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+         role="dialog" aria-labelledby="modal-form" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-scrollable custom-modal " role="document">
+            <div class="modal-content">
+                <div class="row ">
+                    <!-- Sidebar -->
+                    <div class="col-md-3  p-0 sidebar-modal">
+                        <div class="nav flex-column tab-pills" id="v-pills-tab" role="tablist"
+                             aria-orientation="vertical">
+                            <a class="nav-link active" id="propId" data-bs-toggle="pill" href="#propId" role="tab"
+                               aria-controls="prop" aria-selected="true">General Properties</a>
+                            <a class="nav-link" id="scoreId" data-bs-toggle="pill" href="#scoreId" role="tab"
+                               aria-controls="propId" aria-selected="false">Quiz Scoring</a>
+                            <a class="nav-link" id="qPropId" data-bs-toggle="pill" href="#qPropId" role="tab"
+                               aria-controls="qPropId" aria-selected="false">Question Properties</a>
+                            <a class="nav-link" id="qListId" data-bs-toggle="pill" href="#qListId" role="tab"
+                               aria-controls="qListId" aria-selected="false">Question List</a>
+                            <a class="nav-link" id="reportId" data-bs-toggle="pill" href="#reportId" role="tab"
+                               aria-controls="reportId" aria-selected="false">Reporting</a>
+                        </div>
                     </div>
-                    <form id="examForm" class="mt-4">
-                        {% csrf_token %}
-                        <div class="form-group">
-                            <div class="mb-3">
-                                <label for="label">Label</label>
-                                <input type="text" class="form-control" id="label" required>
-                                <div class="valid-feedback">Looks good!</div>
+                    <!-- Main Content -->
+                    <div class="col-md-9">
+                        <div class="modal-body p-4">
+                            <button type="button" class="btn-close position-absolute top-0 end-0 m-2"
+                                    data-bs-dismiss="modal" aria-label="Close"></button>
+                            <div class="text-center mb-4">
+                                <h2 class="mb-0 h4">Create New Exam</h2>
                             </div>
-                            <div class="mb-3">
-                                <label for="datePicker">Date of Exam</label>
-                                <div class="input-group">
+
+                            <div class=" modal-body p-0">
+                                <div class="card p-3 p-lg-4 modal-height">
+
+                                    <form id="examForm" class="mt-4">
+                                        {% csrf_token %}
+                                        <div class="form-group">
+                                            <div class="mb-3">
+                                                <label for="label">Label</label>
+                                                <input type="text" class="form-control" id="label" required>
+                                                <div class="valid-feedback">Looks good!</div>
+                                            </div>
+                                            <div class="mb-3">
+                                                <label for="datePicker">Date of Exam</label>
+                                                <div class="input-group">
                                     <span class="input-group-text">
-                                        <svg class="icon icon-xs text-gray-600" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-                                            <path fill-rule="evenodd" d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z" clip-rule="evenodd"></path>
+                                        <svg class="icon icon-xs text-gray-600" fill="currentColor" viewBox="0 0 20 20"
+                                             xmlns="http://www.w3.org/2000/svg">
+                                            <path fill-rule="evenodd"
+                                                  d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z"
+                                                  clip-rule="evenodd"></path>
                                         </svg>
                                     </span>
-                                    <input data-datepicker="" class="form-control datePicker" placeholder="dd/mm/yyyy" id="datePicker" type="text" required>
-                                </div>
-                            </div>
-                            <div class="mb-3">
-                                <label for="durationInput">End</label>
-                                <div class="input-group date">
-                                    <span class="input-group-text"><i class="fa fa-clock-o" aria-hidden="true"></i></span>
-                                    <input type="text" id="durationInput" class="form-control timePicker" required>
+                                                    <input data-datepicker="" class="form-control datePicker"
+                                                           placeholder="dd/mm/yyyy" id="datePicker" type="text"
+                                                           required>
+                                                </div>
+                                            </div>
+
+                                            <div class="mb-3">
+                                                <label for="durationInput">Duration</label>
+                                                <div class="input-group date">
+                                                    <span class="input-group-text"><i class="fa fa-clock-o"
+                                                                                      aria-hidden="true"></i></span>
+                                                    <input type="text" id="durationInput"
+                                                           class="form-control timePicker" required>
+                                                </div>
+                                            </div>
+                                            <div class="container mt-4">
+                                                <div class="row">
+                                                    <div class="col-md-6">
+                                                        <div class="form-group row">
+                                                            <label for="selectTypeScore"
+                                                                   class="col-sm-5 col-form-label">Score In:</label>
+                                                            <div class="col-sm-7">
+                                                                <select class="form-control" id="selectTypeScore">
+                                                                    <option value="PE">Percent</option>
+                                                                    <option value="PO">Points</option>
+                                                                </select>
+                                                            </div>
+                                                        </div>
+
+
+                                                    </div>
+
+                                                    <div class="form-group row mt-3" id="passingScoreContainer">
+                                                        <label for="passingScore" class="col-sm-4 col-form-label">Passing
+                                                            Score:</label>
+                                                        <div class="col-sm-8">
+                                                            <input type="number" class="form-control" id="passingScore"
+                                                                   name="passingScore" max=100>
+                                                        </div>
+
+                                                    </div>
+                                                    <div class="alert alert-danger custom-alert mt-2 mx-4"
+                                                         id="invalidNumberAlert"
+                                                         style="display: none;">
+                                                        Passing score can not be more than 100 percent
+                                                    </div>
+
+                                                    <div class="form-group row mt-3" id="incorrectPenaltyContainer">
+                                                        <label for="incorrectPenalty"
+                                                               class="col-sm-7 col-form-label incorrect-penalty">Penalty
+                                                            point for incorrect answer:</label>
+                                                        <div class="col-sm-5">
+                                                            <input type="number" class="form-control"
+                                                                   id="incorrectPenalty" name="incorrectPenalty">
+                                                        </div>
+
+                                                    </div>
+
+
+                                                    <div class="form-check mt-3">
+                                                        <input class="form-check-input" type="checkbox"
+                                                               id="unAnsweredQuestionCheckBox">
+                                                        <label class="form-check-label"
+                                                               for="unAnsweredQuestionCheckBox">
+                                                            Apply penalty to unanswered questions
+                                                        </label>
+                                                    </div>
+
+                                                    <div class="form-check mt-3">
+                                                        <input class="form-check-input" type="checkbox"
+                                                               id="shuffleAnswerCheckbox">
+                                                        <label class="form-check-label" for="shuffleAnswerCheckbox">
+                                                            shuffle answer choices
+                                                        </label>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                        <div class="d-grid mt-4">
+                                            <button type="submit" id="submitButton" class="btn btn-outline-success">
+                                                Submit
+                                            </button>
+                                        </div>
+                                    </form>
+
                                 </div>
                             </div>
                         </div>
-                        <div class="d-grid">
-                            <button type="submit" id="submitButton" class="btn btn-outline-success">Submit</button>
-                        </div>
-                    </form>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
-</div>
-
-<div class="table-settings mb-4">
-    <table id="examTable" class="table table-striped" style="width:100%">
-        <thead>
+    <div class="table-settings mb-4">
+        <table id="examTable" class="table table-striped">
+            <thead>
             <tr>
                 <th>Label</th>
-                <th>Date</th>
+                {#                <th>Date</th>#}
                 <th>Duration</th>
                 <th>Design Page</th>
                 <th>Preview</th>
-{#                TODO#}
                 <th>Active</th>
                 <th>Delete</th>
 
             </tr>
-        </thead>
-        <tbody>
+            </thead>
+            <tbody>
             {% for field in exams %}
-            <tr>
-                <td>{{ field.label }}</td>
-                <td>{{ field.deadline }}</td>
-                <td>{{ field.duration }}</td>
-                <td>
-                    <button type="button" class="btn btn-outline-success showqbtn" onclick="window.location.href='/builder/{{ field.id }}/form'">
-                        <i class="fas fa-paperclip"></i>
-                    </button>
-                </td>
-                <td>
-                    <button type="button" class="btn btn-outline-success showqbtn" onclick="window.location.href='/taker/{{ field.id }}/exam_session'">
-                        <i class="fa fa-eye" aria-hidden="true"></i>
-                    </button>
-                </td>
-            <td>
-                    <button type="button" class="btn btn-outline-danger showqbtn" onclick="window.location.href='/taker/{{ field.id }}/exam_session'">
-                        <i class='fa fa-trash'></i>
-                    </button>
-                </td>
-            <td>
-                    <button type="button" class="btn btn-outline-success showqbtn" onclick="window.location.href='/taker/{{ field.id }}/exam_session'">
-                        <i class="fa fa-eye" aria-hidden="true"></i>
-                    </button>
-                </td>
-            </tr>
+                <tr>
+                    <td>{{ field.label }}</td>
+                    {#                <td>{{ field.deadline }}</td>#}
+                    <td>{{ field.duration }}</td>
+                    <td>
+                        <button type="button" class="btn btn-outline-success" data-bs-toggle="modal"
+                                data-bs-target="#modal-form">
+                            <i class="fa fa-cog" aria-hidden="true"></i>
+                        </button>
+                    </td>
+                    <td>
+                        <button type="button" class="btn btn-outline-primary showqbtn"
+                                onclick="window.location.href='/taker/{{ field.id }}/exam_session'">
+                            <i class="fa fa-eye" aria-hidden="true"></i>
+                        </button>
+                    </td>
+                    {#TODO#}
+                    <td>
+                        <button type="button" class="btn btn-outline-warning showqbtn"
+                                onclick="window.location.href='/taker/{{ field.id }}/exam_session'">
+                            <i class="fa fa-bolt" aria-hidden="true"></i>
+                        </button>
+                    </td>
+                    <td>
+                        <button type="button" class="btn btn-outline-danger showqbtn"
+                                onclick="window.location.href='/taker/{{ field.id }}/exam_session'">
+                            <i class='fa fa-trash'></i>
+                        </button>
+                    </td>
+                </tr>
             {% endfor %}
-        </tbody>
-    </table>
-</div>
+            </tbody>
+        </table>
+    </div>
 {% endblock content %}
 
 <!-- Specific Page JS goes HERE -->
 {% block javascripts %}
-<script src="{% static 'js/exam.js' %}"></script>
+    <script src="{% static 'js/exam.js' %}"></script>
 {% endblock javascripts %}

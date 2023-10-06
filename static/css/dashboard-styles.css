@@ -1,19 +1,20 @@
 .custom-card {
-        background-color: #dcdcdc; /* Set your desired background color for the card */
-        border: none; /* Remove the card border */
-        border-radius: 15px;/* Add rounded corners for a nicer look */
-    }
-    .custom-card .card-header {
-        background-color: #c0c0c0;
-        border-radius: 15px 15px 0 0;/* Set your desired background color for the card title */
-    }
+    background-color: #dcdcdc; /* Set your desired background color for the card */
+    border: none; /* Remove the card border */
+    border-radius: 15px; /* Add rounded corners for a nicer look */
+}
 
-    .custom-card .card-body {
-        padding: 20px; /* Add some padding to the card body */
-    }
+.custom-card .card-header {
+    background-color: #c0c0c0;
+    border-radius: 15px 15px 0 0; /* Set your desired background color for the card title */
+}
 
-    .modal-content {
-         height: 600px; /* Set the desired height */
+.custom-card .card-body {
+    padding: 20px; /* Add some padding to the card body */
+}
+
+.modal-content {
+    height: 600px; /* Set the desired height */
     border: none;
 
 }
@@ -49,10 +50,26 @@
 .btn-close:hover {
     color: #007bff; /* Close button hover color */
 }
+
 .custom-modal {
     max-width: 50%; /* Adjust the max-width to your desired size */
 }
+
 .custom-alert {
     padding: 0.5rem 1rem; /* Adjust padding as needed */
     font-size: 0.875rem; /* Adjust font size as needed */
+}
+
+.modal-height {
+    height: 25em;
+    overflow: auto;
+}
+
+.sidebar-modal {
+    border-radius: 10px;
+    background-color: #001f3f
+}
+
+.incorrect-penalty {
+    font-size: 15px;
 }
