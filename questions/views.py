@@ -136,14 +136,14 @@ class QBank(View):
             'questionGroupsData': json_data,
         })
 
-    def post(self, request, id):
+    def post(self, request):
         question_qroups_form = QuestionGroupForm(request.POST)
 
         if question_qroups_form.is_valid():
             print('POST request')
 
             new_question_group = question_qroups_form.save(commit=False)
-            new_question_group.exam = Exam.objects.get(pk=id)
+            # new_question_group.exam = Exam.objects.first()
             new_question_group.save()
 
             return JsonResponse({
@@ -181,7 +181,7 @@ class QuestionSort(View):
         print(request.POST["question_id"])
         qg = QuestionGroup.objects.get(id=request.POST["question_group_id"])
         Question.objects.filter(id=request.POST["question_id"]).update(
-            queston_group=qg
+            question_group=qg
         )
         return JsonResponse({'result': 'ok'}, status=200)
 
