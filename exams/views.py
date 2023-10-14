@@ -94,3 +94,18 @@ class ExamDelete(DeleteView):
 
         return JsonResponse({},status=200)
 
+
+class ActiveExam(UpdateView):
+    model = Exam
+    fields = ['id',]
+    template_name = 'home/exams.html'
+    success_url = '/success/'
+
+    def form_valid(self, form):
+        self.object = self.get_object()
+        self.object.action=True
+        self.object.save()
+
+        return JsonResponse({}, status=200)
+
+

@@ -1,5 +1,6 @@
 var desiredId = null;
 var candidate_delete_exam = null;
+var candidate_active_exam = null;
 $(document).ready(function () {
     $('.open-modal-button').click(function () {
         desiredId = $(this).data('id');
@@ -154,7 +155,7 @@ $(document).on('click', '#settingScore', function (event) {
 })
 $(document).on('click', '.open-delete-modal', function (event) {
     candidate_delete_exam = $(this).data('id')
-    $('#deleteModalLabel').html('Delete '+findExamById(examsData, candidate_delete_exam).label+' Exam')
+    $('#deleteModalLabel').html('Delete ' + findExamById(examsData, candidate_delete_exam).label + ' Exam')
 })
 
 function findExamById(examsData, examId) {
@@ -171,6 +172,25 @@ $(document).on('click', '.delete-exam', function (event) {
     $.ajax({
         url: candidate_delete_exam + '/delete/',
         type: 'DELETE',  // Use DELETE as the HTTP method
+        headers: {
+            'X-CSRFToken': csrfToken, // Include the CSRF token in headers
+        },
+        success: function () {
+            window.location.href = '/exams/list';
+        }
+    })
+
+})
+$(document).on('click', '.open-active-modal', function (event) {
+    candidate_active_exam = $(this).data('id')
+    $('#activeModalLabel').html('Active ' + findExamById(examsData, candidate_active_exam).label + ' Exam')
+})
+
+$(document).on('click', '.active-exam', function (event) {
+
+    $.ajax({
+        url: candidate_active_exam + '/active/',
+        type: "post",
         headers: {
             'X-CSRFToken': csrfToken, // Include the CSRF token in headers
         },
