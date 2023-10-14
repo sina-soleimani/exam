@@ -1,7 +1,30 @@
+var desiredId = null;
+var candidate_delete_exam = null;
 $(document).ready(function () {
+    $('.open-modal-button').click(function () {
+        desiredId = $(this).data('id');
+        const element = examsData.find(item => item.id === desiredId);
+        if (element) {
+            console.log(element);
+            $('#label').val(element.label);
+            // 'deadline': formattedStr,
+            $('#durationInput').val(element.duration);
+            $('#datePicker').val(element.deadline.replaceAll('-', '/'));
+            $('#selectTypeScore').val(element.score_type);
+            $('#passingScore').val(element.point_passing_score);
+            // 'percent_passing_score': $('#passingScore').val(),
+            $('#incorrectPenalty').val(element.incorrect_penalty);
+            $("#unAnsweredQuestionCheckBox").prop('checked', element.unanswered_penalty);
+            $("#shuffleAnswerCheckbox").prop('checked', element.shuffle_answer);
+            $('#modal-form').modal('show');
+        }
+        $('#settingQPropId').attr('hidden', 'hidden')
+        $('#settingScoreId').attr('hidden', 'hidden')
+        $('#settingPropId').removeAttr('hidden')
+    });
     $('#examTable').DataTable();
 
-    $("#passingScore").on("input", function() {
+    $("#passingScore").on("input", function () {
         if ($(this).attr('max') === '100') {
             var inputValue = $(this).val();
             var parsedValue = parseFloat(inputValue);
@@ -66,12 +89,21 @@ $('#submitButton').click(function (event) {
         'point_passing_score': $('#passingScore').val(),
         'percent_passing_score': $('#passingScore').val(),
         'incorrect_penalty': $('#incorrectPenalty').val(),
-        'unanswered_penalty': $('#unAnsweredQuestionCheckBox').val(),
-        'shuffle_answer': $('#shuffleAnswerCheckbox').val(),
+        'unanswered_penalty': $('#unAnsweredQuestionCheckBox').prop('checked'),
+        'shuffle_answer': $('#shuffleAnswerCheckbox').prop('checked'),
     };
+    var url;
+
+    if (desiredId) {
+        url = desiredId + '/update/'
+        console.log(typeof url)
+    } else {
+        url = 'exam_submit/'
+    }
+    console.log(url)
 
     $.ajax({
-        url: 'exam_submit/',
+        url: url,
         type: 'post',
         dataType: 'json',
         data: formData,
@@ -86,17 +118,61 @@ $('#submitButton').click(function (event) {
 
 
 document.getElementById('selectTypeScore').addEventListener('change', function () {
-            const selectedOption = this.value;
+    const selectedOption = this.value;
 
-            const passingScore = document.getElementById('passingScore');
+    const passingScore = document.getElementById('passingScore');
 
-            if (selectedOption === 'Percent') {
+    if (selectedOption === 'Percent') {
 
-                passingScore.placeholder = 'Enter a percentage';
-                passingScore.max = 100;
-                passingScore.min = 0;
-            } else if (selectedOption === 'Points') {
-                passingScore.placeholder = 'Enter a number';
-                passingScore.min=0;
-            }
-        });
+        passingScore.placeholder = 'Enter a percentage';
+        passingScore.max = 100;
+        passingScore.min = 0;
+    } else if (selectedOption === 'Points') {
+        passingScore.placeholder = 'Enter a number';
+        passingScore.min = 0;
+    }
+});
+
+$(document).on('click', '#settingProp', function (event) {
+    $('#settingQPropId').attr('hidden', 'hidden')
+    $('#settingScoreId').attr('hidden', 'hidden')
+    $('#settingPropId').removeAttr('hidden')
+})
+
+
+$(document).on('click', '#settingQProp', function (event) {
+    $('#settingPropId').attr('hidden', 'hidden')
+    $('#settingScoreId').attr('hidden', 'hidden')
+    $('#settingQPropId').removeAttr('hidden')
+})
+
+
+$(document).on('click', '#settingScore', function (event) {
+    $('#settingQPropId').attr('hidden', 'hidden')
+    $('#settingPropId').attr('hidden', 'hidden')
+    $('#settingScoreId').removeAttr('hidden')
+})
+$(document).on('click', '.open-delete-modal', function (event) {
+    candidate_delete_exam = $(this).data('id')
+})
+
+
+//TODO
+$(document).on('click', '.delete-exam', function (event) {
+
+    $.ajax({
+        url: '/exams/' + candidate_delete_exam + '/delete/',
+        type: 'DELETE',  // Use DELETE as the HTTP method
+        headers: {
+            'X-CSRFToken': csrfToken, // Include the CSRF token in headers
+        },
+        data: JSON.stringify({
+            'csrfmiddlewaretoken': csrfToken,
+            'id': candidate_delete_exam,
+        }),
+        dataType: 'json',
+        success: function () {
+        }
+    })
+
+})
