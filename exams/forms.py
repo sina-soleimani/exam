@@ -10,3 +10,13 @@ class ExamForm(forms.ModelForm):
                   'point_passing_score', 'percent_passing_score',
                   'incorrect_penalty', 'unanswered_penalty', 'shuffle_answer'
                   ]
+
+
+
+class ExamFormUpdate(forms.ModelForm):
+    class Meta:
+        model = Exam
+        fields = ['label', 'duration', 'score_type',
+                  'point_passing_score', 'percent_passing_score',
+                  'incorrect_penalty', 'unanswered_penalty', 'shuffle_answer'
+                  ]

@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect
 from django.views.generic import CreateView, ListView, UpdateView, DeleteView
 from .models import Exam
-from .forms import ExamForm
+from .forms import ExamForm, ExamFormUpdate
 import json
 from django.http import JsonResponse
 # from django.core import serializers
@@ -62,12 +62,11 @@ class ExamCreateView(CreateView):
     template_name = 'home/exams.html'
     success_url = '/success/'
 
-# TODO
 class ExamUpdateView(UpdateView):
     model = Exam
-    form_class = ExamForm
+    form_class = ExamFormUpdate
     template_name = 'home/exams.html'
-    success_url = reverse_lazy('exams:exam_update')
+    success_url = '/success/'
 
     def form_valid(self, form):
         print("Form is valid!")
