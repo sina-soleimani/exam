@@ -207,10 +207,9 @@
                             <i class="fa fa-eye" aria-hidden="true"></i>
                         </button>
                     </td>
-                    {#TODO#}
                     <td>
-                        <button type="button" class="btn btn-outline-warning showqbtn"
-                                onclick="window.location.href='/taker/{{ field.id }}/exam_session'">
+                        <button type="button" class="btn btn-outline-warning showqbtn open-active-modal"
+                                data-bs-toggle="modal" data-bs-target="#activeModal" data-id="{{ field.id }}">
                             <i class="fa fa-bolt" aria-hidden="true"></i>
                         </button>
                     </td>
@@ -230,7 +229,7 @@
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="deleteModalLabel">Delete Exam</h5>
+                    <h5 class="modal-title" id="deleteModalLabel">Delete  Exam</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
@@ -239,6 +238,25 @@
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary " data-bs-dismiss="modal">Close</button>
                     <button type="button" class="btn btn-danger delete-exam">Delete</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="activeModal" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false"
+         aria-labelledby="activeModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="activeModalLabel"></h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    Are you sure to active exam
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary " data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-warning active-exam">Active</button>
                 </div>
             </div>
         </div>
