@@ -4,6 +4,7 @@ let audioFile;
 let qg_selected_id = null;
 let create_question_flag = null;
 let file = null
+let multiQCheckbox = 3
 
 $(document).ready(function () {
     sortQuestions();
@@ -570,27 +571,16 @@ function addMatchingOption() {
 function addMultipleOption() {
 
     $(document).on('click', '#addOptionId', function (event) {
-        const newRowHtml = `
-        <tr class="q-option">
-            <th scope="row">
-                <div class="custom-control custom-radio">
-                    <input type="radio" name="questionTrueFalse" class="custom-control-input">
-                    <label class="custom-control-label"></label>
-                </div>
-            </th>
-            <td>
-                <div class="input-group">
-                    <input type="text" class="form-control" aria-label="Text input with segmented dropdown button">
-                    <div class="input-group-append">
-                        <button type="button" class="btn btn-outline-danger remove-option">
-                            <i class="fa fa-trash"></i>
-                        </button>
-                    </div>
-                </div>
-            </td>
-        </tr>`;
+        const newRowHtml = '<tr class="q-option"><th scope="row"><div class="custom-control custom-radio">' +
+            '<input type="radio" name="questionMultiQ" id="multiQCheckbox' + multiQCheckbox + '" class="custom-control-input">' +
+            '<label class="custom-control-label" for="multiQCheckbox' + multiQCheckbox + '" ></label></div></th><td>' +
+            '<div class="input-group"><input type="text" class="form-control" ' +
+            'aria-label="Text input with segmented dropdown button"><div class="input-group-append">' +
+            '<button type="button" class="btn btn-outline-danger remove-option"><i class="fa fa-trash"></i></button>' +
+            '</div></div></td></tr>';
 
         $('#tbodyMultiQ').append(newRowHtml);
+        multiQCheckbox = multiQCheckbox + 1;
     })
 
 }
