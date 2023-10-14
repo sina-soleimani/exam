@@ -1,17 +1,14 @@
-from django.shortcuts import render
-from django.views.generic import CreateView, ListView, UpdateView
+from django.shortcuts import render, redirect
+from django.views.generic import CreateView, ListView, UpdateView, DeleteView
 from .models import Exam
 from .forms import ExamForm
 import json
-# TODO
-# from django.http import JsonResponse
+from django.http import JsonResponse
 # from django.core import serializers
 from decimal import Decimal
+# TODO
 from django.urls import reverse_lazy
 
-
-
-# Create your views here.
 
 class ExamListView(ListView):
     model = Exam
@@ -39,6 +36,7 @@ class ExamListView(ListView):
         context['exams_json'] = exams_json
 
         return context
+
 
 class DecimalEncoder(json.JSONEncoder):
     def default(self, obj):
@@ -84,24 +82,15 @@ class ExamUpdateView(UpdateView):
 
         return response
 
-#
-#TODO
 
-# class ExamDelete(View):
-#     def delete(self, request, id):
-#         try:
-#             data = json.loads(request.body.decode('utf-8'))
-#             name = data.get('name')
-#
-#             if name == 'question':
-#                 question = get_object_or_404(Question, id=id)
-#                 question.delete()
-#             elif name == 'question_group':
-#                 question_group = get_object_or_404(QuestionGroup, id=id)
-#                 question_group.delete()
-#             else:
-#                 return JsonResponse({'error': 'Invalid name'}, status=400)
-#
-#             return JsonResponse({'result': 'ok'}, status=200)
-#         except json.JSONDecodeError:
-#             return JsonResponse({'error': 'Invalid JSON data'}, status=400)
+class ExamDelete(DeleteView):
+    model = Exam
+    template_name = 'home/exams.html'
+    success_url = '/success/'
+
+    def form_valid(self, form):
+        self.object = self.get_object()
+        self.object.delete()
+
+        return JsonResponse({},status=200)
+
