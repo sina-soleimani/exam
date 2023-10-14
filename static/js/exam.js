@@ -157,21 +157,16 @@ $(document).on('click', '.open-delete-modal', function (event) {
 })
 
 
-//TODO
 $(document).on('click', '.delete-exam', function (event) {
 
     $.ajax({
-        url: '/exams/' + candidate_delete_exam + '/delete/',
+        url:  candidate_delete_exam + '/delete/',
         type: 'DELETE',  // Use DELETE as the HTTP method
         headers: {
             'X-CSRFToken': csrfToken, // Include the CSRF token in headers
         },
-        data: JSON.stringify({
-            'csrfmiddlewaretoken': csrfToken,
-            'id': candidate_delete_exam,
-        }),
-        dataType: 'json',
         success: function () {
+            window.location.href = '/exams/list';
         }
     })
 
