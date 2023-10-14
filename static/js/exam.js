@@ -154,13 +154,22 @@ $(document).on('click', '#settingScore', function (event) {
 })
 $(document).on('click', '.open-delete-modal', function (event) {
     candidate_delete_exam = $(this).data('id')
+    $('#deleteModalLabel').html('Delete '+findExamById(examsData, candidate_delete_exam).label+' Exam')
 })
 
+function findExamById(examsData, examId) {
+    for (let i = 0; i < examsData.length; i++) {
+        const exam = examsData[i];
+        if (exam.id === examId) {
+            return exam;
+        }
+    }
+}
 
 $(document).on('click', '.delete-exam', function (event) {
 
     $.ajax({
-        url:  candidate_delete_exam + '/delete/',
+        url: candidate_delete_exam + '/delete/',
         type: 'DELETE',  // Use DELETE as the HTTP method
         headers: {
             'X-CSRFToken': csrfToken, // Include the CSRF token in headers
