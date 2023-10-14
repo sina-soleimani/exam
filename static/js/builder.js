@@ -3,7 +3,7 @@ let audio = '';
 let audioFile;
 let qg_selected_id = null;
 let create_question_flag = null;
-let file=null
+let file = null
 
 $(document).ready(function () {
     sortQuestions();
@@ -56,7 +56,7 @@ function updateQuestionInQuestionGroupsData(qu, qId) {
 function addQuestionToQuestionGroupsData(qu, qgId) {
     for (let i = 0; i < questionGroupsData.length; i++) {
         const group = questionGroupsData[i];
-        if (group.id.toString() === qgId) {
+        if (group.id.toString() === qgId.toString()) {
             group.questions.push(qu)
             return group;
         }
@@ -105,6 +105,7 @@ function findSelectedQG() {
 
         } else {
 
+            globalRestartForm();
         }
 
         $(this).addClass("q_selected");
@@ -140,7 +141,7 @@ function createQuestion() {
         }
 
         var question_group__id = (qg_selected_id === null) ? $('.menu-list li:first').attr('data-id') : qg_selected_id;
-        if($('.menu-list li:first').attr('data-id')===undefined){
+        if ($('.menu-list li:first').attr('data-id') === undefined) {
             $("#notExistQGAlert").show();
             setTimeout(function () {
                 $("#notExistQGAlert").hide();
@@ -314,7 +315,7 @@ function sortQuestions() {
 
 function chooseImage() {
     $('#questionImageId').change(function () {
-         file = this.files[0];
+        file = this.files[0];
         const invalidImageAlert = $('#invalidImageAlert');
         if (file) {
             // Check if the selected file is an image
@@ -491,14 +492,19 @@ function deleteAudio() {
     })
 }
 
-function globalDropDownfunc() {
+function globalRestartForm() {
     $("#questionTextarea").val('')
     $("#baremId").val('')
     create_question_flag = null;
+
+    $('#questionTextarea').val('');
+    $('#questionTrueId').prop('checked', false);
+    $('#questionFalseId').prop('checked', false);
+
 }
 
 $(document).on('click', '#matchingDropDown', function (event) {
-    globalDropDownfunc()
+    globalRestartForm()
     $('#multiQuestionTable').attr('hidden', 'hidden')
     $('#TrueFalseQuestionTable').attr('hidden', 'hidden')
     $('#multiLableId').attr('hidden', 'hidden')
@@ -508,9 +514,7 @@ $(document).on('click', '#matchingDropDown', function (event) {
 })
 
 $(document).on('click', '#trueFalseDropDown', function (event) {
-    globalDropDownfunc()
-    $('#questionTrueId').prop('checked', false);
-    $('#questionFalseId').prop('checked', false);
+    globalRestartForm()
     $('#TrueFalseQuestionTable').removeAttr('hidden')
     $('#multiQuestionTable').attr('hidden', 'hidden')
     $('#tfLableId').removeAttr('hidden')
@@ -519,7 +523,7 @@ $(document).on('click', '#trueFalseDropDown', function (event) {
 })
 
 $(document).on('click', '#multipleDropDown', function (event) {
-    globalDropDownfunc()
+    globalRestartForm()
     $('#multiQuestionTable').removeAttr('hidden')
     $('#TrueFalseQuestionTable').attr('hidden', 'hidden')
     $('#tfLableId').attr('hidden', 'hidden')
