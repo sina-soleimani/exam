@@ -11,7 +11,8 @@ from django.db.models import OuterRef, Subquery
 
 class examSession(View):
     def get(self, request, id):
-        question_qroups = models.QuestionGroup.objects.filter(exam__pk=id).prefetch_related('question_group_questions')
+        # question_qroups = models.QuestionGroup.objects.filter(exam__pk=id).prefetch_related('question_group_questions')
+        question_qroups = models.QuestionGroup.objects.all().prefetch_related('question_group_questions')
         subquery = Subquery(
             models.Answer.objects.filter(
                 question=OuterRef('id')
