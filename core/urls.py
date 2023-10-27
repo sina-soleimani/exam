@@ -18,6 +18,7 @@ from django.contrib import admin
 from questions import urls as q_urls
 from taker import urls as taker_url
 from exams import urls as exam_urls
+from user import urls as usr_urls
 
 urlpatterns = [
     path('builder/', include(q_urls)),
@@ -26,6 +27,7 @@ urlpatterns = [
 
     path('admin/', admin.site.urls),
 
-    path("", include("authentication.urls")),  # Auth routes - login / register
+    # path("", include("authentication.urls")),  # Auth routes - login / register
+    path("", include(usr_urls)),
     path("", include("home.urls")),
 ]

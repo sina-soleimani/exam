@@ -24,6 +24,7 @@ SECRET_KEY = 'bq-*%(bxqnrdu(vkes(mf6-1j+-!u2m0qv^pql$24m55c9o!@t'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
+AUTH_USER_MODEL = 'user.Profile'
 ALLOWED_HOSTS = []
 
 # Application definition
@@ -40,6 +41,8 @@ INSTALLED_APPS = [
     'questions',
     'exams',
     'taker',
+    'course',
+    'user',
 
 ]
 
