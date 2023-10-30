@@ -11,6 +11,10 @@ class BaseModel(models.Model):
         abstract = True
 
 
+class QuestionBank(BaseModel):
+    name = models.CharField(max_length=200)
+
+
 # Create your models here.
 # todo: rename question group
 class QuestionGroup(BaseModel):
@@ -22,6 +26,10 @@ class QuestionGroup(BaseModel):
     exam = models.ForeignKey(
         Exam, blank=True, null=True, on_delete=models.CASCADE,
         related_name='exam_question_groups', related_query_name='exam_question_group',
+    )
+    q_bank = models.ForeignKey(
+        QuestionBank, blank=True, null=True, on_delete=models.CASCADE,
+        related_name='q_bank_q_groups', related_query_name='q_bank_q_group',
     )
 
     def __str__(self):
