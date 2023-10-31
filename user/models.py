@@ -1,4 +1,5 @@
 from django.db import models
+from django.utils import timezone
 
 # Create your models here.
 
@@ -29,6 +30,14 @@ class Profile(AbstractUser):
     ]
 
     access_level = models.CharField(max_length=10, choices=ACCESS_LEVEL_CHOICES, blank=True, null=True)
+
+    # username = models.CharField(max_length=30, unique=True)
+    # email = models.EmailField(unique=True)
+    # first_name = models.CharField(max_length=30, blank=True)
+    # last_name = models.CharField(max_length=30, blank=True)
+    # is_active = models.BooleanField(default=True)
+    entry_year = models.DateField(null=True)
+    major_code = models.PositiveIntegerField(null=True)
 
     def __str__(self):
         return self.username
