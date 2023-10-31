@@ -1,5 +1,6 @@
 from django.db import models
 from datetime import date
+from questions.models import QuestionBank
 # Create your models here.
 
 
@@ -17,4 +18,10 @@ class Course(BaseModel):
     group_code = models.IntegerField(max_length=200)
     term = models.IntegerField(max_length=200)
     year = models.DateField(default=date.today().replace(month=1, day=1))
-
+    question_bank = models.ForeignKey(
+        QuestionBank,
+        blank=True,
+        null=True,
+        on_delete=models.CASCADE,
+        related_name='q_bank_courses',
+    )
