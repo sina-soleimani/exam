@@ -46,9 +46,15 @@
                 <td>{{ field.term }}</td>
                 <td>{{ field.year }}</td>
 
-                <td>{{ field.q_bank }}
+                <td>
                     <button type="button" class="btn btn-outline-primary showqbtn"
                             onclick="window.location.href='/builder/{{ field.question_bank.id }}/q_bank'">
+                        <i class="fa fa-eye" aria-hidden="true"></i>
+                    </button>
+                </td>
+                <td>
+                    <button type="button" class="btn btn-outline-warning showqbtn"
+                            onclick="window.location.href='/exams/{{ field.id }}/list'">
                         <i class="fa fa-eye" aria-hidden="true"></i>
                     </button>
                 </td>
