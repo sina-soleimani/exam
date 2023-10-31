@@ -18,6 +18,13 @@ class Exam(BaseModel):
     deadline = models.DateField(blank=True, null=True)
     duration = models.DurationField(default=None)
     action = models.BooleanField(default=False)
+    course = models.ForeignKey(
+        'course.Course',
+        blank=True,
+        null=True,
+        on_delete=models.CASCADE,
+        related_name='course_exams',
+    )
 
     class ScoreType(models.TextChoices):
         PERCENT = 'PE', 'PERCENT'

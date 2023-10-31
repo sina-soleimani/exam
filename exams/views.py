@@ -15,6 +15,20 @@ class ExamListView(ListView):
     template_name = 'home/exams.html'
     context_object_name = 'exams'
 
+    def get_queryset(self):
+        # Get the 'id' parameter from the URL
+        course_id = self.kwargs['id']
+        print('salam')
+        print(course_id)
+
+        # Filter the exams by 'id' if it's provided in the URL parameter
+        if course_id:
+            return Exam.objects.filter(course__pk=course_id)
+
+        # If 'id' is not provided in the URL, return all exams
+        return Exam.objects.all()
+
+
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         exams = self.get_queryset()
