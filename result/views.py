@@ -17,6 +17,9 @@ class ResultListView(ListView):
         if exam_id:
             return Result.objects.filter(exam__pk=exam_id)
 
-        # If 'id' is not provided in the URL, return all exams
-        return Exam.objects.all()
+        # If 'id' is not provided in the URL, return all exam
+        # TODO
+
+
+        return Result.objects.all()
 

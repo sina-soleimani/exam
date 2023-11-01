@@ -11,7 +11,7 @@ class BaseModel(models.Model):
 
 
 class Result(BaseModel):
-    name = models.CharField(max_length=200)
+    # name = models.CharField(max_length=200)
     exam = models.ForeignKey(
         'exams.Exam', blank=True, null=True, on_delete=models.CASCADE,
         related_name='exam_results', related_query_name='exam_result',
