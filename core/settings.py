@@ -58,6 +58,9 @@ MIDDLEWARE = [
 
 ROOT_URLCONF = 'core.urls'
 
+SESSION_ENGINE = "django.contrib.sessions.backends.db"
+SESSION_COOKIE_AGE = 300
+
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
