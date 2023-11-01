@@ -184,6 +184,7 @@
                 <th>Duration</th>
                 <th>Setting</th>
                 <th>Preview</th>
+                <th>Results</th>
                 <th>Active</th>
                 <th>Delete</th>
 
@@ -204,6 +205,12 @@
                     <td>
                         <button type="button" class="btn btn-outline-primary showqbtn"
                                 onclick="window.location.href='/taker/{{ field.id }}/exam_session'">
+                            <i class="fa fa-eye" aria-hidden="true"></i>
+                        </button>
+                    </td>
+                    <td>
+                        <button type="button" class="btn btn-outline-primary showqbtn"
+                                onclick="window.location.href='/results/{{ field.id }}/list'">
                             <i class="fa fa-eye" aria-hidden="true"></i>
                         </button>
                     </td>
