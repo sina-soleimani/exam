@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     'taker',
     'course',
     'user',
+    'result',
 
 ]
 
