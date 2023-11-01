@@ -23,3 +23,17 @@ class Course(BaseModel):
         on_delete=models.CASCADE,
         related_name='q_bank_courses',
     )
+
+    teacher = models.ForeignKey(
+        'user.Profile',
+        related_name='teacher_courses',
+        blank=True,
+        null=True,
+        on_delete=models.CASCADE)
+    students = models.ManyToManyField(
+        'user.Profile', related_name='student_courses',
+        related_query_name='student_course',
+        blank=True,
+        null=True
+    )
+
