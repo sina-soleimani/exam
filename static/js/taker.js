@@ -1,7 +1,8 @@
+const csrfToken = $("input[name=csrfmiddlewaretoken]").val();
+let question;
 //TODO
 $(document).on('click', 'button.showqbtn', async function (event) {
-        const question = findQuestionById(questionGroupsData, $(this).data('id'));
-
+        question = findQuestionById(questionGroupsData, $(this).data('id'));
         const imageBlob = await fetchImageAsBlob(question.image);
         console.log(imageBlob)
         console.log(question.image)
@@ -69,3 +70,27 @@ async function fetchImageAsBlob(url) {
 function isValidImageType(fileType) {
     return /^image\//.test(fileType);
 }
+
+$("#submitQAnswser").on("submit", function (event) {
+
+
+    const formData = {
+        'csrfmiddlewaretoken': csrfToken,
+        'is_true': 'True',
+        'question_id': question.id,
+        'result_id': $('#result_id').data('id'),
+    };
+
+    $.ajax({
+        url: '/taker/answer_question/' + question.id,
+        type: 'post',
+        dataType: 'json',
+        data: formData,
+        success: (response) => {
+            console.log(response);
+        },
+        error: (error) => {
+            console.error(error);
+        }
+    });
+});
