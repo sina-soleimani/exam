@@ -1,6 +1,10 @@
 from django.shortcuts import render
 from django.views.generic import View
 from questions import models
+from django.views.generic import CreateView
+from .models import ProfileAnswer
+from .forms import ProfileAnswerForm
+from result.models import Result
 
 # TODO REVIEW THIS IMPORT
 from django.db.models import Sum
@@ -45,8 +49,26 @@ class examSession(View):
 
         json_data = json.dumps(data)
 
-        print(question_qroups)
+        result=Result.objects.get_or_create(exam_id=id, student_id=request.user.id)
 
         return render(request, 'taker.html', context={
             'questionGroupsData': json_data,
-            'questions': question_qroups})
+            'questions': question_qroups,
+            'result_id':result[0].id})
+
+
+class AnswerQuestionView(CreateView):
+    model = ProfileAnswer
+    form_class = ProfileAnswerForm
+    template_name = 'home/taker.html'
+    success_url = '/success/'
+
+    def form_valid(self, form):
+        # Save the form and assign result if available
+        profile_answer = form.save(commit=False)
+        question=models.Question.objects.get(id=self.request.POST.get('question_id'))
+        profile_answer.question = question
+        result=Result.objects.get(id=self.request.POST.get('result_id'))
+        profile_answer.result = result
+        profile_answer.save()
+        return super().form_valid(form)
