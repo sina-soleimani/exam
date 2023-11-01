@@ -92,13 +92,16 @@
                 </div>
 
                 <div class="card-body  rounded" style="z-index: 100">
+                    <form  id="submitQAnswser">
+                        {% csrf_token %}
+
 
                     <div class="card " style="height: 100%">
                         <div class="container car-body" style="height: 100%">
                             <div class="font-weight-bold my-5" id="descriptionContent">
                                 {{ q.description | safe }}
                             </div>
-
+                            <div data-id="{{ result_id }}" id="result_id"></div>
                             <div class="">
                                 <input type="radio" class="btn-check " name="options-outlined" id="success-outlined"
                                        autocomplete="off" checked>
@@ -119,13 +122,14 @@
                             </div>
                             <div class="col-auto">
                                 <button type="submit" class="btn btn-outline-primary mb-2 mr-2"
-                                        id="create_question_button">
+                                        id="answer_q_btn">
                                     Success
                                 </button>
                             </div>
                         </div>
 
                     </div>
+                  </form>
                 </div>
 
             </div>
