@@ -7,58 +7,66 @@
 {% block stylesheets %}{% endblock stylesheets %}
 
 {% block content %}
-<div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center py-4">
-    <div class="d-block mb-4 mb-md-0">
-        <nav aria-label="breadcrumb" class="d-none d-md-inline-block">
-        </nav>
-        <h2 class="h4"></h2>
+    <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center py-4">
+        <div class="d-block mb-4 mb-md-0">
+            <nav aria-label="breadcrumb" class="d-none d-md-inline-block">
+            </nav>
+            <h2 class="h4">Result List </h2>
+        </div>
+        <div class="btn-toolbar mb-2 mb-md-0">
+            <form id="result_form">
+                {% csrf_token %}
+                <button type="button" id="calc_results" class="btn btn-outline-success open-modal-button">
+                    <i class="fa fa-plus" aria-hidden="true"></i> Calculate scores
+                </button>
+            </form>
+        </div>
     </div>
-    <div class="btn-toolbar mb-2 mb-md-0">
 
-    </div>
-</div>
+    <div class="container-fluid">
 
-<div class="container-fluid">
+        <div class="card custom-card shadow" style="height: 100vh">
+            <div class="card-header  text-white">
+                <h5 class="card-title">Results</h5>
+            </div>
+            <div class="card-body" style="height: 100%">
+                <div class="table-settings mb-4">
+                    <table id="resultTable" class="table table-striped" style="width:100%; height: 100%">
+                        <thead class="thead-dark">
+                        <tr>
+                            <th>Username</th>
+                            <th>Course Code</th>
+                            <th>Course Name</th>
+                            <th>Term</th>
+                            <th>Score</th>
 
-            <div class="card custom-card shadow"  style="height: 100vh">
-                <div class="card-header  text-white">
-                    <h5 class="card-title">Courses</h5>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {% for field in results %}
+                            <tr>
+                                <td>{{ field.student.username }}</td>
+                                <td>{{ field.exam.course.course_code }}</td>
+                                <td>{{ field.exam.course.course_name }}</td>
+                                <td>{{ field.exam.course.term }}</td>
+                                <td>{{ field.score }}</td>
+
+
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
                 </div>
-                <div class="card-body"  style="height: 100%">
-<div class="table-settings mb-4">
-    <table id="examTable" class="table table-striped" style="width:100%; height: 100%">
-        <thead class="thead-dark">
-            <tr>
-                <th>Label</th>
-                <th>Code</th>
-                <th>Term</th>
-
-            </tr>
-        </thead>
-        <tbody>
-            {% for field in results %}
-            <tr>
-                <td>{{ field.name }}</td>
-                <td>{{ field.exam.duration }}</td>
-                <td>{{ field.student.pk }}</td>
-
-
-
-            </tr>
-            {% endfor %}
-        </tbody>
-    </table>
-</div>
-</div>
-</div>
+            </div>
+        </div>
     </div>
 
 {% endblock content %}
 
 <!-- Specific Page JS goes HERE -->
 {% block javascripts %}
-{#    TODO#}
-    <script src="{% static 'js/exam.js' %}"></script>
+    {#    TODO#}
+    <script src="{% static 'js/result.js' %}"></script>
 
-{#<script src="{% static 'js/courses.js' %}"></script>#}
+    {#<script src="{% static 'js/courses.js' %}"></script>#}
 {% endblock javascripts %}
