@@ -1,9 +1,10 @@
 from django.urls import path
-from .views import ResultListView
+from .views import ResultListView, calc_result
 
 app_name = 'results'
 
 urlpatterns = [
-    path('<int:id>/list', ResultListView.as_view(), name='resultlist'),
+    path('list/<int:id>', ResultListView.as_view(), name='resultList'),
+    path('calc_result/', calc_result, name='calc_result'),
 
 ]
