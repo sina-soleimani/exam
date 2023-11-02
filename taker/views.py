@@ -5,25 +5,31 @@ from django.views.generic import CreateView
 from .models import ProfileAnswer
 from .forms import ProfileAnswerForm
 from result.models import Result
-
-# TODO REVIEW THIS IMPORT
-from django.db.models import Sum
-
+from exams.models import Exam
 import json
 from django.db.models import OuterRef, Subquery
+from django.contrib.auth.decorators import login_required
 
+class LoginRequiredMixin:
+    @classmethod
+    def as_view(cls, **initkwargs):
+        view = super().as_view(**initkwargs)
+        return login_required(view)
 
-class examSession(View):
+class examSession(LoginRequiredMixin,View):
     def get(self, request, id):
+        exam = Exam.objects.filter(id=id).prefetch_related('exam_question_groups__question_group_questions').first()
+        question_groups = exam.exam_question_groups.all()  # Access related QuestionGroups
+
         # question_qroups = models.QuestionGroup.objects.filter(exam__pk=id).prefetch_related('question_group_questions')
-        question_qroups = models.QuestionGroup.objects.all().prefetch_related('question_group_questions')
+        # question_qroups = models.QuestionGroup.objects.all().prefetch_related('question_group_questions')
         subquery = Subquery(
             models.Answer.objects.filter(
                 question=OuterRef('id')
             ).values('is_true')[:1]
         )
         # Annotate 'is_true' for each Question
-        question_qroups = question_qroups.annotate(
+        question_qroups = question_groups.annotate(
             question_group_questions__is_true=subquery
         )
         data = []
@@ -57,7 +63,7 @@ class examSession(View):
             'result_id':result[0].id})
 
 
-class AnswerQuestionView(CreateView):
+class AnswerQuestionView(LoginRequiredMixin,CreateView):
     model = ProfileAnswer
     form_class = ProfileAnswerForm
     template_name = 'home/taker.html'
