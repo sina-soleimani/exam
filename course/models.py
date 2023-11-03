@@ -13,7 +13,7 @@ class BaseModel(models.Model):
 class Course(BaseModel):
     course_name = models.CharField(max_length=200)
     course_code = models.IntegerField(max_length=200)
-    group_code = models.IntegerField(max_length=200)
+    group_code = models.IntegerField(max_length=200, null=True)
     term = models.IntegerField(max_length=200)
     year = models.DateField(default=date.today().replace(month=1, day=1))
     question_bank = models.ForeignKey(

@@ -1,7 +1,8 @@
 from django.shortcuts import render
 from .models import Course
 from django.views.generic import CreateView, ListView, UpdateView, DeleteView
-import json
+from .forms import CourseForm , CourseFormUpdate
+from django.http import JsonResponse
 
 # Create your views here.
 
@@ -39,3 +40,49 @@ class CourseListView(ListView):
 #         if isinstance(obj, Decimal):
 #             return str(obj)
 #         return super(DecimalEncoder, self).default(obj)
+
+
+class CourseCreateView(CreateView):
+    model = Course
+    form_class = CourseForm
+    template_name = 'home/courses.html'
+    success_url = '/success/'
+
+    def form_invalid(self, form):
+        errors = form.errors.as_json()
+        return JsonResponse({'errors': errors}, status=400)
+
+    def form_valid(self, form):
+        print("Form is valid!")
+        response = super().form_valid(form)
+
+        return response
+
+
+class CourseUpdateView(UpdateView):
+    model = Course
+    form_class = CourseFormUpdate
+    template_name = 'home/courses.html'
+    success_url = '/success/'
+
+    def form_invalid(self, form):
+        print("Form is valid!")
+        response = super().form_valid(form)
+
+        # Add any additional custom logic after saving the form
+
+        return response
+
+    def form_valid(self, form):
+        print("Form is valid!")
+        # Here you can add custom logic before saving the form
+        # For example, you can perform some additional processing or validation
+        print('sasam')
+
+        # Call the parent class's form_valid method to save the form
+        response = super().form_valid(form)
+
+        # Add any additional custom logic after saving the form
+
+        return response
+
