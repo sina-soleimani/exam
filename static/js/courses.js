@@ -1,28 +1,21 @@
+var desiredId = null;
 const csrfToken = $("input[name=csrfmiddlewaretoken]").val();
-console.log('khfrutrfcghf')
 $(document).ready(function () {
-    console.log('adsfhgjhtghgvjgfc')
-    // $('.open-modal-button').click(function () {
-    //     desiredId = $(this).data('id');
-    //     const element = examsData.find(item => item.id === desiredId);
-    //     if (element) {
-    //         console.log(element);
-    //         $('#label').val(element.label);
-    //         // 'deadline': formattedStr,
-    //         $('#durationInput').val(element.duration);
-    //         $('#datePicker').val(element.deadline.replaceAll('-', '/'));
-    //         $('#selectTypeScore').val(element.score_type);
-    //         $('#passingScore').val(element.point_passing_score);
-    //         // 'percent_passing_score': $('#passingScore').val(),
-    //         $('#incorrectPenalty').val(element.incorrect_penalty);
-    //         $("#unAnsweredQuestionCheckBox").prop('checked', element.unanswered_penalty);
-    //         $("#shuffleAnswerCheckbox").prop('checked', element.shuffle_answer);
-    //         $('#modal-form').modal('show');
-    //     }
-    //     $('#settingQPropId').attr('hidden', 'hidden')
-    //     $('#settingScoreId').attr('hidden', 'hidden')
-    //     $('#settingPropId').removeAttr('hidden')
-    // });
+    $('.open-modal-button').click(function () {
+        desiredId = $(this).data('id');
+        const element = coursesData.find(item => item.id === desiredId);
+        if (element) {
+            $('#label').val(element.course_name);
+            $('#courseCode').val(element.course_code);
+            $('#termId').val(element.term);
+            $('#datePicker').val(element.year);
+
+            $('#modal-form').modal('show');
+        }
+        // $('#settingQPropId').attr('hidden', 'hidden')
+        // $('#settingScoreId').attr('hidden', 'hidden')
+        // $('#settingPropId').removeAttr('hidden')
+    });
     $('#courseTable').DataTable();
 
 
@@ -43,7 +36,7 @@ $('#submitButton').click(function (event) {
     const formData = {
         'csrfmiddlewaretoken': csrfToken,
         'course_name': $('#label').val(),
-        'year': formattedStr,
+        'year': $('#datePicker').val(),
         'course_code': $('#courseCode').val(),
         'term': $('#termId').val(),
 
@@ -54,10 +47,13 @@ $('#submitButton').click(function (event) {
     //     url = desiredId + '/update/'
     //     console.log(typeof url)
     // } else {
-        url = 'course_submit/'
-    // }
-    console.log(url)
-    console.log(formData)
+
+    if (desiredId) {
+        url = desiredId + '/update/'
+        console.log(typeof url)
+    } else {
+        url = 'exam_submit/'
+    }
 
     $.ajax({
         url: url,
