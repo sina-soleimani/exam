@@ -1,5 +1,6 @@
 var desiredId = null;
 const csrfToken = $("input[name=csrfmiddlewaretoken]").val();
+var candidate_delete_course = null;
 $(document).ready(function () {
     $('.open-modal-button').click(function () {
         desiredId = $(this).data('id');
@@ -43,10 +44,6 @@ $('#submitButton').click(function (event) {
     };
     var url;
 
-    // if (desiredId) {
-    //     url = desiredId + '/update/'
-    //     console.log(typeof url)
-    // } else {
 
     if (desiredId) {
         url = desiredId + '/update/'
@@ -69,51 +66,34 @@ $('#submitButton').click(function (event) {
     });
 });
 
-
-// $(document).on('click', '#settingProp', function (event) {
-//     $('#settingQPropId').attr('hidden', 'hidden')
-//     $('#settingScoreId').attr('hidden', 'hidden')
-//     $('#settingPropId').removeAttr('hidden')
-// })
+$(document).on('click', '.open-delete-modal', function (event) {
+    candidate_delete_course = $(this).data('id')
+    $('#deleteModalLabel').html('Delete ' + findCourseById(coursesData, candidate_delete_course).course_name + ' Course')
+})
 
 
-// $(document).on('click', '#settingQProp', function (event) {
-//     $('#settingPropId').attr('hidden', 'hidden')
-//     $('#settingScoreId').attr('hidden', 'hidden')
-//     $('#settingQPropId').removeAttr('hidden')
-// })
+$(document).on('click', '.delete-course', function (event) {
+
+    $.ajax({
+        url: candidate_delete_course + '/delete/',
+        type: 'DELETE',  // Use DELETE as the HTTP method
+        headers: {
+            'X-CSRFToken': csrfToken, // Include the CSRF token in headers
+        },
+        success: function () {
+            console.log('done')
+            window.location.href = '/courses/list';
+        }
+    })
+
+})
 
 
-// $(document).on('click', '#settingScore', function (event) {
-//     $('#settingQPropId').attr('hidden', 'hidden')
-//     $('#settingPropId').attr('hidden', 'hidden')
-//     $('#settingScoreId').removeAttr('hidden')
-// })
-// $(document).on('click', '.open-delete-modal', function (event) {
-//     candidate_delete_exam = $(this).data('id')
-//     $('#deleteModalLabel').html('Delete ' + findExamById(examsData, candidate_delete_exam).label + ' Exam')
-// })
-
-// function findExamById(examsData, examId) {
-//     for (let i = 0; i < examsData.length; i++) {
-//         const exam = examsData[i];
-//         if (exam.id === examId) {
-//             return exam;
-//         }
-//     }
-// }
-
-// $(document).on('click', '.delete-exam', function (event) {
-//
-//     $.ajax({
-//         url: candidate_delete_exam + '/delete/',
-//         type: 'DELETE',  // Use DELETE as the HTTP method
-//         headers: {
-//             'X-CSRFToken': csrfToken, // Include the CSRF token in headers
-//         },
-//         success: function () {
-//             window.location.href = '/exams/list';
-//         }
-//     })
-//
-// })
+function findCourseById(examsData, examId) {
+    for (let i = 0; i < examsData.length; i++) {
+        const exam = examsData[i];
+        if (exam.id === examId) {
+            return exam;
+        }
+    }
+}

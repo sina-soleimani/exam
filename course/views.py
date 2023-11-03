@@ -85,3 +85,13 @@ def form_valid(self, form):
 
         return response
 
+class CourseDelete(DeleteView):
+    model = Course
+    template_name = 'home/courses.html'
+    success_url = '/success/'
+
+    def form_valid(self, form):
+        self.object = self.get_object()
+        self.object.delete()
+        return JsonResponse({},status=200)
+
