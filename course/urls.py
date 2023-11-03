@@ -10,7 +10,7 @@ urlpatterns = [
     path('list', CourseListView.as_view(), name='courselist'),
 
     path('course_submit/', CourseCreateView.as_view(), name='create_course'),
-    # TODO
+
     path('<int:pk>/update/', CourseUpdateView.as_view(), name='update_course'),
 
 ]

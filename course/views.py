@@ -3,6 +3,8 @@ from .models import Course
 from django.views.generic import CreateView, ListView, UpdateView, DeleteView
 from .forms import CourseForm , CourseFormUpdate
 from django.http import JsonResponse
+import json
+from decimal import Decimal
 
 # Create your views here.
 
@@ -12,34 +14,33 @@ class CourseListView(ListView):
     template_name = 'home/courses.html'
     context_object_name = 'courses'
 
-    # def get_context_data(self, **kwargs):
-    #     context = super().get_context_data(**kwargs)
-    #     courses = self.get_queryset()
-    #     print('salam')
-    #     # print(course.question_bank.all())
-    #
-    #     courses_data = [{
-    #         'id': course.id,
-    #         # 'course_name': type(course.course_name),
-    #         # 'course_code': course.course_code,
-    #         # 'term': course.term,
-    #         # 'year': course.year,
-    #         'qqq': course.question_bank.id,
-    #     } for course in courses]
-    #
-    #     courses_json = json.dumps(courses_data, cls=DecimalEncoder, indent=4, sort_keys=True, default=str)
-    #     print(courses_json)
-    #
-    #     context['courses_json'] = courses_json
-    #
-    #     return context
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        courses = self.get_queryset()
+        print('salam')
+        # print(course.question_bank.all())
+
+        courses_data = [{
+            'id': course.id,
+            'course_name': course.course_name,
+            'course_code': course.course_code,
+            'term': course.term,
+            'year': course.year,
+        } for course in courses]
+
+        courses_json = json.dumps(courses_data, cls=DecimalEncoder, indent=4, sort_keys=True, default=str)
+        print(courses_json)
+
+        context['courses_json'] = courses_json
+
+        return context
 
 
-# class DecimalEncoder(json.JSONEncoder):
-#     def default(self, obj):
-#         if isinstance(obj, Decimal):
-#             return str(obj)
-#         return super(DecimalEncoder, self).default(obj)
+class DecimalEncoder(json.JSONEncoder):
+    def default(self, obj):
+        if isinstance(obj, Decimal):
+            return str(obj)
+        return super(DecimalEncoder, self).default(obj)
 
 
 class CourseCreateView(CreateView):
@@ -66,18 +67,16 @@ class CourseUpdateView(UpdateView):
     success_url = '/success/'
 
     def form_invalid(self, form):
-        print("Form is valid!")
-        response = super().form_valid(form)
+        print("Form is INvalid!")
+        errors = form.errors.as_json()
+        print(errors)
+        return JsonResponse({'errors': errors}, status=400)
 
-        # Add any additional custom logic after saving the form
 
-        return response
-
-    def form_valid(self, form):
+def form_valid(self, form):
         print("Form is valid!")
         # Here you can add custom logic before saving the form
         # For example, you can perform some additional processing or validation
-        print('sasam')
 
         # Call the parent class's form_valid method to save the form
         response = super().form_valid(form)
