@@ -160,13 +160,13 @@
                                 <td>
                                     <button type="button" class="btn btn-outline-primary showqbtn"
                                             onclick="window.location.href='/builder/{{ field.question_bank.id }}/q_bank'">
-                                        <i class="fa fa-eye" aria-hidden="true"></i>
+                                        <i class="fa fa-bank" aria-hidden="true"></i>
                                     </button>
                                 </td>
                                 <td>
                                     <button type="button" class="btn btn-outline-warning showqbtn"
                                             onclick="window.location.href='/exams/{{ field.id }}/list'">
-                                        <i class="fa fa-eye" aria-hidden="true"></i>
+                                        <i class="fa fa-list" aria-hidden="true"></i>
                                     </button>
                                 </td>
                                 <td>
@@ -214,6 +214,7 @@
 {% block javascripts %}
     <script>
         var coursesData = {{ courses_json|safe }};
+        var banksData = {{ banks_json|safe }};
     </script>
     <script src="{% static 'js/courses.js' %}"></script>
 {% endblock javascripts %}
