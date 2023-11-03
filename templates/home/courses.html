@@ -135,6 +135,7 @@
                             <th>Code</th>
                             <th>Term</th>
                             <th>Year</th>
+                            <th>Setting</th>
                             <th>QBqnk</th>
                             <th>examlist</th>
 
@@ -147,6 +148,12 @@
                                 <td>{{ field.course_code }}</td>
                                 <td>{{ field.term }}</td>
                                 <td>{{ field.year }}</td>
+                                <td>
+                        <button type="button" class="btn btn-outline-success open-modal-button" data-bs-toggle="modal"
+                                data-bs-target="#modal-form" data-id={{ field.id }}>
+                            <i class="fa fa-cog" aria-hidden="true"></i>
+                        </button>
+                    </td>
 
                                 <td>
                                     <button type="button" class="btn btn-outline-primary showqbtn"
@@ -175,5 +182,8 @@
 
 <!-- Specific Page JS goes HERE -->
 {% block javascripts %}
+    <script>
+        var coursesData = {{ courses_json|safe }};
+    </script>
     <script src="{% static 'js/courses.js' %}"></script>
 {% endblock javascripts %}
