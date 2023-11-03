@@ -5,6 +5,7 @@ from .forms import CourseForm , CourseFormUpdate
 from django.http import JsonResponse
 import json
 from decimal import Decimal
+from questions.models import QuestionBank
 
 # Create your views here.
 
@@ -17,9 +18,6 @@ class CourseListView(ListView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         courses = self.get_queryset()
-        print('salam')
-        # print(course.question_bank.all())
-
         courses_data = [{
             'id': course.id,
             'course_name': course.course_name,
@@ -30,8 +28,15 @@ class CourseListView(ListView):
 
         courses_json = json.dumps(courses_data, cls=DecimalEncoder, indent=4, sort_keys=True, default=str)
         print(courses_json)
+        banks= QuestionBank.objects.all()
+        banks_data = [{
+            'id': bank.id,
+            'name': bank.name,
+        } for bank in banks]
 
+        banks_json = json.dumps(banks_data, cls=DecimalEncoder, indent=4, sort_keys=True, default=str)
         context['courses_json'] = courses_json
+        context['banks_json'] = banks_json
 
         return context
 
@@ -84,6 +89,7 @@ def form_valid(self, form):
         # Add any additional custom logic after saving the form
 
         return response
+
 
 class CourseDelete(DeleteView):
     model = Course
