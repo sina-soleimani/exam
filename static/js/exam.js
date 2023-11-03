@@ -96,7 +96,7 @@ $('#submitButton').click(function (event) {
     var url;
 
     if (desiredId) {
-        url = desiredId + '/update/'
+        url = 'update/' + desiredId + '/'
         console.log(typeof url)
     } else {
         url = 'exam_submit/'

@@ -1,13 +1,10 @@
-from django.shortcuts import render, redirect
 from django.views.generic import CreateView, ListView, UpdateView, DeleteView
 from .models import Exam
+from course.models import Course
 from .forms import ExamForm, ExamFormUpdate
 import json
 from django.http import JsonResponse
-# from django.core import serializers
 from decimal import Decimal
-# TODO
-from django.urls import reverse_lazy
 
 
 class ExamListView(ListView):
@@ -76,24 +73,18 @@ class ExamCreateView(CreateView):
     template_name = 'home/exams.html'
     success_url = '/success/'
 
+    def form_valid(self, form):
+        course=Course.objects.get(id=self.kwargs['id'])
+        exam = form.save(commit=False)
+        exam.course = course
+        exam.save()
+
+
 class ExamUpdateView(UpdateView):
     model = Exam
     form_class = ExamFormUpdate
     template_name = 'home/exams.html'
     success_url = '/success/'
-
-    def form_valid(self, form):
-        print("Form is valid!")
-        # Here you can add custom logic before saving the form
-        # For example, you can perform some additional processing or validation
-        print('sasam')
-
-        # Call the parent class's form_valid method to save the form
-        response = super().form_valid(form)
-
-        # Add any additional custom logic after saving the form
-
-        return response
 
 
 class ExamDelete(DeleteView):
