@@ -33,10 +33,11 @@
                             <a class="nav-link active" id="settingProp" data-bs-toggle="pill" href="#settingProp"
                                role="tab"
                                aria-controls="prop" aria-selected="true">Course Properties</a>
-                            <a class="nav-link" id="settingTeacher" data-bs-toggle="pill" href="#settingTeacher"
+                            <a class="nav-link" id="settingQBank" data-bs-toggle="pill" href="#settingQBank"
                                role="tab"
-                               aria-controls="propId" aria-selected="false">Teacher</a>
-                            <a class="nav-link" id="settingQProp" data-bs-toggle="pill" href="#settingQProp" role="tab"
+                               aria-controls="propId" aria-selected="false">Question Bank</a>
+                            <a class="nav-link" id="settingStudents" data-bs-toggle="pill" href="#settingStudents"
+                               role="tab"
                                aria-controls="qPropId" aria-selected="false">Students</a>
                         </div>
                     </div>
@@ -77,37 +78,88 @@
                                                                required>
                                                     </div>
                                                 </div>
-                                            </div>
-                                            <div id="settingScoreId">
-                                                <div class="form-group row mt-3" id="termContainer">
-                                                    <label for="termId" class="col-sm-4 col-form-label">Term:</label>
-                                                    <div class="col-sm-8">
+                                                <div id="settingScoreId">
+                                                    <div class="form-group row mt-3" id="termContainer">
+                                                        <label for="termId"
+                                                               class="col-sm-4 col-form-label">Term:</label>
+                                                        <div class="col-sm-8">
+                                                            <input type="number" class="form-control"
+                                                                   id="termId"
+                                                                   name="termId" max=100>
+                                                        </div>
+
+                                                    </div>
+                                                </div>
+
+
+                                                <div class="form-group row mt-3" id="courseCodeContainer">
+                                                    <label for="courseCode"
+                                                           class="col-sm-7 col-form-label incorrect-penalty">Course
+                                                        Code:
+                                                    </label>
+                                                    <div class="col-sm-5">
                                                         <input type="number" class="form-control"
-                                                               id="termId"
-                                                               name="termId" max=100>
+                                                               id="courseCode" name="courseCode">
                                                     </div>
 
                                                 </div>
                                             </div>
 
-                                            <div class="form-group row mt-3" id="courseCodeContainer">
-                                                <label for="courseCode"
-                                                       class="col-sm-7 col-form-label incorrect-penalty">Course
-                                                    Code:
-                                                </label>
-                                                <div class="col-sm-5">
-                                                    <input type="number" class="form-control"
-                                                           id="courseCode" name="courseCode">
-                                                </div>
+                                            <div id="q_bank_table">
+
+                                                <table class="table table-striped table-bordered mt-1">
+                                                    <thead>
+
+                                                    <tr>
+                                                        <th scope="col" style="width: 16.66%">Select</th>
+                                                        <th scope="col">Question Bank</th>
+                                                    </tr>
+                                                    </thead>
+                                                    <tbody id="tbodyMultiQ">
+                                                    <tr>
+                                                        <th scope="row">
+                                                            <div class="custom-control custom-radio">
+                                                                <input type="radio" id="new_bank"
+                                                                       data-id="new_bank" name="selected_bank"
+                                                                       class="custom-control-input">
+                                                                <label class="custom-control-label"
+                                                                       for="new_bank"></label>
+                                                            </div>
+
+                                                        </th>
+                                                        <td>
+                                                            <input type="text" class="form-control" id="new_bank_input"
+                                                                   aria-label="Text input with segmented dropdown button">
+
+                                                        </td>
+
+                                                    </tr>
+                                                    {% for field in banks_data %}
+                                                        <tr>
+                                                            <th scope="row">
+                                                                <div class="custom-control custom-radio">
+                                                                    <input type="radio" id="{{ field.id }}_bank"
+                                                                           data-id="{{ field.id }}"
+                                                                           name="selected_bank"
+                                                                           class="custom-control-input">
+                                                                    <label class="custom-control-label"
+                                                                           for="{{ field.id }}_bank"></label>
+                                                                </div>
+
+                                                            </th>
+                                                            <td>{{ field.name }}</td>
+                                                        </tr>
+                                                    {% endfor %}
+                                                    </tbody>
+                                                </table>
+
 
                                             </div>
-
-
-                                        </div>
-                                        <div class="d-grid mt-4">
-                                            <button type="submit" id="submitButton" class="btn btn-outline-success">
-                                                Submit
-                                            </button>
+                                            <div class="d-grid mt-4">
+                                                <button type="submit" id="submitButton" class="btn btn-outline-success">
+                                                    Submit
+                                                </button>
+                                            </div>
                                         </div>
                                     </form>
 
@@ -214,7 +266,6 @@
 {% block javascripts %}
     <script>
         var coursesData = {{ courses_json|safe }};
-        var banksData = {{ banks_json|safe }};
     </script>
     <script src="{% static 'js/courses.js' %}"></script>
 {% endblock javascripts %}
