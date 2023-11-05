@@ -78,7 +78,7 @@ class CourseUpdateView(UpdateView):
         return JsonResponse({'errors': errors}, status=400)
 
 
-def form_valid(self, form):
+    def form_valid(self, form):
         print("Form is valid!")
         # Here you can add custom logic before saving the form
         # For example, you can perform some additional processing or validation

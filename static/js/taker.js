@@ -73,10 +73,16 @@ function isValidImageType(fileType) {
 
 $("#submitQAnswser").on("submit", function (event) {
 
+            const isTrue = $("#answer_true_id").is(":checked");
+            const isFalse = $("#answer_false_id").is(":checked");
+            const trueFalseChoice = isTrue ? "True" : (isFalse ? "False" : null);
+
+
+
 
     const formData = {
         'csrfmiddlewaretoken': csrfToken,
-        'is_true': 'True',
+        'is_true': trueFalseChoice,
         'question_id': question.id,
         'result_id': $('#result_id').data('id'),
     };
