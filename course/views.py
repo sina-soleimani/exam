@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from .models import Course
 from django.views.generic import CreateView, ListView, UpdateView, DeleteView
-from .forms import CourseForm , CourseFormUpdate
+from .forms import CourseForm, CourseFormUpdate
 from django.http import JsonResponse
 import json
 from decimal import Decimal
@@ -24,11 +24,12 @@ class CourseListView(ListView):
             'course_code': course.course_code,
             'term': course.term,
             'year': course.year,
+            'q_bank': course.question_bank.id,
         } for course in courses]
 
         courses_json = json.dumps(courses_data, cls=DecimalEncoder, indent=4, sort_keys=True, default=str)
         print(courses_json)
-        banks= QuestionBank.objects.all()
+        banks = QuestionBank.objects.all()
         banks_data = [{
             'id': bank.id,
             'name': bank.name,
@@ -36,7 +37,7 @@ class CourseListView(ListView):
 
         banks_json = json.dumps(banks_data, cls=DecimalEncoder, indent=4, sort_keys=True, default=str)
         context['courses_json'] = courses_json
-        context['banks_json'] = banks_json
+        context['banks_data'] = banks_data
 
         return context
 
@@ -60,6 +61,17 @@ class CourseCreateView(CreateView):
 
     def form_valid(self, form):
         print("Form is valid!")
+        q_bank_id = self.request.POST.get('q_bank_id')
+        q_bank_name = self.request.POST.get('q_bank_name')
+        course = form.save(commit=False)
+        if q_bank_id:
+            q_bank = QuestionBank.objects.get(id=q_bank_id)
+            course.question_bank = q_bank
+
+        elif q_bank_name:
+            q_bank = QuestionBank.objects.create(name=q_bank_name)
+            course.question_bank = q_bank
+        course.save()
         response = super().form_valid(form)
 
         return response
@@ -77,9 +89,21 @@ class CourseUpdateView(UpdateView):
         print(errors)
         return JsonResponse({'errors': errors}, status=400)
 
-
     def form_valid(self, form):
         print("Form is valid!")
+        q_bank_id = self.request.POST.get('q_bank_id')
+        q_bank_name = self.request.POST.get('q_bank_name')
+        course = form.save(commit=False)
+        if q_bank_name:
+            q_bank = QuestionBank.objects.create(name=q_bank_name)
+            course.question_bank = q_bank
+
+        elif q_bank_id:
+            q_bank = QuestionBank.objects.get(id=q_bank_id)
+            course.question_bank = q_bank
+
+        course.save()
+
         # Here you can add custom logic before saving the form
         # For example, you can perform some additional processing or validation
 
@@ -99,5 +123,4 @@ class CourseDelete(DeleteView):
     def form_valid(self, form):
         self.object = self.get_object()
         self.object.delete()
-        return JsonResponse({},status=200)
-
+        return JsonResponse({}, status=200)
