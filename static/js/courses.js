@@ -10,12 +10,25 @@ $(document).ready(function () {
             $('#courseCode').val(element.course_code);
             $('#termId').val(element.term);
             $('#datePicker').val(element.year);
+            $('#' + element.q_bank + '_bank').prop('checked', true);
 
             $('#modal-form').modal('show');
+        } else {
+
+            $('#label').val('');
+            $('#courseCode').val('');
+            $('#termId').val('');
+            $('#datePicker').val('');
+
+            $("input[name='selected_bank']").prop('checked', false);
+
+            $('#modal-form').modal('show');
+
         }
-        // $('#settingQPropId').attr('hidden', 'hidden')
-        // $('#settingScoreId').attr('hidden', 'hidden')
-        // $('#settingPropId').removeAttr('hidden')
+
+        $('#q_bank_table').attr('hidden', 'hidden')
+        $('#settingPropId').removeAttr('hidden')
+
     });
     $('#courseTable').DataTable();
 
@@ -32,25 +45,40 @@ $('#submitButton').click(function (event) {
     const str = $('#datePicker').val().replaceAll('/', '-');
     const endstr = str.substring(str.length - 5, str.length);
     const startstr = str.substring(0, str.length - 5);
-    const formattedStr = `${endstr.substring(1)}-${startstr}`;
+    var formattedStr = `${endstr.substring(1)}-${startstr}`;
+    const selectedRadioButton = $('input[name="selected_bank"]:checked');
 
-    const formData = {
-        'csrfmiddlewaretoken': csrfToken,
-        'course_name': $('#label').val(),
-        'year': $('#datePicker').val(),
-        'course_code': $('#courseCode').val(),
-        'term': $('#termId').val(),
+    if (selectedRadioButton.length > 0) {
+        var new_bank_name;
+        if (selectedRadioButton.attr('data-id') === 'new_bank') {
+            new_bank_name = $('#new_bank_input').val()
 
-    };
+        }
+    } else {
+        console.log("No radio button selected.");
+    }
+
     var url;
 
 
     if (desiredId) {
         url = desiredId + '/update/'
-        console.log(typeof url)
+        formattedStr = $('#datePicker').val()
     } else {
-        url = 'exam_submit/'
+        url = 'course_submit/'
     }
+
+    const formData = {
+        'csrfmiddlewaretoken': csrfToken,
+        'course_name': $('#label').val(),
+        'year': formattedStr,
+        'course_code': $('#courseCode').val(),
+        'term': $('#termId').val(),
+        'q_bank_id': selectedRadioButton.attr('data-id'),
+        'q_bank_name': new_bank_name,
+
+    };
+
 
     $.ajax({
         url: url,
@@ -86,6 +114,16 @@ $(document).on('click', '.delete-course', function (event) {
         }
     })
 
+})
+
+$(document).on('click', '#settingQBank', function (event) {
+    $('#settingPropId').attr('hidden', 'hidden')
+    $('#q_bank_table').removeAttr('hidden')
+})
+
+$(document).on('click', '#settingProp', function (event) {
+    $('#q_bank_table').attr('hidden', 'hidden')
+    $('#settingPropId').removeAttr('hidden')
 })
 
 
