@@ -27,6 +27,7 @@ $(document).ready(function () {
         }
 
         $('#q_bank_table').attr('hidden', 'hidden')
+        $('#student_import').attr('hidden', 'hidden')
         $('#settingPropId').removeAttr('hidden')
 
     });
@@ -118,14 +119,53 @@ $(document).on('click', '.delete-course', function (event) {
 
 $(document).on('click', '#settingQBank', function (event) {
     $('#settingPropId').attr('hidden', 'hidden')
+    $('#student_import').attr('hidden', 'hidden')
     $('#q_bank_table').removeAttr('hidden')
+    $('#submitIdBtn').removeAttr('hidden')
 })
 
 $(document).on('click', '#settingProp', function (event) {
     $('#q_bank_table').attr('hidden', 'hidden')
+    $('#student_import').attr('hidden', 'hidden')
     $('#settingPropId').removeAttr('hidden')
+    $('#submitIdBtn').removeAttr('hidden')
 })
 
+$(document).on('click', '#settingStudents', function (event) {
+    $('#q_bank_table').attr('hidden', 'hidden')
+    $('#settingPropId').attr('hidden', 'hidden')
+    $('#submitIdBtn').attr('hidden', 'hidden')
+    $('#student_import').removeAttr('hidden')
+})
+
+function uploadExcelFile(id) {
+    var fileInput = document.getElementById('excelFileInput');
+    var file = fileInput.files[0];
+
+    if (file) {
+        var formData = new FormData();
+        formData.append('excelFile', file);
+        formData.append('csrfmiddlewaretoken', csrfToken);
+        formData.append('course_id', desiredId);
+
+
+        $.ajax({
+            url: 'upload_excel/', // URL where you'll handle the upload in your Django application
+            type: 'POST',
+            data: formData,
+            processData: false,
+            contentType: false,
+            success: function (response) {
+                window.location.href = '/courses/list';
+            },
+            error: function () {
+                alert('File upload failed.');
+            }
+        });
+    } else {
+        alert('Please select an Excel file to upload.');
+    }
+}
 
 function findCourseById(examsData, examId) {
     for (let i = 0; i < examsData.length; i++) {
