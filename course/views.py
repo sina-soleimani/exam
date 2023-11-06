@@ -3,9 +3,12 @@ from .models import Course
 from django.views.generic import CreateView, ListView, UpdateView, DeleteView
 from .forms import CourseForm, CourseFormUpdate
 from django.http import JsonResponse
+import openpyxl
 import json
 from decimal import Decimal
 from questions.models import QuestionBank
+from user.models import Profile
+
 
 # Create your views here.
 
@@ -24,7 +27,7 @@ class CourseListView(ListView):
             'course_code': course.course_code,
             'term': course.term,
             'year': course.year,
-            'q_bank': course.question_bank.id,
+            'q_bank': None if not course.question_bank else course.question_bank.id,
         } for course in courses]
 
         courses_json = json.dumps(courses_data, cls=DecimalEncoder, indent=4, sort_keys=True, default=str)
@@ -124,3 +127,28 @@ class CourseDelete(DeleteView):
         self.object = self.get_object()
         self.object.delete()
         return JsonResponse({}, status=200)
+
+
+from django.http import JsonResponse
+
+
+def upload_excel(request):
+    course_id = request.POST['course_id']
+    if request.method == 'POST' and request.FILES['excelFile']:
+        excel_file = request.FILES['excelFile']
+
+        try:
+            workbook = openpyxl.load_workbook(excel_file, data_only=True)
+            sheet = workbook.active  # Assuming the first sheet in the Excel file
+
+            # Extract data from the first column (column A)
+            column_data = [cell.value for cell in sheet['A']]
+            profiles = Profile.objects.filter(username__in=column_data)
+            course = Course.objects.get(id=course_id)
+            course.students.set(profiles)
+
+            return JsonResponse({'message': 'File uploaded successfully', 'column_data': column_data})
+        except Exception as e:
+            return JsonResponse({'message': f'Error reading Excel file: {str(e)}'})
+
+    return JsonResponse({'message': 'Please select a file to upload.'})
