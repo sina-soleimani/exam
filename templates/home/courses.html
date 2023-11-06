@@ -155,13 +155,25 @@
 
 
                                             </div>
-                                            <div class="d-grid mt-4">
-                                                <button type="submit" id="submitButton" class="btn btn-outline-success">
-                                                    Submit
-                                                </button>
+
+                                            <div id="submitIdBtn">
+                                                <div class="d-grid mt-4">
+                                                    <button type="submit" id="submitButton"
+                                                            class="btn btn-outline-success">
+                                                        Submit
+                                                    </button>
+                                                </div>
                                             </div>
                                         </div>
                                     </form>
+                                    <div id="student_import">
+                                        <input type="file" id="excelFileInput" class="form-control mb-3"
+                                               accept=".xlsx, .xls" lang="pl-Pl">
+
+                                        <button class="btn btn-outline-success" onclick="uploadExcelFile( )">Upload
+                                            Excel File
+                                        </button>
+                                    </div>
 
                                 </div>
                             </div>
