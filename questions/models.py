@@ -22,6 +22,7 @@ class QuestionGroup(BaseModel):
     # exam = models.ManyToManyField(Exam,
     #                                 related_name='question_groups',
     #                                 related_query_name='question_group', )
+    # TODO manytomany
 
     exam = models.ForeignKey(
         Exam, blank=True, null=True, on_delete=models.CASCADE,
@@ -57,6 +58,9 @@ class Question(BaseModel):
         default=QuestionType.TRUE_FALSE
     )
 
+    def get_short_description(self):
+        return self.description[:20]
+    
 
 class Choice(BaseModel):
     question = models.ForeignKey(
@@ -66,6 +70,8 @@ class Choice(BaseModel):
         on_delete=models.CASCADE,
     )
     choice_text = models.CharField(max_length=200)  # Add this field
+    is_true = models.BooleanField(blank=True, null=True)
+
 
     def __str__(self):
         return self.choice_text

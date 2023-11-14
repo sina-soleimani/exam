@@ -1,5 +1,6 @@
 from django import forms
-from .models import QuestionTrueFalse, QuestionGroup, Question
+from .models import QuestionGroup, Question
+from django.forms import modelform_factory
 
 
 class TrueFalseModelForm(forms.ModelForm):
@@ -23,8 +24,12 @@ class TrueFalseModelForm(forms.ModelForm):
         self.fields['question_type'].widget = forms.HiddenInput()
 
 
-class MultipleChoiceModelForm(forms.ModelForm):
-    pass
+
+
+QuestionForm = modelform_factory(
+    Question,
+    fields=['description' , 'score', 'question_type'],
+)
 
 
 class MatchingChoiceModelForm(forms.ModelForm):
