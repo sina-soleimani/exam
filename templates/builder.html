@@ -95,7 +95,9 @@
                                             {% for question in question_group.question_group_questions.all %}
                                                 <li class="question " data-id="{{ question.id }}">
                                                     <div class="d-flex tag-btn select-btn">
-                                                        <a class="flex-grow-1 ">True/False</a>
+                                                        <a class="flex-grow-1 ">
+                                                                {{ question.get_short_description }}
+                                                        </a>
                                                         <button type="button" class="close float-right" name="question"
                                                                 data-id="{{ question.id }}">
                                                             <span aria-hidden="true">&times;</span>
@@ -300,13 +302,13 @@
                                         <th scope="row">
                                             <div class="custom-control custom-radio">
                                                 <input type="radio" id="multiQCheckbox1" name="questionMultiQ"
-                                                       class="custom-control-input">
+                                                       class="custom-control-input muti_q_choices_radio">
                                                 <label class="custom-control-label" for="multiQCheckbox1"></label>
                                             </div>
                                         </th>
                                         <td>
                                             <div class="input-group">
-                                                <input type="text" class="form-control"
+                                                <input type="text" class="form-control muti_q_choices"
                                                        aria-label="Text input with segmented dropdown button">
                                                 <div class="input-group-append">
                                                     <button type="button" class="btn btn-outline-danger remove-option">
@@ -320,14 +322,14 @@
                                         <th scope="row">
                                             <div class="custom-control custom-radio">
                                                 <input type="radio" id="multiQCheckbox2" name="questionMultiQ"
-                                                       class="custom-control-input">
+                                                       class="custom-control-input muti_q_choices_radio">
                                                 <label class="custom-control-label" for="multiQCheckbox2"></label>
                                             </div>
 
                                         </th>
                                         <td>
                                             <div class="input-group">
-                                                <input type="text" class="form-control"
+                                                <input type="text" class="form-control muti_q_choices"
                                                        aria-label="Text input with segmented dropdown button">
                                                 <div class="input-group-append">
                                                     <button type="button" class="btn btn-outline-danger  remove-option">

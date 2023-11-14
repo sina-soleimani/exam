@@ -5,6 +5,14 @@ let qg_selected_id = null;
 let create_question_flag = null;
 let file = null
 let multiQCheckbox = 3
+let questionType = 'TF'
+const qTypeMap = new Map();
+
+// Add key-value pairs to the Map
+qTypeMap.set('TF', ['/builder/true_false_question/', 'True/False']);
+qTypeMap.set('MC', ['/builder/multi_question/', 'Multiple Choice']);
+// TODO
+qTypeMap.set('M', ['/builder/match_question/', 'Matching']);
 
 $(document).ready(function () {
     sortQuestions();
@@ -77,26 +85,43 @@ function findSelectedQG() {
 
     // Click event handler for li.question elements
     $(document).on("click", "div.select-btn", function () {
-        // Remove the "q_selected" class from the previously selected element (if any)
         if (selectedElement) {
             $(selectedElement).removeClass("q_selected");
         }
-        var lastQuestion = $(this).find('ul.question-list li.question:last');
         qg_selected_id = $(this).closest('li.question-group').data('id')
         var el_selected_id = $(this).parent().data('id')
-
         if (qg_selected_id !== el_selected_id) {
             //handle selected question element
             create_question_flag = el_selected_id
             const question = findQuestionById(questionGroupsData, el_selected_id);
-            $('#questionTextarea').val(question.description);
-            if (question.question_answer__is_true === true) {
-                $('#questionTrueId').prop('checked', true);
-            } else {
-                $('#questionFalseId').prop('checked', true);
+            document.getElementById("tbodyMultiQ").innerHTML = '';
+            if (question.question_type === 'MC') {
+                multiplePageProceess();
+                for (let i = 0; i < question.question_choices.length; i++) {
+                    const choice = question.question_choices[i];
+                    const newRowHtml = '<tr class="q-option"><th scope="row"><div class="custom-control custom-radio">' +
+                        '<input type="radio" name="questionMultiQ" id="multiQCheckbox' + multiQCheckbox + '" class="custom-control-input"' + (choice.is_true ? ' checked' : '') + '>' +
+                        '<label class="custom-control-label" for="multiQCheckbox' + multiQCheckbox + '" ></label></div></th><td>' +
+                        '<div class="input-group"><input type="text" class="form-control muti_q_choices"' +
+                        ' data-id="' + choice.id + '" aria-label="Text input with segmented dropdown button"' +
+                        ' value="' + choice.choice_text + '"><div class="input-group-append">' +
+                        '<button type="button" class="btn btn-outline-danger remove-option"><i class="fa fa-trash"></i></button>' +
+                        '</div></div></td></tr>';
+
+                    $('#tbodyMultiQ').append(newRowHtml);
+                    multiQCheckbox = multiQCheckbox + 1;
+                }
+            }
+            if (question.question_type === 'TF') {
+                tFPageProceess();
+                if (question.question_answers['is_true'] === true) {
+                    $('#questionTrueId').prop('checked', true);
+                } else if (question.question_answers['is_true'] === false) {
+                    $('#questionFalseId').prop('checked', true);
+                }
             }
 
-
+            $('#questionTextarea').val(question.description);
             $('#baremId').val(question.score);
             if (question) {
                 console.log("Found question:", question);
@@ -121,25 +146,6 @@ function createQuestion() {
     $("#createQuestionForm").on("submit", function (event) {
         event.preventDefault(); // Prevent the default form submission
 
-        const isTrue = $("#questionTrueId").is(":checked");
-        const isFalse = $("#questionFalseId").is(":checked");
-        const trueFalseChoice = isTrue ? "True" : (isFalse ? "False" : null);
-        const tFChoiced = isTrue ? true : (isFalse ? false : null);
-        var score = $("#baremId").val();
-        var description = $("#questionTextarea").val()
-        const isValid = handleFormValidation("#invalidDescriptionAlert", "#questionTextarea");
-        if (!isValid) {
-            // Validation failed, do not proceed with form submission
-            return;
-        }
-
-        if (trueFalseChoice === null) {
-            $("#invalidTFAlert").show();
-            setTimeout(function () {
-                $("#invalidTFAlert").hide();
-            }, 3000);
-            return false;
-        }
 
         var question_group__id = (qg_selected_id === null) ? $('.menu-list li:first').attr('data-id') : qg_selected_id;
         if ($('.menu-list li:first').attr('data-id') === undefined) {
@@ -150,23 +156,58 @@ function createQuestion() {
             return false;
         }
 
+        var score = $("#baremId").val();
+        var description = $("#questionTextarea").val()
+        const isValid = handleFormValidation("#invalidDescriptionAlert", "#questionTextarea");
+        if (!isValid) {
+            // Validation failed, do not proceed with form submission
+            return;
+        }
         const imageInput = document.querySelector("#showImageId");
         console.log(imageInput)
         const formData = new FormData(this);
         formData.append("question__id", create_question_flag);
-        formData.append("is_true", trueFalseChoice);
         formData.append("csrfmiddlewaretoken", csrfToken);
         formData.append("description", description);
         formData.append("question_group__id", question_group__id);
         formData.append("score", score);
-        formData.append("question_type", "TF");
+        formData.append("question_type", questionType);
         formData.append("image", file);
+        var tFChoiced;
+        if (questionType === 'TF') {
+
+            const isTrue = $("#questionTrueId").is(":checked");
+            const isFalse = $("#questionFalseId").is(":checked");
+            const trueFalseChoice = isTrue ? "True" : (isFalse ? "False" : null);
+            tFChoiced = isTrue ? true : (isFalse ? false : null);
+
+            if (trueFalseChoice === null) {
+                $("#invalidTFAlert").show();
+                setTimeout(function () {
+                    $("#invalidTFAlert").hide();
+                }, 3000);
+                return false;
+            }
+            formData.append("is_true", trueFalseChoice);
+        } else if (questionType === 'MC') {
+            var choices = $('.muti_q_choices').map(function () {
+    return { value: $(this).val(), id: $(this).data('id') };
+}).get();
+            const selectedRadioButton = $('input[name="questionMultiQ"]:checked');
+            const selected_choice = selectedRadioButton.closest('tr').find('.muti_q_choices').val();
+            var choicesJSON = JSON.stringify(choices);
+            formData.append("choice_text", choicesJSON);
+            formData.append("selected_choice_text", selected_choice);
+        }
 
         var update_url;
-        if (create_question_flag)
-            update_url = '/builder/true_false_question/' + create_question_flag + '/';
+        if (create_question_flag){
+            update_url = qTypeMap.get(questionType)[0]+create_question_flag+'/';
+            }
+
+            // update_url = '/builder/true_false_question/' + create_question_flag + '/';
         else {
-            update_url = $(this).data("url");
+            update_url = qTypeMap.get(questionType)[0];
 
         }
 
@@ -184,7 +225,7 @@ function createQuestion() {
                     'id': response.question_id,
                     'description': description,
                     'question_answer__is_true': tFChoiced,
-                    'question_type': "TF",
+                    'question_type': questionType,
                     'score': parseInt(score, 10),
                 }
                 if (create_question_flag) {
@@ -199,8 +240,7 @@ function createQuestion() {
 
                     // Create a new nested li element
                     // Append the new nested li to the found question-group li
-                    var q_type = 'True/False'
-                    var $newNestedLi = $('<li class="question" data-id=' + response.question_id + '><div class="d-flex tag-btn select-btn">\<a class="flex-grow-1 ">' + q_type +
+                    var $newNestedLi = $('<li class="question" data-id=' + response.question_id + '><div class="d-flex tag-btn select-btn">\<a class="flex-grow-1 ">' + qTypeMap.get(questionType)[1] +
                         '</a><button type="button" class="close float-right" name="question" ' +
                         'data-id=' + response.question_id + '><span aria-hidden="true">&times;</span></button></div></li></li>');
                     $questionGroup.find('ul.question-list').append($newNestedLi);
@@ -304,7 +344,7 @@ function sortQuestions() {
                     url: '/builder/' + qg_id + '/sort_questions/',
                     type: 'post',
                     data: {csrfmiddlewaretoken: csrfToken, question_group_id: qg_id, question_id: q_id},
-                    success: function (request) {
+                    success: function () {
                         $('.sortable');
                     }
                 })
@@ -496,7 +536,6 @@ function deleteAudio() {
 function globalRestartForm() {
     $("#questionTextarea").val('')
     $("#baremId").val('')
-    create_question_flag = null;
 
     $('#questionTextarea').val('');
     $('#questionTrueId').prop('checked', false);
@@ -505,6 +544,8 @@ function globalRestartForm() {
 }
 
 $(document).on('click', '#matchingDropDown', function (event) {
+    questionType = 'M'
+    create_question_flag = null;
     globalRestartForm()
     $('#multiQuestionTable').attr('hidden', 'hidden')
     $('#TrueFalseQuestionTable').attr('hidden', 'hidden')
@@ -515,22 +556,46 @@ $(document).on('click', '#matchingDropDown', function (event) {
 })
 
 $(document).on('click', '#trueFalseDropDown', function (event) {
+    create_question_flag = null;
+    tFPageProceess();
+})
+
+function tFPageProceess() {
+    questionType = 'TF'
     globalRestartForm()
     $('#TrueFalseQuestionTable').removeAttr('hidden')
     $('#multiQuestionTable').attr('hidden', 'hidden')
     $('#tfLableId').removeAttr('hidden')
     $('#multiLableId').attr('hidden', 'hidden')
     $('#MathingQuestionTable').attr('hidden', 'hidden')
-})
+}
 
 $(document).on('click', '#multipleDropDown', function (event) {
+    create_question_flag = null;
+    document.getElementById("tbodyMultiQ").innerHTML = '<tr class="q-option"><th scope="row"><div class="custom-control custom-radio">' +
+        '<input type="radio" id="multiQCheckbox1" name="questionMultiQ" class="custom-control-input muti_q_choices_radio">' +
+        '<label class="custom-control-label" for="multiQCheckbox1"></label></div></th><td><div class="input-group">' +
+        '<input type="text" class="form-control muti_q_choices" aria-label="Text input with segmented dropdown button"> ' +
+        '<div class="input-group-append"><button type="button" class="btn btn-outline-danger remove-option"><i class=\'fa fa-trash\'></i></button>' +
+        '</div></div></td></tr><tr class="q-option"><th scope="row"><div class="custom-control custom-radio">' +
+        '<input type="radio" id="multiQCheckbox2" name="questionMultiQ" class="custom-control-input muti_q_choices_radio"> ' +
+        '<label class="custom-control-label" for="multiQCheckbox2"></label> </div></th><td><div class="input-group">' +
+        '<input type="text" class="form-control muti_q_choices" aria-label="Text input with segmented dropdown button"> ' +
+        '<div class="input-group-append"> <button type="button" class="btn btn-outline-danger  remove-option"> <i class=\'fa fa-trash\'></i></button>' +
+        '</div></div></td></tr>';
+
+    multiplePageProceess();
+})
+
+function multiplePageProceess() {
+    questionType = 'MC'
     globalRestartForm()
     $('#multiQuestionTable').removeAttr('hidden')
     $('#TrueFalseQuestionTable').attr('hidden', 'hidden')
     $('#tfLableId').attr('hidden', 'hidden')
     $('#multiLableId').removeAttr('hidden')
     $('#MathingQuestionTable').attr('hidden', 'hidden')
-})
+}
 
 function deleteImage() {
     $('#deleteImageId').on('click', function () {
@@ -543,24 +608,12 @@ function deleteImage() {
 function addMatchingOption() {
     $(document).on('click', '#addMatchingId', function (event) {
 
-        const newRowHtml = `
-        <tr class="q-option">
-            <td>
-                <div class="input-group">
-                    <input type="text" class="form-control" aria-label="Text input with segmented dropdown button">
-                </div>
-            </td>
-            <td>
-                <div class="input-group">
-                    <input type="text" class="form-control" aria-label="Text input with segmented dropdown button">
-                    <div class="input-group-append">
-                        <button type="button" class="btn btn-outline-danger remove-option">
-                            <i class="fa fa-trash"></i>
-                        </button>
-                    </div>
-                </div>
-            </td>
-        </tr>`;
+        const newRowHtml = '<tr class="q-option"><td><div class="input-group">' +
+            '<input type="text" class="form-control" aria-label="Text input with segmented dropdown button">' +
+            '</div></td><td><div class="input-group">' +
+            '<input type="text" class="form-control muti_q_choices" aria-label="Text input with segmented dropdown button">' +
+            '<div class="input-group-append"><button type="button" class="btn btn-outline-danger remove-option">' +
+            '<i class="fa fa-trash"></i></button></div></div></td></tr>';
 
         $('#tbodyMatchingQ').append(newRowHtml);
 
@@ -572,9 +625,9 @@ function addMultipleOption() {
 
     $(document).on('click', '#addOptionId', function (event) {
         const newRowHtml = '<tr class="q-option"><th scope="row"><div class="custom-control custom-radio">' +
-            '<input type="radio" name="questionMultiQ" id="multiQCheckbox' + multiQCheckbox + '" class="custom-control-input">' +
+            '<input type="radio" name="questionMultiQ" id="multiQCheckbox' + multiQCheckbox + '" class="custom-control-input ">' +
             '<label class="custom-control-label" for="multiQCheckbox' + multiQCheckbox + '" ></label></div></th><td>' +
-            '<div class="input-group"><input type="text" class="form-control" ' +
+            '<div class="input-group"><input type="text" class="form-control muti_q_choices" ' +
             'aria-label="Text input with segmented dropdown button"><div class="input-group-append">' +
             '<button type="button" class="btn btn-outline-danger remove-option"><i class="fa fa-trash"></i></button>' +
             '</div></div></td></tr>';
