@@ -32,9 +32,65 @@
         </div>
 
         <div class="mt-3 mr-1 ">
-            <a href="#" class="btn btn-light btn-sm  btn-outline-secondary  " role="button" aria-disabled="true">
-                <i class='fa-solid fa-file-export'></i> Publish
-            </a></div>
+            <button type="button" class="btn btn-light btn-sm  btn-outline-secondary   showqbtn open-import-modal"
+                    data-bs-toggle="modal" data-bs-target="#importModal">
+                <i class='fa-solid fa-file-import'></i> Import
+            </button>
+            <div class="modal fade" id="importModal" tabindex="-1" data-bs-backdrop="static"
+                 data-bs-keyboard="false"
+                 aria-labelledby="importModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="importModalLabel">Import Question By Excel</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                    aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <div id="student_import">
+                                <input type="file" id="excelFileInput" class="form-control mb-3"
+                                       accept=".xlsx, .xls" lang="pl-Pl">
+
+                                <div class=" mt-3 ">
+                                    <div class="dropdown d-flex">
+                                        <button class="btn btn-light btn-sm  btn-outline-secondary dropdown-toggle ml-auto"
+                                                type="button"
+                                                id="dropdownMenuButton"
+                                                data-toggle="dropdown"
+                                                aria-haspopup="true" aria-expanded="false">
+                                            <i class="fa-solid fa-list"></i>
+                                            Question Groups
+                                        </button>
+
+                                        <div class="dropdown-menu" id="dropdown-menu-id"
+                                             aria-labelledby="dropdownMenuButton">
+                                            {% for field in question_qroups %}
+
+
+                                                <a class="dropdown-item q_group_import" data-id="{{ field.id }}">
+                                                    {{ field.name }}</a>
+
+                                            {% endfor %}
+                                        </div>
+                                    </div>
+
+                                </div>
+
+                                <button class="btn btn-outline-success" onclick="uploadExcelQFile( )">Upload
+                                    Excel File
+                                </button>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary " data-bs-dismiss="modal">Close</button>
+                            <button type="button" class="btn btn-danger delete-course">Delete</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
         <div class="mt-3 mr-1 ">
             <a href="#" class="btn btn-light btn-sm  btn-outline-secondary" role="button" aria-disabled="true">
                 <i class="fa fa-cog" aria-hidden="true"></i> Setting
@@ -96,7 +152,7 @@
                                                 <li class="question " data-id="{{ question.id }}">
                                                     <div class="d-flex tag-btn select-btn">
                                                         <a class="flex-grow-1 ">
-                                                                {{ question.get_short_description }}
+                                                            {{ question.get_short_description }}
                                                         </a>
                                                         <button type="button" class="close float-right" name="question"
                                                                 data-id="{{ question.id }}">
@@ -187,14 +243,14 @@
                                         <td>
 
                                             <div class="input-group">
-                                                <input type="text" class="form-control"
+                                                <input type="text" class="form-control matching_q_item"
                                                        aria-label="Text input with segmented dropdown button">
                                             </div>
 
                                         </td>
                                         <td>
                                             <div class="input-group">
-                                                <input type="text" class="form-control"
+                                                <input type="text" class="form-control "
                                                        aria-label="Text input with segmented dropdown button">
                                                 <div class="input-group-append">
                                                     <button type="button" class="btn btn-outline-danger remove-option">
@@ -209,7 +265,7 @@
 
 
                                             <div class="input-group">
-                                                <input type="text" class="form-control"
+                                                <input type="text" class="form-control matching_q_item"
                                                        aria-label="Text input with segmented dropdown button">
                                             </div>
 
@@ -407,6 +463,8 @@
 
     <script>
         var questionGroupsData = JSON.parse('{{ questionGroupsData|escapejs }}');
+        console.log(questionGroupsData)
+        var bank_id = {{ bank_id }}
     </script>
     <script src="{% static 'js/builder.js' %}"></script>
 {% endblock javascripts %}
