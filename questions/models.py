@@ -41,7 +41,7 @@ class Question(BaseModel):
     description = models.TextField(blank=True)
     image = models.ImageField(blank=True, upload_to=image_path)
     audio = models.FileField(upload_to=audio_path, blank=True, )
-    score = models.PositiveIntegerField(default=0)
+    score = models.PositiveIntegerField(default=0, null=True)
     question_group = models.ForeignKey(
         QuestionGroup, blank=True, null=True, on_delete=models.CASCADE,
         related_name='question_group_questions', related_query_name='question_group_question',
@@ -60,7 +60,7 @@ class Question(BaseModel):
 
     def get_short_description(self):
         return self.description[:20]
-    
+
 
 class Choice(BaseModel):
     question = models.ForeignKey(
@@ -72,9 +72,19 @@ class Choice(BaseModel):
     choice_text = models.CharField(max_length=200)  # Add this field
     is_true = models.BooleanField(blank=True, null=True)
 
-
     def __str__(self):
         return self.choice_text
+
+
+class Match(BaseModel):
+    question = models.ForeignKey(
+        to='Question',
+        related_name='question_matches',
+        related_query_name='question_match',
+        on_delete=models.CASCADE,
+    )
+    item_text = models.CharField(max_length=200, null=True)  # Add this field
+    match_text = models.CharField(max_length=200, null=True)  # Add this field
 
 
 class Answer(BaseModel):
