@@ -6,13 +6,14 @@ let create_question_flag = null;
 let file = null
 let multiQCheckbox = 3
 let questionType = 'TF'
+let q_group_import_id = null
 const qTypeMap = new Map();
 
 // Add key-value pairs to the Map
 qTypeMap.set('TF', ['/builder/true_false_question/', 'True/False']);
 qTypeMap.set('MC', ['/builder/multi_question/', 'Multiple Choice']);
 // TODO
-qTypeMap.set('M', ['/builder/match_question/', 'Matching']);
+qTypeMap.set('M', ['/builder/matching_question/', 'Matching']);
 
 $(document).ready(function () {
     sortQuestions();
@@ -112,6 +113,22 @@ function findSelectedQG() {
                     multiQCheckbox = multiQCheckbox + 1;
                 }
             }
+            document.getElementById("tbodyMatchingQ").innerHTML = '';
+            if (question.question_type === 'M') {
+                matchingPageProceess();
+                for (let i = 0; i < question.question_items.length; i++) {
+                    const item = question.question_items[i];
+                    const newRowHtml = '<tr class="q-option"><td><div class="input-group">' +
+                        '<input type="text" class="form-control matching_q_item" data-id="' + item.id + '"' +
+                        ' aria-label="Text input with segmented dropdown button"' +
+                        ' value="' + item.item_text + '"></div></td><td><div class="input-group">' +
+                        '<input type="text" class="form-control " aria-label="Text input with segmented dropdown button"' +
+                        ' value="' + item.match_text + '"><div class="input-group-append"><button type="button" class="btn btn-outline-danger remove-option">' +
+                        '<i class="fa fa-trash"></i></button></div></div></td></tr>';
+                    $('#tbodyMatchingQ').append(newRowHtml);
+                    multiQCheckbox = multiQCheckbox + 1;
+                }
+            }
             if (question.question_type === 'TF') {
                 tFPageProceess();
                 if (question.question_answers['is_true'] === true) {
@@ -191,21 +208,37 @@ function createQuestion() {
             formData.append("is_true", trueFalseChoice);
         } else if (questionType === 'MC') {
             var choices = $('.muti_q_choices').map(function () {
-    return { value: $(this).val(), id: $(this).data('id') };
-}).get();
+                return {value: $(this).val(), id: $(this).data('id')};
+            }).get();
             const selectedRadioButton = $('input[name="questionMultiQ"]:checked');
             const selected_choice = selectedRadioButton.closest('tr').find('.muti_q_choices').val();
             var choicesJSON = JSON.stringify(choices);
             formData.append("choice_text", choicesJSON);
             formData.append("selected_choice_text", selected_choice);
+        } else if (questionType === 'M') {
+            var items = $('.q-option').map(function () {
+                var firstInput = $(this).find('.matching_q_item');
+                var secondInput = $(this).find('.form-control').not('.matching_q_item');
+
+                return {
+                    item: firstInput.val(),
+                    match: secondInput.val(),
+                    id: firstInput.data('id')
+                };
+            }).get();
+
+            var itemsJSON = JSON.stringify(items);
+            formData.append("match_item", itemsJSON);
+
+
         }
 
         var update_url;
-        if (create_question_flag){
-            update_url = qTypeMap.get(questionType)[0]+create_question_flag+'/';
-            }
+        if (create_question_flag) {
+            update_url = qTypeMap.get(questionType)[0] + create_question_flag + '/';
+        }
 
-            // update_url = '/builder/true_false_question/' + create_question_flag + '/';
+        // update_url = '/builder/true_false_question/' + create_question_flag + '/';
         else {
             update_url = qTypeMap.get(questionType)[0];
 
@@ -221,6 +254,7 @@ function createQuestion() {
             contentType: false,
             data: formData,
             success: function (response) {
+                window.location.href = '/builder/' + bank_id + '/q_bank'
                 var q_input_questionGroupsData = {
                     'id': response.question_id,
                     'description': description,
@@ -559,6 +593,11 @@ $(document).on('click', '#trueFalseDropDown', function (event) {
     create_question_flag = null;
     tFPageProceess();
 })
+$(document).on('click', '.q_group_import', function (event) {
+
+    q_group_import_id = $(this).data('id')
+
+})
 
 function tFPageProceess() {
     questionType = 'TF'
@@ -597,6 +636,16 @@ function multiplePageProceess() {
     $('#MathingQuestionTable').attr('hidden', 'hidden')
 }
 
+function matchingPageProceess() {
+    questionType = 'M'
+    globalRestartForm()
+    $('#MathingQuestionTable').removeAttr('hidden')
+    $('#TrueFalseQuestionTable').attr('hidden', 'hidden')
+    $('#tfLableId').attr('hidden', 'hidden')
+    $('#multiLableId').removeAttr('hidden')
+    $('#multiQuestionTable').attr('hidden', 'hidden')
+}
+
 function deleteImage() {
     $('#deleteImageId').on('click', function () {
         $('#showImageId').removeAttr('src');
@@ -609,9 +658,9 @@ function addMatchingOption() {
     $(document).on('click', '#addMatchingId', function (event) {
 
         const newRowHtml = '<tr class="q-option"><td><div class="input-group">' +
-            '<input type="text" class="form-control" aria-label="Text input with segmented dropdown button">' +
+            '<input type="text" class="form-control matching_q_item" aria-label="Text input with segmented dropdown button">' +
             '</div></td><td><div class="input-group">' +
-            '<input type="text" class="form-control muti_q_choices" aria-label="Text input with segmented dropdown button">' +
+            '<input type="text" class="form-control " aria-label="Text input with segmented dropdown button">' +
             '<div class="input-group-append"><button type="button" class="btn btn-outline-danger remove-option">' +
             '<i class="fa fa-trash"></i></button></div></div></td></tr>';
 
@@ -636,4 +685,39 @@ function addMultipleOption() {
         multiQCheckbox = multiQCheckbox + 1;
     })
 
+}
+
+$(document).on('click', '.open-import-modal', function (event) {
+    // candidate_delete_course = $(this).data('id')
+    // $('#deleteModalLabel').html('Delete   Course')
+    console.log('salam');
+    // $('#importModal').modal('toggle')
+})
+
+function uploadExcelQFile(id) {
+    var fileInput = document.getElementById('excelFileInput');
+    var file = fileInput.files[0];
+
+    if (file) {
+        var formData = new FormData();
+        formData.append('excelFile', file);
+        formData.append('csrfmiddlewaretoken', csrfToken);
+        formData.append('q_group_import_id', q_group_import_id);
+
+        $.ajax({
+            url: '/builder/upload_q_excel/', // URL where you'll handle the upload in your Django application
+            type: 'POST',
+            data: formData,
+            processData: false,
+            contentType: false,
+            success: function (response) {
+                window.location.href = '/builder/' + bank_id + '/q_bank'
+            },
+            error: function () {
+                alert('File upload failed.');
+            }
+        });
+    } else {
+        alert('Please select an Excel file to upload.');
+    }
 }
