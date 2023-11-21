@@ -158,3 +158,22 @@ hr {
     text-align: center;
     margin-bottom: 20px;
 }
+
+
+    .btn-group-vertical.custom-radio-group .btn {
+      border-radius: 0; /* Remove border-radius for square edges */
+    }
+
+    .btn-group-vertical.custom-radio-group .btn:not(:last-child) {
+      margin-bottom: 10px; /* Add margin between buttons */
+    }
+
+    .btn-group-vertical.custom-radio-group .btn input[type="radio"]:checked + label {
+      background-color: #007bff; /* Change background color for selected radio button */
+      color: #fff; /* Change text color for selected radio button */
+    }
+
+    .btn-primary {
+      background-color: #28a745; /* Green color for the submit button */
+      border-color: #28a745; /* Border color for the submit button */
+    }
