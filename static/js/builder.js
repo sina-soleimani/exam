@@ -114,7 +114,7 @@ function findSelectedQG() {
                 }
             }
             document.getElementById("tbodyMatchingQ").innerHTML = '';
-            if (question.question_type === 'M') {
+            if (question.question_type === 'MG') {
                 matchingPageProceess();
                 for (let i = 0; i < question.question_items.length; i++) {
                     const item = question.question_items[i];
@@ -215,7 +215,7 @@ function createQuestion() {
             var choicesJSON = JSON.stringify(choices);
             formData.append("choice_text", choicesJSON);
             formData.append("selected_choice_text", selected_choice);
-        } else if (questionType === 'M') {
+        } else if (questionType === 'MG') {
             var items = $('.q-option').map(function () {
                 var firstInput = $(this).find('.matching_q_item');
                 var secondInput = $(this).find('.form-control').not('.matching_q_item');
@@ -637,7 +637,7 @@ function multiplePageProceess() {
 }
 
 function matchingPageProceess() {
-    questionType = 'M'
+    questionType = 'MG'
     globalRestartForm()
     $('#MathingQuestionTable').removeAttr('hidden')
     $('#TrueFalseQuestionTable').attr('hidden', 'hidden')
