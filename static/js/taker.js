@@ -3,52 +3,86 @@ let question;
 //TODO
 $(document).on('click', 'button.showqbtn', async function (event) {
         question = findQuestionById(questionGroupsData, $(this).data('id'));
-        const imageBlob = await fetchImageAsBlob(question.image);
-        console.log(imageBlob)
-        console.log(question.image)
+        var description = question.description;
+        const question_type = question.question_type
+        if (question_type === 'TF') {
+            $('.TF_container').removeAttr('hidden')
+            $('.MC_container').attr('hidden', 'hidden')
+            $('.MG_container').attr('hidden', 'hidden')
+            if (question.question_answers.is_true === true)
+                $('#answer_true_id').prop('checked', true);
+            else if (question.question_answers.is_true === false)
+                $('#answer_false_id').prop('checked', true);
 
-        var description = question.description.replaceAll('\r\n', '<br>');
+        } else if (question_type === 'MC') {
+            $('#MC_options').empty()
+            $('.TF_container').attr('hidden', 'hidden')
+            $('.MG_container').attr('hidden', 'hidden')
+            $('.MC_container').removeAttr('hidden')
+            for (let i = 0; i < question.question_choices.length; i++) {
+                const choice = question.question_choices[i];
+                const newRowHtml = '<input type="radio" class="btn-check" name="true_name" id="choice_' + choice.id + '" data-id="' + choice.id + '" ' +
+                    'autocomplete="off"> <label class="btn btn-outline-secondary" for="choice_' + choice.id + '">' + choice.choice_text + '</label>';
+                $('#MC_options').append(newRowHtml);
+
+            }
+            // $('#MC_options').innerHTML
+        } else if (question_type === 'MG') {
+            console.log('MG')
+            $('.MG_container').removeAttr('hidden')
+            $('.MG_item').empty()
+            $('.MG_match').empty()
+
+            $('.TF_container').attr('hidden', 'hidden')
+            $('.MC_container').attr('hidden', 'hidden')
+            for (let i = 0; i < question.question_items.length; i++) {
+                const item = question.question_items[i].item_text;
+                const match = question.question_items[i].match_text;
+
+
+                const newItemHtml = '<div class="sortable-item">' +
+                    '<input type="radio" class="btn-check col-12" name="true_name" autocomplete="off">' +
+                    '<label class="btn btn-outline-secondary col-12">' + item + '</label>' +
+                    '<hr></div>';
+                $('.MG_item').append(newItemHtml);
+
+                const newMatchHtml = '<div class="sortable-item">' +
+                    '<input type="radio" class="btn-check col-12" name="true_name" autocomplete="off">' +
+                    '<label class="btn btn-outline-secondary col-12">' + match + '</label>' +
+                    '<hr></div>';
+                $('.MG_match').append(newMatchHtml);
+
+            }
+
+
+        }
 
         $("#descriptionContent").html(description)
-        if (imageBlob) {
-            const reader = new FileReader();
-            reader.onload = function (event) {
-                $('#imageHandler').removeAttr('hidden');
-                $('#showImageId').on('load', function () {
-                    // Image loaded successfully
-                    $('#qlistModal').modal('toggle');
-                }).on('error', function () {
-                    // Handle image loading error
-                    console.error('Error loading the image.');
-                });
-                $('#showImageId').attr('src', event.target.result);
-            };
-            reader.onerror = function () {
-                // Handle errors, e.g., display an error message
-                console.error('Error reading the image file.');
-            };
 
-            // Read the Blob as a data URL
-            reader.readAsDataURL(imageBlob);
-        }
-        $('#qlistModal').modal('toggle');
+        $('.close').click()
     }
 )
+$('.MG_item').sortable({
+    connectWith: '.sortable-item',
+});
+$('.MG_match').sortable({
+    connectWith: '.sortable-match',
+});
+
+// Add a container to hold the sortable items
+$('.MG_match').addClass('sortable-match');
+$('.MG_item').addClass('sortable-item');
 
 function findQuestionById(questionGroupsData, questionId) {
     for (let i = 0; i < questionGroupsData.length; i++) {
-        const group = questionGroupsData[i];
+        question = questionGroupsData[i];
 
-        for (let j = 0; j < group.questions.length; j++) {
-            const question = group.questions[j];
 
-            if (question.id === questionId) {
-                return question;
-            }
+        if (question.id === questionId) {
+            return question;
         }
     }
 
-    // If the question is not found, return null
     return null;
 }
 
@@ -73,17 +107,16 @@ function isValidImageType(fileType) {
 
 $("#submitQAnswser").on("submit", function (event) {
 
-            const isTrue = $("#answer_true_id").is(":checked");
-            const isFalse = $("#answer_false_id").is(":checked");
-            const trueFalseChoice = isTrue ? "True" : (isFalse ? "False" : null);
-
-
+    const isTrue = $("#answer_true_id").is(":checked");
+    const isFalse = $("#answer_false_id").is(":checked");
+    const trueFalseChoice = isTrue ? "True" : (isFalse ? "False" : null);
 
 
     const formData = {
         'csrfmiddlewaretoken': csrfToken,
         'is_true': trueFalseChoice,
         'question_id': question.id,
+        'tf_id': question.question_answers.tf_id,
         'result_id': $('#result_id').data('id'),
     };
 

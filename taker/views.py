@@ -1,14 +1,14 @@
+from django.forms import model_to_dict
 from django.shortcuts import render
-from django.views.generic import View
+from django.views.generic import View, CreateView
 from questions import models
-from django.views.generic import CreateView
 from .models import ProfileAnswer
 from .forms import ProfileAnswerForm
 from result.models import Result
 from exams.models import Exam
 import json
-from django.db.models import OuterRef, Subquery
 from django.contrib.auth.decorators import login_required
+
 
 class LoginRequiredMixin:
     @classmethod
@@ -16,54 +16,52 @@ class LoginRequiredMixin:
         view = super().as_view(**initkwargs)
         return login_required(view)
 
-class examSession(LoginRequiredMixin,View):
+
+class examSession(LoginRequiredMixin, View):
     def get(self, request, id):
-        exam = Exam.objects.filter(id=id).prefetch_related('exam_question_groups__question_group_questions').first()
-        question_groups = exam.exam_question_groups.all()  # Access related QuestionGroups
+        exam = Exam.objects.filter(id=id).select_related('course__question_bank').first()
+        question_bank = exam.course.question_bank
+        questions = []
 
-        # question_qroups = models.QuestionGroup.objects.filter(exam__pk=id).prefetch_related('question_group_questions')
-        # question_qroups = models.QuestionGroup.objects.all().prefetch_related('question_group_questions')
-        subquery = Subquery(
-            models.Answer.objects.filter(
-                question=OuterRef('id')
-            ).values('is_true')[:1]
-        )
-        # Annotate 'is_true' for each Question
-        question_qroups = question_groups.annotate(
-            question_group_questions__is_true=subquery
-        )
-        data = []
-        for group in question_qroups:
-            group_data = {
-                'id': group.id,
-                'name': group.name,
-                'questions': [],
-            }
+        for question_group in question_bank.q_bank_q_groups.all():
+            for q in question_group.question_group_questions.all():
+                questions.append(q)
+        q = []
 
-            # Fetch the required fields from questions and answers
-            # TODO IMAGE
-            questions = group.question_group_questions.values(
-                'id', 'description', 'score', 'question_type', 'image',
-                'question_answer__is_true',  # Include the 'is_true' field from answers
-            )
+        for question in questions:
+            question_dict = model_to_dict(question, fields=['id', 'description', 'score', 'question_type'])
+            question_dict['question_choices'] = []
+            question_dict['question_items'] = []
+            question_dict['question_tf_answer'] = []
 
-            for question in questions:
-                # Add other answer-related fields here if needed
-                group_data['questions'].append(question)
+            for choice in question.question_choices.all():
+                choice_dict = model_to_dict(choice, fields=['id', 'is_true', 'choice_text'])
+                question_dict['question_choices'].append(choice_dict)
 
-            data.append(group_data)
+            for match in question.question_matches.all():
+                match_dict = model_to_dict(match, fields=['id', 'item_text', 'match_text'])
+                question_dict['question_items'].append(match_dict)
 
-        json_data = json.dumps(data)
+            answer = question.question_prof_answers.first()
+            if answer:
+                question_dict['question_answers'] = {
+                    'tf_id': answer.id,
+                    'is_true': answer.is_true,
+                }
 
-        result=Result.objects.get_or_create(exam_id=id, student_id=request.user.id)
+            q.append(question_dict)
+
+        json_data = json.dumps(q)
+
+        result = Result.objects.get_or_create(exam_id=id, student_id=request.user.id)
 
         return render(request, 'taker.html', context={
             'questionGroupsData': json_data,
-            'questions': question_qroups,
-            'result_id':result[0].id})
+            'questions': questions,
+            'result_id': result[0].id})
 
 
-class AnswerQuestionView(LoginRequiredMixin,CreateView):
+class AnswerQuestionView(LoginRequiredMixin, CreateView):
     model = ProfileAnswer
     form_class = ProfileAnswerForm
     template_name = 'home/taker.html'
@@ -71,10 +69,17 @@ class AnswerQuestionView(LoginRequiredMixin,CreateView):
 
     def form_valid(self, form):
         # Save the form and assign result if available
-        profile_answer = form.save(commit=False)
-        question=models.Question.objects.get(id=self.request.POST.get('question_id'))
-        profile_answer.question = question
-        result=Result.objects.get(id=self.request.POST.get('result_id'))
-        profile_answer.result = result
-        profile_answer.save()
-        return super().form_valid(form)
+        if self.request.POST.get('tf_id') is not None and self.request.POST.get('tf_id') != '':
+            profile_answer = ProfileAnswer.objects.get(id=self.request.POST.get('tf_id'))
+            profile_answer.is_true = self.request.POST.get('is_true')
+            profile_answer.save()
+        else:
+
+
+            profile_answer = form.save(commit=False)
+            question = models.Question.objects.get(id=self.request.POST.get('question_id'))
+            profile_answer.question = question
+            result = Result.objects.get(id=self.request.POST.get('result_id'))
+            profile_answer.result = result
+            profile_answer.save()
+            return super().form_valid(form)
