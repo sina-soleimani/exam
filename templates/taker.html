@@ -16,8 +16,8 @@
             <!--LEFT BAR-->
             <div class="left-bar col-12 col-md-3 col-lg-3 bd-sidebar   border-secondary">
 
-{#TODO IMAGE                #}
-<div class="text-center " hidden="hidden" id="imageHandler">
+                {#TODO IMAGE                #}
+                <div class="text-center " hidden="hidden" id="imageHandler">
 
                     <img src="#" class="img-thumbnail" id="showImageId">
 
@@ -54,31 +54,34 @@
                                     </tr>
                                     </thead>
                                     <tbody>
-                                    {% for qg in questions %}
-
-                                        {% for question in qg.question_group_questions.all %}
+                                    {% for question in questions %}
 
 
-                                            <tr>
-                                                <td class="q-desc">
-                                                    true/false
+                                        <tr>
+                                            <td class="q-desc">
+                                                {% if question.question_type == 'TF' %}
+                                                    True / False
+                                                {% elif question.question_type == 'MC' %}
+                                                    Multiple Choice
+                                                {% elif question.question_type == 'MG' %}
+                                                    Matching
+                                                {% endif %}
 
 
-                                                </td>
-                                                <td>
-                                                    {{ question.score }}
+                                            </td>
+                                            <td>
+                                                {{ question.score }}
 
 
-                                                </td>
+                                            </td>
 
-                                                <td>
-                                                    <button type="button" class="btn btn-outline-success showqbtn"
-                                                            data-id="{{ question.id }}">
-                                                        <i class="fa fa-eye" aria-hidden="true"></i>
-                                                    </button>
-                                                </td>
-                                            </tr>
-                                        {% endfor %}
+                                            <td>
+                                                <button type="button" class="btn btn-outline-success showqbtn"
+                                                        data-id="{{ question.id }}">
+                                                    <i class="fa fa-eye" aria-hidden="true"></i>
+                                                </button>
+                                            </td>
+                                        </tr>
                                     {% endfor %}
                                     </tbody>
                                 </table>
@@ -92,44 +95,70 @@
                 </div>
 
                 <div class="card-body  rounded" style="z-index: 100">
-                    <form  id="submitQAnswser">
+                    <form id="submitQAnswser">
                         {% csrf_token %}
 
 
-                    <div class="card " style="height: 100%">
-                        <div class="container car-body" style="height: 100%">
-                            <div class="font-weight-bold my-5" id="descriptionContent">
-                                {{ q.description | safe }}
-                            </div>
-                            <div data-id="{{ result_id }}" id="result_id"></div>
-                            <div class="">
-                                <input type="radio" class="btn-check " name="options-outlined" id="answer_true_id"
-                                       autocomplete="off" checked>
-                                <label class="btn btn-outline-success btn-block" for="answer_true_id">True</label>
-                                <br>
-                                <input type="radio" class="btn-check" name="options-outlined" id="answer_false_id"
-                                       autocomplete="off">
-                                <label class="btn btn-outline-danger btn-block" for="answer_false_id">False</label>
-                            </div>
+                        <div class="card " style="height: 100%">
+                            <div class="container car-body" style="height: 100%">
+                                <div class="font-weight-bold my-5" id="descriptionContent">
+                                    {{ q.description | safe }}
+                                </div>
+                                <div data-id="{{ result_id }}" id="result_id"></div>
 
+                                <div class="container TF_container" hidden="hidden">
+
+                                    <div class="btn-group-vertical col-12 custom-radio-group" role="group"
+                                         aria-label="Options" id="TF_options">
+                                        <input type="radio" class="btn-check" name="tf_name" id="answer_true_id"
+                                               autocomplete="off">
+                                        <label class="btn btn-outline-secondary" for="answer_true_id">True</label>
+
+                                        <input type="radio" class="btn-check" name="tf_name" id="answer_false_id"
+                                               autocomplete="off">
+                                        <label class="btn btn-outline-secondary" for="answer_false_id">False</label>
+                                    </div>
+
+                                </div>
+
+                                <div class="container MC_container">
+
+                                    <div class="btn-group-vertical col-12 custom-radio-group" role="group"
+                                         aria-label="Options" id="MC_options">
+
+                                    </div>
+
+                                </div>
+                                <div class="container MG_container">
+
+                                    <div class="btn-group-vertical col-12 custom-radio-group" role="group"
+                                         aria-label="Options" id="MG_options">
+                                        <div class="row col-12">
+                                            <div class="col-6 MG_item"></div>
+                                            <div class="col-6 MG_match"></div>
+                                        </div>
+
+                                    </div>
+
+                                </div>
+
+
+                            </div>
+                            <hr>
+                            <div class="row">
+                                <div class="col-auto mr-auto">
+
+                                </div>
+                                <div class="col-auto">
+                                    <button type="submit" class="btn btn-outline-primary mb-2 mr-2"
+                                            id="answer_q_btn">
+                                        Success
+                                    </button>
+                                </div>
+                            </div>
 
                         </div>
-                        <hr>
-                        <div class="row">
-                            <div class="col-auto mr-auto">
-                                {#                                    CAN ADD OPTION HERE#}
-
-                            </div>
-                            <div class="col-auto">
-                                <button type="submit" class="btn btn-outline-primary mb-2 mr-2"
-                                        id="answer_q_btn">
-                                    Success
-                                </button>
-                            </div>
-                        </div>
-
-                    </div>
-                  </form>
+                    </form>
                 </div>
 
             </div>
@@ -144,7 +173,11 @@
 {% block javascripts %}
 
     <script>
+        {#var questionGroupsData = {{ questionGroupsData|json_script }};#}
+
         var questionGroupsData = JSON.parse('{{ questionGroupsData|escapejs }}');
+        {#var questionGroupsData = {{ questionGroupsData|tojson|safe }};#}
+        {#console.log(questionGroupsData)#}
     </script>
     <script src="{% static 'js/taker.js' %}"></script>
 {% endblock javascripts %}
