@@ -48,7 +48,7 @@ class Question(BaseModel):
     )
 
     class QuestionType(models.TextChoices):
-        MATCHING = 'M', 'MATCHING'
+        MATCHING = 'MG', 'MATCHING'
         MULTIPLE_CHOICE = 'MC', 'MULTIPLE_CHOICE'
         TRUE_FALSE = 'TF', 'TRUE_FALSE'
 
