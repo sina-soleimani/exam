@@ -8,3 +8,9 @@ class ProfileAnswerForm(forms.ModelForm):
         fields = ['is_true', ]
 
 
+class ProfileAnswerFormEmpty(forms.ModelForm):
+    class Meta:
+        model = ProfileAnswer
+        fields = []
+
+

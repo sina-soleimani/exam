@@ -3,7 +3,7 @@ from django.shortcuts import render
 from django.views.generic import View, CreateView
 from questions import models
 from .models import ProfileAnswer
-from .forms import ProfileAnswerForm
+from .forms import ProfileAnswerForm, ProfileAnswerFormEmpty
 from result.models import Result
 from exams.models import Exam
 import json
@@ -45,8 +45,9 @@ class examSession(LoginRequiredMixin, View):
             answer = question.question_prof_answers.first()
             if answer:
                 question_dict['question_answers'] = {
-                    'tf_id': answer.id,
+                    'pf_answer_id': answer.id,
                     'is_true': answer.is_true,
+                    'mc_id': answer.choice_id,
                 }
 
             q.append(question_dict)
@@ -63,15 +64,23 @@ class examSession(LoginRequiredMixin, View):
 
 class AnswerQuestionView(LoginRequiredMixin, CreateView):
     model = ProfileAnswer
-    form_class = ProfileAnswerForm
     template_name = 'home/taker.html'
     success_url = '/success/'
 
+    def get_form_class(self):
+        if self.request.POST.get('q_type') == 'MC':
+            return ProfileAnswerFormEmpty
+        else:
+            return ProfileAnswerForm
+
     def form_valid(self, form):
-        # Save the form and assign result if available
-        if self.request.POST.get('tf_id') is not None and self.request.POST.get('tf_id') != '':
-            profile_answer = ProfileAnswer.objects.get(id=self.request.POST.get('tf_id'))
-            profile_answer.is_true = self.request.POST.get('is_true')
+        if self.request.POST.get('pf_answer_id') is not None and self.request.POST.get('pf_answer_id') != '':
+            profile_answer = ProfileAnswer.objects.get(id=self.request.POST.get('pf_answer_id'))
+            if self.request.POST.get('q_type')=='MC':
+                choice= models.Choice.objects.get(id=self.request.POST.get('mc_id'))
+                profile_answer.choice=choice
+            if self.request.POST.get('q_type')=='TF':
+                profile_answer.is_true = self.request.POST.get('is_true')
             profile_answer.save()
         else:
 
@@ -80,6 +89,10 @@ class AnswerQuestionView(LoginRequiredMixin, CreateView):
             question = models.Question.objects.get(id=self.request.POST.get('question_id'))
             profile_answer.question = question
             result = Result.objects.get(id=self.request.POST.get('result_id'))
+            if self.request.POST.get('q_type')=='MC':
+                choice= models.Choice.objects.get(id=self.request.POST.get('mc_id'))
+                profile_answer.choice=choice
+
             profile_answer.result = result
             profile_answer.save()
-            return super().form_valid(form)
+        return super().form_valid(form)

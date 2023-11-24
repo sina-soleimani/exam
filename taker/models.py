@@ -31,6 +31,14 @@ class ProfileAnswer(BaseModel):
 
     is_true = models.BooleanField(blank=True, null=True)  # For True/False questions
 
+    choice = models.ForeignKey(
+        to='questions.Choice',
+        blank=True, null=True,
+        related_name='choice_prof_answers',
+        related_query_name='choice_prof_answer',
+        on_delete=models.CASCADE,
+    )
+
     def __str__(self):
         return f"Answer for Question: {self.question}"
 
