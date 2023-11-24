@@ -9,9 +9,9 @@ $(document).on('click', 'button.showqbtn', async function (event) {
             $('.TF_container').removeAttr('hidden')
             $('.MC_container').attr('hidden', 'hidden')
             $('.MG_container').attr('hidden', 'hidden')
-            if (question.question_answers.is_true === true)
+            if (question.question_answers && question.question_answers.is_true === true)
                 $('#answer_true_id').prop('checked', true);
-            else if (question.question_answers.is_true === false)
+            else if (question.question_answers && question.question_answers.is_true === false)
                 $('#answer_false_id').prop('checked', true);
 
         } else if (question_type === 'MC') {
@@ -21,14 +21,14 @@ $(document).on('click', 'button.showqbtn', async function (event) {
             $('.MC_container').removeAttr('hidden')
             for (let i = 0; i < question.question_choices.length; i++) {
                 const choice = question.question_choices[i];
-                const newRowHtml = '<input type="radio" class="btn-check" name="true_name" id="choice_' + choice.id + '" data-id="' + choice.id + '" ' +
+                const newRowHtml = '<input type="radio" class="btn-check" name="choice_name" id="choice_' + choice.id + '" data-id="' + choice.id + '" ' +
                     'autocomplete="off"> <label class="btn btn-outline-secondary" for="choice_' + choice.id + '">' + choice.choice_text + '</label>';
                 $('#MC_options').append(newRowHtml);
 
             }
-            // $('#MC_options').innerHTML
+            if (question.question_answers)
+                $('#choice_' + question.question_answers.mc_id).prop('checked', true);
         } else if (question_type === 'MG') {
-            console.log('MG')
             $('.MG_container').removeAttr('hidden')
             $('.MG_item').empty()
             $('.MG_match').empty()
@@ -111,14 +111,45 @@ $("#submitQAnswser").on("submit", function (event) {
     const isFalse = $("#answer_false_id").is(":checked");
     const trueFalseChoice = isTrue ? "True" : (isFalse ? "False" : null);
 
+    var selectedRadioButton = $('input[name="choice_name"]:checked');
+    if (selectedRadioButton.length > 0) {
+        var selectedChoiceId = selectedRadioButton.data('id');
+        console.log('Selected choice ID:', selectedChoiceId);
+    } else {
+        console.log('No radio button selected');
+    }
 
     const formData = {
         'csrfmiddlewaretoken': csrfToken,
         'is_true': trueFalseChoice,
         'question_id': question.id,
-        'tf_id': question.question_answers.tf_id,
+        'pf_answer_id': question.question_answers ? question.question_answers.pf_answer_id : null,
+        'mc_id': selectedChoiceId,
+        'q_type': question.question_type,
         'result_id': $('#result_id').data('id'),
     };
+    if (question.question_type === 'TF') {
+        console.log('TF')
+        const formData = {
+            'csrfmiddlewaretoken': csrfToken,
+            'is_true': trueFalseChoice,
+            'question_id': question.id,
+            // 'tf_id': question.question_answers.tf_id,
+            'mc_id': selectedChoiceId,
+            'q_type': question.question_type,
+            'result_id': $('#result_id').data('id'),
+        };
+    } else if (question.question_type === 'MC') {
+        const formData = {
+            'csrfmiddlewaretoken': csrfToken,
+            // 'is_true': trueFalseChoice,
+            'question_id': question.id,
+            // 'tf_id': question.question_answers.tf_id,
+            'mc_id': selectedChoiceId,
+            'q_type': question.question_type,
+            'result_id': $('#result_id').data('id'),
+        };
+    }
 
     $.ajax({
         url: '/taker/answer_question/' + question.id,
