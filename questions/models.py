@@ -33,8 +33,8 @@ class QuestionGroup(BaseModel):
         related_name='q_bank_q_groups', related_query_name='q_bank_q_group',
     )
 
-    def __str__(self):
-        return self.name
+    # def __str__(self):
+    #     return self.name
 
 
 class Question(BaseModel):
