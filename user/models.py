@@ -1,9 +1,9 @@
 from django.db import models
-from django.utils import timezone
 
 # Create your models here.
 
 from django.contrib.auth.models import AbstractUser
+
 
 class BaseModel(models.Model):
     created_at = models.DateTimeField(auto_now=True)
@@ -18,6 +18,7 @@ class AccessLevel(BaseModel):
 
     def __str__(self):
         return self.name
+
 
 class Profile(AbstractUser):
     # Add any additional fields you need for your user model here
@@ -36,8 +37,8 @@ class Profile(AbstractUser):
     # first_name = models.CharField(max_length=30, blank=True)
     # last_name = models.CharField(max_length=30, blank=True)
     # is_active = models.BooleanField(default=True)
-    entry_year = models.DateField(null=True)
-    major_code = models.PositiveIntegerField(null=True)
+    entry_year = models.CharField(null=True, blank=True)
+    major_code = models.CharField(null=True, blank=True)
 
     def __str__(self):
         return self.username
