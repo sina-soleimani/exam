@@ -20,6 +20,7 @@ body {
     border-image-slice: 1; /* Slice the gradient border */
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
 }
+
 .builder-color {
     background: #F5F5F5;
 
@@ -59,7 +60,7 @@ body {
     display: block;
     margin-bottom: 5px;
     /*border: 1px solid #eee;*/
-    background:#888888;
+    background: #888888;
 }
 
 .menu-box ul.menu-list > li a {
@@ -118,6 +119,7 @@ ul.accordion .inner {
     padding: 0.5rem 1rem; /* Adjust padding as needed */
     font-size: 0.875rem; /* Adjust font size as needed */
 }
+
 .btn {
     font-weight: bold;
     border-radius: 5px; /* Rounded corners */
@@ -127,6 +129,7 @@ ul.accordion .inner {
 .custom-file-label::after {
     content: "Upload"; /* Adjust label text as needed */
 }
+
 /*.alert {*/
 /*    margin-top: 10px; !* Adjust spacing *!*/
 /*    border-radius: 5px; !* Rounded corners *!*/
@@ -160,20 +163,51 @@ hr {
 }
 
 
-    .btn-group-vertical.custom-radio-group .btn {
-      border-radius: 0; /* Remove border-radius for square edges */
-    }
+.btn-group-vertical.custom-radio-group .btn {
+    border-radius: 0; /* Remove border-radius for square edges */
+}
 
-    .btn-group-vertical.custom-radio-group .btn:not(:last-child) {
-      margin-bottom: 10px; /* Add margin between buttons */
-    }
+.btn-group-vertical.custom-radio-group .btn:not(:last-child) {
+    margin-bottom: 10px; /* Add margin between buttons */
+}
 
-    .btn-group-vertical.custom-radio-group .btn input[type="radio"]:checked + label {
-      background-color: #007bff; /* Change background color for selected radio button */
-      color: #fff; /* Change text color for selected radio button */
-    }
+.btn-group-vertical.custom-radio-group .btn input[type="radio"]:checked + label {
+    background-color: #007bff; /* Change background color for selected radio button */
+    color: #fff; /* Change text color for selected radio button */
+}
 
-    .btn-primary {
-      background-color: #28a745; /* Green color for the submit button */
-      border-color: #28a745; /* Border color for the submit button */
-    }
+.btn-primary {
+    background-color: #28a745; /* Green color for the submit button */
+    border-color: #28a745; /* Border color for the submit button */
+}
+
+.icon-box {
+    display: inline-flex;
+    align-items: center;
+    padding: 15px;
+    border-radius: 8px;
+    background: linear-gradient(135deg, #5e5e5e, #8c8c8c);
+    color: #fff;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    margin-right: 20px;
+}
+
+.icon-box-uncheck {
+    display: inline-flex;
+    align-items: center;
+    padding: 15px;
+    border-radius: 8px;
+    background: linear-gradient(135deg, #2980b9, #2c3e50);
+    color: #fff;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    margin-right: 20px;
+}
+
+
+.danger {
+    color: #e74c3c;
+}
+
+.success {
+    color: #2ecc71;
+}
