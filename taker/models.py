@@ -38,7 +38,19 @@ class ProfileAnswer(BaseModel):
         related_query_name='choice_prof_answer',
         on_delete=models.CASCADE,
     )
+    match = models.ManyToManyField('ProfMatch',
+        blank=True, null=True,
+        related_name='match_prof_answers',
+        related_query_name='match_prof_answer',
+    )
 
-    def __str__(self):
-        return f"Answer for Question: {self.question}"
+    # def __str__(self):
+    #     return f"Answer for Question: {self.question}"
+
+
+class ProfMatch(BaseModel):
+    item_text = models.CharField(max_length=200, null=True)  # Add this field
+    match_text = models.CharField(max_length=200, null=True)  # Add this fieldi
+    item_id = models.CharField(max_length=200, null=True)  # Add this field
+    match_id = models.CharField(max_length=200, null=True)  # Add this field
 
