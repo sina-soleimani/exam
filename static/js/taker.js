@@ -1,65 +1,77 @@
 const csrfToken = $("input[name=csrfmiddlewaretoken]").val();
 let question;
-//TODO
-$(document).on('click', 'button.showqbtn', async function (event) {
-        question = findQuestionById(questionGroupsData, $(this).data('id'));
-        var description = question.description;
-        const question_type = question.question_type
-        if (question_type === 'TF') {
-            $('.TF_container').removeAttr('hidden')
-            $('.MC_container').attr('hidden', 'hidden')
-            $('.MG_container').attr('hidden', 'hidden')
-            if (question.question_answers && question.question_answers.is_true === true)
-                $('#answer_true_id').prop('checked', true);
-            else if (question.question_answers && question.question_answers.is_true === false)
-                $('#answer_false_id').prop('checked', true);
 
-        } else if (question_type === 'MC') {
-            $('#MC_options').empty()
-            $('.TF_container').attr('hidden', 'hidden')
-            $('.MG_container').attr('hidden', 'hidden')
-            $('.MC_container').removeAttr('hidden')
-            for (let i = 0; i < question.question_choices.length; i++) {
-                const choice = question.question_choices[i];
-                const newRowHtml = '<input type="radio" class="btn-check" name="choice_name" id="choice_' + choice.id + '" data-id="' + choice.id + '" ' +
-                    'autocomplete="off"> <label class="btn btn-outline-secondary" for="choice_' + choice.id + '">' + choice.choice_text + '</label>';
-                $('#MC_options').append(newRowHtml);
+function showQuestion(question) {
+    var description = question.description;
+    const question_type = question.question_type
+    if (question_type === 'TF') {
+        $('.TF_container').removeAttr('hidden')
+        $('.MC_container').attr('hidden', 'hidden')
+        $('.MG_container').attr('hidden', 'hidden')
+        if (question.question_answers && question.question_answers.is_true === true)
+            $('#answer_true_id').prop('checked', true);
+        else if (question.question_answers && question.question_answers.is_true === false)
+            $('#answer_false_id').prop('checked', true);
 
-            }
-            if (question.question_answers)
-                $('#choice_' + question.question_answers.mc_id).prop('checked', true);
-        } else if (question_type === 'MG') {
-            $('.MG_container').removeAttr('hidden')
-            $('.MG_item').empty()
-            $('.MG_match').empty()
+    } else if (question_type === 'MC') {
+        $('#MC_options').empty()
+        $('.TF_container').attr('hidden', 'hidden')
+        $('.MG_container').attr('hidden', 'hidden')
+        $('.MC_container').removeAttr('hidden')
+        for (let i = 0; i < question.question_choices.length; i++) {
+            const choice = question.question_choices[i];
+            const newRowHtml = '<input type="radio" class="btn-check" name="choice_name" id="choice_' + choice.id + '" data-id="' + choice.id + '" ' +
+                'autocomplete="off"> <label class="btn btn-outline-secondary" for="choice_' + choice.id + '">' + choice.choice_text + '</label>';
+            $('#MC_options').append(newRowHtml);
 
-            $('.TF_container').attr('hidden', 'hidden')
-            $('.MC_container').attr('hidden', 'hidden')
-            for (let i = 0; i < question.question_items.length; i++) {
-                const item = question.question_items[i].item_text;
-                const match = question.question_items[i].match_text;
+        }
+        if (question.question_answers)
+            $('#choice_' + question.question_answers.mc_id).prop('checked', true);
+    } else if (question_type === 'MG') {
+        $('.MG_container').removeAttr('hidden')
+        $('.MG_item').empty()
+        $('.MG_match').empty()
+
+        $('.TF_container').attr('hidden', 'hidden')
+        $('.MC_container').attr('hidden', 'hidden')
+        const itemTextArray = question.question_items.map(item => item.item_text);
+        const matchTextArray = question.question_match.map(item => item.match_text);
+
+        const yourItemTextArray = ["Item1", "Item2", "Item3", "Item4"];
+
+        for (let i = 0; i < question.question_items.length; i++) {
+            const item = question.question_items[i];
+            const match = question.question_match[i];
 
 
-                const newItemHtml = '<div class="sortable-item">' +
-                    '<input type="radio" class="btn-check col-12" name="true_name" autocomplete="off">' +
-                    '<label class="btn btn-outline-secondary col-12">' + item + '</label>' +
-                    '<hr></div>';
-                $('.MG_item').append(newItemHtml);
+            const newItemHtml = '<div class="sortable-item">' +
+                '<input type="radio" class="btn-check col-12 item_inputs" data-id=' + item.id + ' name="true_name" autocomplete="off">' +
+                '<label class="btn btn-outline-secondary col-12 item_labels" data-value=' + item.item_text + ' > ' + item.item_text + '</label>' +
+                '<hr></div>';
+            $('.MG_item').append(newItemHtml);
 
-                const newMatchHtml = '<div class="sortable-item">' +
-                    '<input type="radio" class="btn-check col-12" name="true_name" autocomplete="off">' +
-                    '<label class="btn btn-outline-secondary col-12">' + match + '</label>' +
-                    '<hr></div>';
-                $('.MG_match').append(newMatchHtml);
-
-            }
-
+            const newMatchHtml = '<div class="sortable-item">' +
+                '<input type="radio" class="btn-check col-12 match_inputs" name="true_name" data-id=' + match.id + ' autocomplete="off">' +
+                '<label class="btn btn-outline-secondary col-12 match_labels" data-value=' + match.match_text + ' > ' + match.match_text + '</label>' +
+                '<hr></div>';
+            $('.MG_match').append(newMatchHtml);
 
         }
 
-        $("#descriptionContent").html(description)
+
+    }
+
+    $("#descriptionContent").html(description)
+
+}
+
+//TODO
+$(document).on('click', 'button.showqbtn', async function (event) {
+        question = nextQuestion;
+        showQuestion(question)
 
         $('.close').click()
+
     }
 )
 $('.MG_item').sortable({
@@ -86,6 +98,11 @@ function findQuestionById(questionGroupsData, questionId) {
     return null;
 }
 
+$(document).ready(function () {
+    findQuestionById(questionGroupsData, nextQuestion.id)
+    showQuestion(nextQuestion)
+    console.log('end')
+})
 
 // Create a function to fetch the image and convert it into a Blob
 
@@ -125,11 +142,22 @@ $("#submitQAnswser").on("submit", function (event) {
         'question_id': question.id,
         'pf_answer_id': question.question_answers ? question.question_answers.pf_answer_id : null,
         'mc_id': selectedChoiceId,
+        'item_ids': $('.item_inputs').map(function () {
+            return $(this).data('id');
+        }).get(),
+        'match_ids': $('.match_inputs').map(function () {
+            return $(this).data('id');
+        }).get(),
+        'item_texts': $('.item_labels').map(function () {
+            return $(this).text();
+        }).get(),
+        'match_texts': $('.match_labels').map(function () {
+            return $(this).text();
+        }).get(),
         'q_type': question.question_type,
         'result_id': $('#result_id').data('id'),
     };
     if (question.question_type === 'TF') {
-        console.log('TF')
         const formData = {
             'csrfmiddlewaretoken': csrfToken,
             'is_true': trueFalseChoice,

@@ -51,6 +51,7 @@
                                         <th scope="col">Type</th>
                                         <th scope="col">Point</th>
                                         <th scope="col">Review</th>
+                                        <th scope="col">Answered</th>
                                     </tr>
                                     </thead>
                                     <tbody>
@@ -80,6 +81,19 @@
                                                         data-id="{{ question.id }}">
                                                     <i class="fa fa-eye" aria-hidden="true"></i>
                                                 </button>
+                                            </td>
+
+                                            <td>
+                                                {% if question.question_prof_answers.first %}
+                                                    {{ question_prof_answers.first.id }}
+                                                    <div class="icon-box">
+                                                        <i class="fa-solid fa-circle-check success"></i>
+                                                    </div>
+                                                {% else %}
+                                                    <div class="icon-box-uncheck">
+                                                        <i class="fa-solid fa-circle danger"></i>
+                                                    </div>
+                                                {% endif %}
                                             </td>
                                         </tr>
                                     {% endfor %}
@@ -176,8 +190,11 @@
         {#var questionGroupsData = {{ questionGroupsData|json_script }};#}
 
         var questionGroupsData = JSON.parse('{{ questionGroupsData|escapejs }}');
+        {#var questionsss = JSON.parse('{{ questions|escapejs }}');#}
+        var user_id = {{ request.user.id }};
         {#var questionGroupsData = {{ questionGroupsData|tojson|safe }};#}
-        {#console.log(questionGroupsData)#}
+        const nextQuestion = questionGroupsData.find(question => !question.question_answers || !question.question_answers.pf_answer_id);
+
     </script>
     <script src="{% static 'js/taker.js' %}"></script>
 {% endblock javascripts %}
