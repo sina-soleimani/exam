@@ -1,0 +1,91 @@
+{% extends "layouts/base.html" %}
+{% load static %}
+
+{% block title %} Transactions {% endblock %}
+
+<!-- Specific Page CSS goes HERE -->
+{% block stylesheets %}{% endblock stylesheets %}
+
+{% block content %}
+    {% csrf_token %}
+
+
+    <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center py-4">
+        <div class="d-block mb-4 mb-md-0">
+            <nav aria-label="breadcrumb" class="d-none d-md-inline-block">
+            </nav>
+            <h2 class="h4">Profiles Manger</h2>
+        </div>
+
+        <div class="btn-toolbar mb-2 mb-md-0">
+
+        </div>
+    </div>
+
+    <div class="container-fluid mb-5">
+
+        <div class="card custom-card shadow">
+            <div class="card-header  text-white">
+                <h5 class="card-title">Import Profile</h5>
+            </div>
+            <div class="card-body" style="height: 100%">
+                <div id="student_import">
+                    <input type="file" id="excelFileInput" class="form-control mb-3"
+                           accept=".xlsx, .xls" lang="pl-Pl">
+
+                    <button class="btn btn-outline-success" onclick="uploadExcelFile( )">Upload
+                        Excel File
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="container-fluid">
+
+        <div class="card custom-card shadow" style="height: 100vh">
+            <div class="card-header  text-white">
+                <h5 class="card-title">Profile Lists</h5>
+            </div>
+            <div class="card-body" style="height: 100%">
+
+                <div class="table-settings mb-4">
+                    <table id="profileTable" class="table table-striped">
+                        <thead>
+                        <tr>
+                            <th>Username</th>
+                            <th>Major Code</th>
+                            <th>Entry Year</th>
+                            <th>Access Level</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {% for field in profiles %}
+                            <tr>
+                                <td>{{ field.username }}</td>
+                                <td>{{ field.major_code }}</td>
+                                <td>{{ field.entry_year }}</td>
+                                <td>{% if  field.access_level == 'A' %}
+                                Admin
+                                    {% elif field.access_level == 'S' %}
+                                    User
+                                {% endif %}</td>
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock content %}
+
+<!-- Specific Page JS goes HERE -->
+{% block javascripts %}
+
+    <script>
+        var ProfilesData = {{ profiles_json|safe }};
+    </script>
+
+    <script src="{% static 'js/profile-manager.js' %}"></script>
+{% endblock javascripts %}
