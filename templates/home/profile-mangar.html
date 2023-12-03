@@ -65,8 +65,8 @@
                                 <td>{{ field.major_code }}</td>
                                 <td>{{ field.entry_year }}</td>
                                 <td>{% if  field.access_level == 'A' %}
-                                Admin
-                                    {% elif field.access_level == 'S' %}
+                                    Admin
+                                {% elif field.access_level == 'S' %}
                                     User
                                 {% endif %}</td>
                             </tr>
