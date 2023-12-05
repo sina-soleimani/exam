@@ -1,5 +1,6 @@
 from django.db import models
 
+
 # Create your models here.
 
 
@@ -28,6 +29,10 @@ class ProfileAnswer(BaseModel):
         blank=True,
         on_delete=models.CASCADE,
     )
+    student = models.ForeignKey(
+        'user.Profile', blank=True, null=True, on_delete=models.CASCADE,
+        related_name='student_answers', related_query_name='student_answer',
+    )
 
     is_true = models.BooleanField(blank=True, null=True)  # For True/False questions
 
@@ -39,10 +44,10 @@ class ProfileAnswer(BaseModel):
         on_delete=models.CASCADE,
     )
     match = models.ManyToManyField('ProfMatch',
-        blank=True, null=True,
-        related_name='match_prof_answers',
-        related_query_name='match_prof_answer',
-    )
+                                   blank=True, null=True,
+                                   related_name='match_prof_answers',
+                                   related_query_name='match_prof_answer',
+                                   )
 
     # def __str__(self):
     #     return f"Answer for Question: {self.question}"
@@ -53,4 +58,3 @@ class ProfMatch(BaseModel):
     match_text = models.CharField(max_length=200, null=True)  # Add this fieldi
     item_id = models.CharField(max_length=200, null=True)  # Add this field
     match_id = models.CharField(max_length=200, null=True)  # Add this field
-

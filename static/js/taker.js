@@ -67,7 +67,7 @@ function showQuestion(question) {
 
 //TODO
 $(document).on('click', 'button.showqbtn', async function (event) {
-        question = nextQuestion;
+        question = findQuestionById(questionGroupsData, $(this).data('id'))
         showQuestion(question)
 
         $('.close').click()
@@ -102,6 +102,21 @@ $(document).ready(function () {
     findQuestionById(questionGroupsData, nextQuestion.id)
     showQuestion(nextQuestion)
     console.log('end')
+    $('.open-modal-button').click(function () {
+        $('#q-list-id').empty();
+        var check_q = null
+        questionGroupsData.forEach(e => {
+            if (e.question_answers) {
+                check_q = '<div class="icon-box"><i class="fa-solid fa-circle-check success"></i></div>'
+            } else {
+                check_q = '<div class="icon-box-uncheck"><i class="fa-solid fa-circle danger"></i></div>'
+            }
+            var add_tr = '<tr><td class="q-desc">' + e.question_type + '</td><td>' + e.score + '</td><td>' +
+                '<button type="button" class="btn btn-outline-success showqbtn" data-id=' + e.id + '>' +
+                '<i class="fa fa-eye" aria-hidden="true"></i></button></td><td>' + check_q + '</td></tr>'
+            $('#q-list-id').append(add_tr)
+        });
+    })
 })
 
 // Create a function to fetch the image and convert it into a Blob
