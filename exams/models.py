@@ -26,6 +26,13 @@ class Exam(BaseModel):
         related_name='course_exams',
     )
 
+    questions = models.ManyToManyField(
+        'questions.Question', related_name='question_exams',
+        related_query_name='question_exam',
+        blank=True,
+        null=True
+    )
+
     class ScoreType(models.TextChoices):
         PERCENT = 'PE', 'PERCENT'
         POINT = 'PO', 'POINT'
