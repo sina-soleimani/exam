@@ -27,7 +27,8 @@
             <!--MIDDLE BAR-->
             <div class="card middle-bar col-12 col-md-9 col-lg-6 py-md-3  shadow " role="main">
                 <div class="mt-3 mr-1 ">
-                    <button class="btn btn-light btn-sm  btn-outline-secondary" role="button" data-toggle="modal"
+                    <button class="btn btn-light btn-sm  btn-outline-secondary open-modal-button" role="button"
+                            data-toggle="modal"
                             data-target="#qlistModal"
                             aria-disabled="true">
                         <i class='fa-solid fa-rectangle-list'></i> Question List
@@ -54,49 +55,7 @@
                                         <th scope="col">Answered</th>
                                     </tr>
                                     </thead>
-                                    <tbody>
-                                    {% for question in questions %}
-
-
-                                        <tr>
-                                            <td class="q-desc">
-                                                {% if question.question_type == 'TF' %}
-                                                    True / False
-                                                {% elif question.question_type == 'MC' %}
-                                                    Multiple Choice
-                                                {% elif question.question_type == 'MG' %}
-                                                    Matching
-                                                {% endif %}
-
-
-                                            </td>
-                                            <td>
-                                                {{ question.score }}
-
-
-                                            </td>
-
-                                            <td>
-                                                <button type="button" class="btn btn-outline-success showqbtn"
-                                                        data-id="{{ question.id }}">
-                                                    <i class="fa fa-eye" aria-hidden="true"></i>
-                                                </button>
-                                            </td>
-
-                                            <td>
-                                                {% if question.question_prof_answers.first %}
-                                                    {{ question_prof_answers.first.id }}
-                                                    <div class="icon-box">
-                                                        <i class="fa-solid fa-circle-check success"></i>
-                                                    </div>
-                                                {% else %}
-                                                    <div class="icon-box-uncheck">
-                                                        <i class="fa-solid fa-circle danger"></i>
-                                                    </div>
-                                                {% endif %}
-                                            </td>
-                                        </tr>
-                                    {% endfor %}
+                                    <tbody id="q-list-id">
                                     </tbody>
                                 </table>
                             </div>
@@ -187,12 +146,8 @@
 {% block javascripts %}
 
     <script>
-        {#var questionGroupsData = {{ questionGroupsData|json_script }};#}
-
         var questionGroupsData = JSON.parse('{{ questionGroupsData|escapejs }}');
-        {#var questionsss = JSON.parse('{{ questions|escapejs }}');#}
         var user_id = {{ request.user.id }};
-        {#var questionGroupsData = {{ questionGroupsData|tojson|safe }};#}
         const nextQuestion = questionGroupsData.find(question => !question.question_answers || !question.question_answers.pf_answer_id);
 
     </script>
