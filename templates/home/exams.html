@@ -156,6 +156,41 @@
                                                             </label>
                                                         </div>
                                                     </div>
+
+
+                                                    <div class="table-q-bank mb-4" id="table-q-bank">
+                                                        <table id="qBankTable" class="table table-striped">
+                                                            <thead>
+                                                            <tr>
+                                                                <th>Group Name</th>
+                                                                <th>Number Of Question</th>
+
+                                                            </tr>
+                                                            </thead>
+                                                            <tbody>
+                                                            {% for field in q_bank %}
+                                                                <tr>
+                                                                    <td>{{ field.name }}</td>
+                                                                    {#                <td>{{ field.deadline }}</td>#}
+                                                                    <td>
+                                                                        <label for="numberSelect" class="form-label">Select
+                                                                            a Number:</label>
+                                                                        <select class="numberSelect form-select"
+                                                                                data-id="{{ field.id }}">
+                                                                            <script>
+                                                                                var numberOfOptions = {{ field.number }};
+
+                                                                                for (var i = 0; i <= numberOfOptions; i++) {
+                                                                                    document.write('<option value="' + i + '">' + i + '</option>');
+                                                                                }
+                                                                            </script>
+                                                                        </select>
+                                                                    </td>
+                                                                </tr>
+                                                            {% endfor %}
+                                                            </tbody>
+                                                        </table>
+                                                    </div>
                                                 </div>
                                             </div>
 

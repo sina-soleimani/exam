@@ -3,10 +3,30 @@ var candidate_delete_exam = null;
 var candidate_active_exam = null;
 $(document).ready(function () {
     $('.open-modal-button').click(function () {
+        $('.numberSelect').val(0);
+        $('#settingQPropId').attr('hidden', 'hidden')
+        $('#table-q-bank').attr('hidden', 'hidden')
+        $('#settingScoreId').attr('hidden', 'hidden')
+        $('#settingPropId').removeAttr('hidden')
         desiredId = $(this).data('id');
         const element = examsData.find(item => item.id === desiredId);
+        const countById = {};
+        element['q_bank'].forEach(e => {
+            const id = e['id'];
+            countById[id] = (countById[id] || 0) + 1;
+        });
+        for (const key in countById) {
+            if (countById.hasOwnProperty(key)) {
+                const value = countById[key];
+
+                var $selectElement = $(".numberSelect[data-id=" + key + "]");
+
+                // Set the selected value to 6
+                $selectElement.val(value);
+            }
+        }
+        console.log(countById);
         if (element) {
-            console.log(element);
             $('#label').val(element.label);
             // 'deadline': formattedStr,
             $('#durationInput').val(element.duration);
@@ -18,10 +38,20 @@ $(document).ready(function () {
             $("#unAnsweredQuestionCheckBox").prop('checked', element.unanswered_penalty);
             $("#shuffleAnswerCheckbox").prop('checked', element.shuffle_answer);
             $('#modal-form').modal('show');
+        } else {
+            $('#label').val('');
+            // 'deadline': formattedStr,
+            $('#durationInput').val('');
+            $('#datePicker').val('');
+            $('#selectTypeScore').val('');
+            $('#passingScore').val('');
+            // 'percent_passing_score': $('#passingScore').val(),
+            $('#incorrectPenalty').val('');
+            $("#unAnsweredQuestionCheckBox").prop('checked', false);
+            $("#shuffleAnswerCheckbox").prop('checked', false);
+            $('#modal-form').modal('show');
         }
-        $('#settingQPropId').attr('hidden', 'hidden')
-        $('#settingScoreId').attr('hidden', 'hidden')
-        $('#settingPropId').removeAttr('hidden')
+
     });
     $('#examTable').DataTable();
 
@@ -92,6 +122,12 @@ $('#submitButton').click(function (event) {
         'incorrect_penalty': $('#incorrectPenalty').val(),
         'unanswered_penalty': $('#unAnsweredQuestionCheckBox').prop('checked'),
         'shuffle_answer': $('#shuffleAnswerCheckbox').prop('checked'),
+        'selected_groups_id': $('.numberSelect').map(function () {
+            return $(this).data('id');
+        }).get(),
+        'selected_groups_num': $('.numberSelect').map(function () {
+            return $(this).val();
+        }).get(),
     };
     var url;
 
@@ -109,7 +145,7 @@ $('#submitButton').click(function (event) {
         dataType: 'json',
         data: formData,
         success: (response) => {
-            console.log(response);
+            window.location.href = '/exams/' + examsData[0].course_id + '/list';
         },
         error: (error) => {
             console.error(error);
@@ -137,6 +173,7 @@ document.getElementById('selectTypeScore').addEventListener('change', function (
 $(document).on('click', '#settingProp', function (event) {
     $('#settingQPropId').attr('hidden', 'hidden')
     $('#settingScoreId').attr('hidden', 'hidden')
+    $('#table-q-bank').attr('hidden', 'hidden')
     $('#settingPropId').removeAttr('hidden')
 })
 
@@ -144,6 +181,7 @@ $(document).on('click', '#settingProp', function (event) {
 $(document).on('click', '#settingQProp', function (event) {
     $('#settingPropId').attr('hidden', 'hidden')
     $('#settingScoreId').attr('hidden', 'hidden')
+    $('#table-q-bank').attr('hidden', 'hidden')
     $('#settingQPropId').removeAttr('hidden')
 })
 
@@ -151,7 +189,14 @@ $(document).on('click', '#settingQProp', function (event) {
 $(document).on('click', '#settingScore', function (event) {
     $('#settingQPropId').attr('hidden', 'hidden')
     $('#settingPropId').attr('hidden', 'hidden')
+    $('#table-q-bank').attr('hidden', 'hidden')
     $('#settingScoreId').removeAttr('hidden')
+})
+$(document).on('click', '#qListId', function (event) {
+    $('#settingQPropId').attr('hidden', 'hidden')
+    $('#settingPropId').attr('hidden', 'hidden')
+    $('#settingScoreId').attr('hidden', 'hidden')
+    $('#table-q-bank').removeAttr('hidden')
 })
 $(document).on('click', '.open-delete-modal', function (event) {
     candidate_delete_exam = $(this).data('id')
@@ -176,7 +221,7 @@ $(document).on('click', '.delete-exam', function (event) {
             'X-CSRFToken': csrfToken, // Include the CSRF token in headers
         },
         success: function () {
-            window.location.href = '/exams/list';
+            window.location.href = '/exams/' + examsData[0].course_id + '/list';
         }
     })
 
@@ -187,6 +232,7 @@ $(document).on('click', '.open-active-modal', function (event) {
 })
 
 $(document).on('click', '.active-exam', function (event) {
+    console.log(candidate_active_exam)
 
     $.ajax({
         url: candidate_active_exam + '/active/',
@@ -195,7 +241,7 @@ $(document).on('click', '.active-exam', function (event) {
             'X-CSRFToken': csrfToken, // Include the CSRF token in headers
         },
         success: function () {
-            window.location.href = '/exams/list';
+            window.location.href = '/exams/' + examsData[0].course_id + '/list';
         }
     })
 
