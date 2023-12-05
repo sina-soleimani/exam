@@ -442,7 +442,7 @@ def save_question_data(row_data, q_group_import_id):
         print(type(data))
         question = Question.objects.create(
             description=data[0],
-            score=data[-1],
+            score=float(data[-1]),
             question_type=question_type,
             question_group_id=q_group_import_id
         )

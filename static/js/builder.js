@@ -13,7 +13,7 @@ const qTypeMap = new Map();
 qTypeMap.set('TF', ['/builder/true_false_question/', 'True/False']);
 qTypeMap.set('MC', ['/builder/multi_question/', 'Multiple Choice']);
 // TODO
-qTypeMap.set('M', ['/builder/matching_question/', 'Matching']);
+qTypeMap.set('MG', ['/builder/matching_question/', 'Matching']);
 
 $(document).ready(function () {
     sortQuestions();
@@ -578,7 +578,7 @@ function globalRestartForm() {
 }
 
 $(document).on('click', '#matchingDropDown', function (event) {
-    questionType = 'M'
+    questionType = 'MG'
     create_question_flag = null;
     globalRestartForm()
     $('#multiQuestionTable').attr('hidden', 'hidden')
