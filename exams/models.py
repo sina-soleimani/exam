@@ -16,6 +16,7 @@ class BaseModel(models.Model):
 class Exam(BaseModel):
     label = models.CharField(max_length=200)
     deadline = models.DateField(blank=True, null=True)
+    active_time = models.DateTimeField(blank=True, null=True)
     duration = models.DurationField(default=None)
     action = models.BooleanField(default=False)
     course = models.ForeignKey(
@@ -66,6 +67,17 @@ class Exam(BaseModel):
     )
     unanswered_penalty = models.BooleanField(default=False)
     shuffle_answer = models.BooleanField(default=True)
+
+    class ExamStatus(models.TextChoices):
+        READY = 'R', 'READY'
+        ACTIVE = 'A', 'ACTIVE'
+        EXPIRE = 'E', 'EXPIRE'
+
+    exam_status = models.CharField(
+        max_length=2,
+        choices=ExamStatus.choices,
+        default=ExamStatus.READY
+    )
 
     def __str__(self):
         return self.label

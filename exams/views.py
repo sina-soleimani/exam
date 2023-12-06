@@ -1,3 +1,4 @@
+from datetime import datetime
 from django.shortcuts import get_object_or_404
 from django.views.generic import CreateView, ListView, UpdateView, DeleteView
 from .models import Exam
@@ -79,7 +80,18 @@ class StudentExamListView(ListView):
     def get_queryset(self):
         # Return only exams where action is True
         print('salam')
-        return Exam.objects.filter(action=True)
+        return Exam.objects.filter(exam_status='A')
+
+
+class StudentExamHistoryListView(ListView):
+    model = Exam
+    template_name = 'home/student-exams-history.html'
+    context_object_name = 'exams'
+
+    def get_queryset(self):
+        # Return only exams where action is True
+        print('salam')
+        return Exam.objects.filter(exam_status='E')
 
 
 class ExamCreateView(CreateView):
@@ -165,6 +177,9 @@ class ActiveExam(UpdateView):
     def form_valid(self, form):
         self.object = self.get_object()
         self.object.action = True
+        current_time = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+        self.object.active_time = current_time
+        self.object.exam_status = 'A'
         self.object.save()
 
         return JsonResponse({}, status=200)
