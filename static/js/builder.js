@@ -1,6 +1,6 @@
 const csrfToken = getCookie('csrftoken');
-let audio = '';
-let audioFile;
+// let audio = '';
+// let audioFile;
 let qg_selected_id = null;
 let create_question_flag = null;
 let file = null
@@ -8,6 +8,8 @@ let multiQCheckbox = 3
 let questionType = 'TF'
 let q_group_import_id = null
 const qTypeMap = new Map();
+let candidate_delete_q = null;
+let candidate_delete_q_name = null;
 
 // Add key-value pairs to the Map
 qTypeMap.set('TF', ['/builder/true_false_question/', 'True/False']);
@@ -19,13 +21,18 @@ $(document).ready(function () {
     sortQuestions();
     createQuestionGroup();
     createQuestion();
-    chooseImage();
+    // chooseImage();
 
-    deleteImage();
+    // deleteImage();
     addMatchingOption();
     addMultipleOption();
     findSelectedQG();
+    $(document).on('click', '.open-delete-modal', function (event) {
+        candidate_delete_q = $(this).data('id')
+        candidate_delete_q_name = $(this).attr('name');
+    })
 
+    deleteQuestionAndQuestionGroup();
 });
 
 function findQuestionById(questionGroupsData, questionId) {
@@ -75,10 +82,9 @@ function addQuestionToQuestionGroupsData(qu, qgId) {
     return null;
 }
 
-deleteAudio();
-questionAudioListener();
+// deleteAudio();
+// questionAudioListener();
 showQuestions();
-deleteQuestionAndQuestionGroup();
 
 
 function findSelectedQG() {
@@ -180,8 +186,8 @@ function createQuestion() {
             // Validation failed, do not proceed with form submission
             return;
         }
-        const imageInput = document.querySelector("#showImageId");
-        console.log(imageInput)
+        // const imageInput = document.querySelector("#showImageId");
+        // console.log(imageInput)
         const formData = new FormData(this);
         formData.append("question__id", create_question_flag);
         formData.append("csrfmiddlewaretoken", csrfToken);
@@ -189,7 +195,7 @@ function createQuestion() {
         formData.append("question_group__id", question_group__id);
         formData.append("score", score);
         formData.append("question_type", questionType);
-        formData.append("image", file);
+        // formData.append("image", file);
         var tFChoiced;
         if (questionType === 'TF') {
 
@@ -324,6 +330,7 @@ function createQuestionGroup() {
             data: serializedData,
             type: 'post',
             success: function (response) {
+                window.location.href = '/builder/' + bank_id + '/q_bank'
 
                 var question_group_list_id = $("#question-group-list-id");
                 question_group_list_id.append('<li class="question-group" data-id="' +
@@ -388,44 +395,45 @@ function sortQuestions() {
 
 }
 
-function chooseImage() {
-    $('#questionImageId').change(function () {
-        file = this.files[0];
-        const invalidImageAlert = $('#invalidImageAlert');
-        if (file) {
-            // Check if the selected file is an image
-            if (isValidImageType(file.type)) {
-                const reader = new FileReader();
-                reader.onload = function (event) {
-                    $('#imageHandler').removeAttr('hidden');
-                    $('#showImageId').attr('src', event.target.result);
-                    invalidImageAlert.hide(); // Hide the alert if it was previously shown
-                };
-                reader.onerror = function () {
-                    // Handle errors, e.g., display an error message
-                    console.error('Error reading the image file.');
-                };
-                reader.readAsDataURL(file);
-            } else {
-                // Display the Bootstrap alert for invalid image file
-                invalidImageAlert.show();
-                // Hide the image if it was previously displayed
-                $('#imageHandler').attr('hidden', 'hidden');
-                setTimeout(function () {
-                    invalidImageAlert.hide();
-                }, 3000);
-            }
-        } else {
-            // Handle the case where no file is selected
-            console.error('No image file selected.');
-        }
-    });
-}
+//
+// function chooseImage() {
+//     $('#questionImageId').change(function () {
+//         file = this.files[0];
+//         const invalidImageAlert = $('#invalidImageAlert');
+//         if (file) {
+//             // Check if the selected file is an image
+//             if (isValidImageType(file.type)) {
+//                 const reader = new FileReader();
+//                 reader.onload = function (event) {
+//                     $('#imageHandler').removeAttr('hidden');
+//                     $('#showImageId').attr('src', event.target.result);
+//                     invalidImageAlert.hide(); // Hide the alert if it was previously shown
+//                 };
+//                 reader.onerror = function () {
+//                     // Handle errors, e.g., display an error message
+//                     console.error('Error reading the image file.');
+//                 };
+//                 reader.readAsDataURL(file);
+//             } else {
+//                 // Display the Bootstrap alert for invalid image file
+//                 invalidImageAlert.show();
+//                 // Hide the image if it was previously displayed
+//                 $('#imageHandler').attr('hidden', 'hidden');
+//                 setTimeout(function () {
+//                     invalidImageAlert.hide();
+//                 }, 3000);
+//             }
+//         } else {
+//             // Handle the case where no file is selected
+//             console.error('No image file selected.');
+//         }
+//     });
+// }
 
 // Function to check if the file type is an image
-function isValidImageType(fileType) {
-    return /^image\//.test(fileType);
-}
+// function isValidImageType(fileType) {
+//     return /^image\//.test(fileType);
+// }
 
 
 $(document).on('click', 'button.remove-option', function (event) {
@@ -433,27 +441,25 @@ $(document).on('click', 'button.remove-option', function (event) {
 })
 
 function deleteQuestionAndQuestionGroup() {
-    $(document).on('click', 'button.close', function (event) {
-        event.stopPropagation();
-        var dateId = $(this).data('id');
-        var del_el_name = $(this).attr('name');
+    $(document).on('click', '.delete-exam', function (event) {
 
         // Get the CSRF token from the cookie
 
         $.ajax({
-            url: '/builder/' + dateId + '/delete/',
+            url: '/builder/' + candidate_delete_q + '/delete/',
             type: 'DELETE',  // Use DELETE as the HTTP method
             headers: {
                 'X-CSRFToken': csrfToken, // Include the CSRF token in headers
             },
             data: JSON.stringify({
                 'csrfmiddlewaretoken': csrfToken,
-                'name': del_el_name,
-                'id': dateId,
+                'name': candidate_delete_q_name,
+                'id': candidate_delete_q,
             }),
             dataType: 'json',
             success: function () {
                 console.log('Success: The item has been deleted.');
+                window.location.href = '/builder/' + bank_id + '/q_bank'
 
                 // You can remove the corresponding HTML element here based on `del_el_name` and `dateId`.
                 if (del_el_name === 'question') {
@@ -504,68 +510,68 @@ function showQuestions() {
 }
 
 
-function changeHandler({target}) {
-    if (!target.files.length) return;
-    const allowedAudioTypes = ['audio/mpeg', 'audio/wav', 'audio/mp3', 'audio/ogg', 'audio/flac']; // Add more audio types if needed
+// function changeHandler({target}) {
+//     if (!target.files.length) return;
+//     const allowedAudioTypes = ['audio/mpeg', 'audio/wav', 'audio/mp3', 'audio/ogg', 'audio/flac']; // Add more audio types if needed
+//
+//     const file = target.files[0];
+//     const invalidAudioAlert = $('#invalidAudioAlert');
+//
+//     if (!allowedAudioTypes.includes(file.type)) {
+//         const alertDiv = document.createElement('div');
+//         alertDiv.classList.add('alert', 'alert-danger');
+//         alertDiv.innerHTML = 'Invalid file type. Please select an audio file.';
+//         invalidAudioAlert.show();
+//         setTimeout(function () {
+//             invalidAudioAlert.hide();
+//         }, 3000);
+//
+//
+//         console.log('Invalid file type');
+//         return;
+//     }
+//     if (file) {
+//         let reader = new FileReader();
+//         reader.onload = function (event) {
+//             audioFile = event.target.result;
+//         }
+//         reader.readAsDataURL(file);
+//     }
+//     Create a blob that we can use as an src for our audio element
+// const urlObj = URL.createObjectURL(target.files[0]);
+//
+// document.getElementById("audioQuestionBase").innerHTML = '';
+// Create an audio element
+// audio = document.createElement("audio");
+// audio.setAttribute('id', 'showAudioId')
 
-    const file = target.files[0];
-    const invalidAudioAlert = $('#invalidAudioAlert');
 
-    if (!allowedAudioTypes.includes(file.type)) {
-        const alertDiv = document.createElement('div');
-        alertDiv.classList.add('alert', 'alert-danger');
-        alertDiv.innerHTML = 'Invalid file type. Please select an audio file.';
-        invalidAudioAlert.show();
-        setTimeout(function () {
-            invalidAudioAlert.hide();
-        }, 3000);
+// Clean up the URL Object after we are done with it
+// audio.addEventListener("load", () => {
+//     URL.revokeObjectURL(urlObj);
+// });
 
+// Append the audio element
+// document.getElementById("audioHidden").removeAttribute('hidden')
+// document.getElementById("audioQuestionBase").appendChild(audio);
+// Allow us to control the audio
+// audio.controls = "true";
 
-        console.log('Invalid file type');
-        return;
-    }
-    if (file) {
-        let reader = new FileReader();
-        reader.onload = function (event) {
-            audioFile = event.target.result;
-        }
-        reader.readAsDataURL(file);
-    }
-    // Create a blob that we can use as an src for our audio element
-    const urlObj = URL.createObjectURL(target.files[0]);
+// Set the src and start loading the audio from the file
+// audio.src = urlObj;
+// }
 
-    document.getElementById("audioQuestionBase").innerHTML = '';
-    // Create an audio element
-    audio = document.createElement("audio");
-    audio.setAttribute('id', 'showAudioId')
+// function questionAudioListener() {
+//     document.getElementById("questionAudioId")
+//         .addEventListener("change", changeHandler, false);
+// }
 
-
-    // Clean up the URL Object after we are done with it
-    audio.addEventListener("load", () => {
-        URL.revokeObjectURL(urlObj);
-    });
-
-    // Append the audio element
-    document.getElementById("audioHidden").removeAttribute('hidden')
-    document.getElementById("audioQuestionBase").appendChild(audio);
-    // Allow us to control the audio
-    audio.controls = "true";
-
-    // Set the src and start loading the audio from the file
-    audio.src = urlObj;
-}
-
-function questionAudioListener() {
-    document.getElementById("questionAudioId")
-        .addEventListener("change", changeHandler, false);
-}
-
-function deleteAudio() {
-    $(document).on('click', '#deleteAudioId', function (event) {
-        $('#audioQuestionBase').empty();
-        $('#audioHidden').prop('hidden', true);
-    })
-}
+// function deleteAudio() {
+//     $(document).on('click', '#deleteAudioId', function (event) {
+//         $('#audioQuestionBase').empty();
+//         $('#audioHidden').prop('hidden', true);
+//     })
+// }
 
 function globalRestartForm() {
     $("#questionTextarea").val('')
@@ -646,12 +652,12 @@ function matchingPageProceess() {
     $('#multiQuestionTable').attr('hidden', 'hidden')
 }
 
-function deleteImage() {
-    $('#deleteImageId').on('click', function () {
-        $('#showImageId').removeAttr('src');
-        $('#imageHandler').attr('hidden', true);
-    })
-}
+// function deleteImage() {
+//     $('#deleteImageId').on('click', function () {
+//         $('#showImageId').removeAttr('src');
+//         $('#imageHandler').attr('hidden', true);
+//     })
+// }
 
 
 function addMatchingOption() {
