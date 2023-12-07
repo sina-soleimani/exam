@@ -76,25 +76,38 @@
 
                                 </div>
 
-                                <button class="btn btn-outline-success" onclick="uploadExcelQFile( )">Upload
-                                    Excel File
-                                </button>
+
                             </div>
                         </div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-secondary " data-bs-dismiss="modal">Close</button>
-                            <button type="button" class="btn btn-danger delete-course">Delete</button>
+                            <button class="btn btn-outline-success" onclick="uploadExcelQFile( )">Upload
+                                Excel File
+                            </button>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-
-
-        <div class="mt-3 mr-1 ">
-            <a href="#" class="btn btn-light btn-sm  btn-outline-secondary" role="button" aria-disabled="true">
-                <i class="fa fa-cog" aria-hidden="true"></i> Setting
-            </a></div>
+        {##}
+        <div class="modal fade" id="deleteModalQ" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false"
+             aria-labelledby="deleteModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="deleteModalQLabel">Delete Item</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        Are you sure to delete Item
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary " data-bs-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-danger delete-exam">Delete</button>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
     <div id="mmenu_screen" class="container-fluid" style="height: 100%">
         <div class="row flex-fill modal-body flex-lg-nowrap">
@@ -140,7 +153,9 @@
                                     <li class="question-group" data-id="{{ question_group.id }}">
                                         <div class="d-flex tag-btn select-btn">
                                             <a class="nest">{{ question_group.name }}</a>
-                                            <button type="button" class="close float-right" name="question_group"
+                                            <button type="button" class="close float-right open-delete-modal"
+                                                    name="question_group"
+                                                    data-bs-toggle="modal" data-bs-target="#deleteModalQ"
                                                     data-id="{{ question_group.id }}">
                                                 <span aria-hidden="true">&times;</span>
                                             </button>
@@ -154,7 +169,11 @@
                                                         <a class="flex-grow-1 ">
                                                             {{ question.get_short_description }}
                                                         </a>
-                                                        <button type="button" class="close float-right" name="question"
+                                                        <button type="button"
+                                                                class="close float-right open-delete-modal"
+                                                                name="question"
+
+                                                                data-bs-toggle="modal" data-bs-target="#deleteModalQ"
                                                                 data-id="{{ question.id }}">
                                                             <span aria-hidden="true">&times;</span>
                                                         </button>
@@ -191,35 +210,35 @@
                                     please fill descriptiion before submit
                                 </div>
                             </div>
-                            <div class="row">
-                                <div class="col-sm-5 col-md-6">
-                                    <div class="custom-file">
-                                        <input type="file" class="custom-file-input" id="questionImageId" lang="pl-Pl">
-                                        <label class="custom-file-label" for="questionImageId"><i
-                                                class="fa fa-picture-o"
-                                                aria-hidden="true"></i></label>
-                                        <div class="alert alert-danger mt-3 custom-alert" id="invalidImageAlert"
-                                             style="display: none;">
-                                            Selected file is not a valid image.
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-sm-5 offset-sm-2 col-md-6 offset-md-0">
-                                    <div class="custom-file ">
-                                        <input type="file" class="custom-file-input" id="questionAudioId" lang="pl-Pl">
-                                        <label class="custom-file-label" for="questionAudioId"> <i
-                                                class="fa fa-volume-up"
-                                                aria-hidden="true"></i></label>
-                                        <div class="alert alert-danger mt-3 custom-alert" id="invalidAudioAlert"
-                                             style="display: none;">
-                                            Selected file is not a valid audio.
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
+                            {#                                                        <div class="row">#}
+                            {#                                                            <div class="col-sm-5 col-md-6">#}
+                            {#                                                                <div class="custom-file">#}
+                            {#                                                                    <input type="file" class="custom-file-input" id="questionImageId" lang="pl-Pl">#}
+                            {#                                                                    <label class="custom-file-label" for="questionImageId"><i#}
+                            {#                                                                            class="fa fa-picture-o"#}
+                            {#                                                                            aria-hidden="true"></i></label>#}
+                            {#                                                                    <div class="alert alert-danger mt-3 custom-alert" id="invalidImageAlert"#}
+                            {#                                                                         style="display: none;">#}
+                            {#                                                                        Selected file is not a valid image.#}
+                            {#                                                                    </div>#}
+                            {#                                                                </div>#}
+                            {#                                                            </div>#}
+                            {#                                                            <div class="col-sm-5 offset-sm-2 col-md-6 offset-md-0">#}
+                            {#                                                                <div class="custom-file ">#}
+                            {#                                                                    <input type="file" class="custom-file-input" id="questionAudioId" lang="pl-Pl">#}
+                            {#                                                                    <label class="custom-file-label" for="questionAudioId"> <i#}
+                            {#                                                                            class="fa fa-volume-up"#}
+                            {#                                                                            aria-hidden="true"></i></label>#}
+                            {#                                                                    <div class="alert alert-danger mt-3 custom-alert" id="invalidAudioAlert"#}
+                            {#                                                                         style="display: none;">#}
+                            {#                                                                        Selected file is not a valid audio.#}
+                            {#                                                                    </div>#}
+                            {#                                                                </div>#}
+                            {#                                                            </div>#}
+                            {#                                                        </div>#}
                             <hr>
 
-                            <div id="MathingQuestionTable" hidden="hidden">
+                            <div id="MathingQuestionTable" hidden="hidden" class="mt-4">
                                 <div class="row">
                                     <div class=" col-auto mr-auto font-weight-bold ">
                                         Choices:
@@ -463,8 +482,8 @@
 
     <script>
         var questionGroupsData = JSON.parse('{{ questionGroupsData|escapejs }}');
-        console.log(questionGroupsData)
-        var bank_id = {{ bank_id }}
+        var bank_id =
+        {{ bank_id }}
     </script>
     <script src="{% static 'js/builder.js' %}"></script>
 {% endblock javascripts %}
