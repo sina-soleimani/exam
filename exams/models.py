@@ -19,6 +19,7 @@ class Exam(BaseModel):
     active_time = models.DateTimeField(blank=True, null=True)
     duration = models.DurationField(default=None)
     action = models.BooleanField(default=False)
+    score = models.PositiveIntegerField(default=0, null=True)
     course = models.ForeignKey(
         'course.Course',
         blank=True,

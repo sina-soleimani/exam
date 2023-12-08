@@ -117,10 +117,11 @@ class ExamCreateView(CreateView):
             q_list.extend(sampled_questions)
 
             group_num = group_num + 1
-        print(q_list)
+        total_score = sum(question.score for question in q_list)
 
         course = get_object_or_404(Course, id=self.kwargs['id'])
         exam = form.save(commit=False)
+        exam.score = total_score
         exam.course = course
         exam.save()
 
@@ -142,13 +143,14 @@ class ExamUpdateView(UpdateView):
         group_num = 0
         for group_id in selected_groups_id:
             questions = models.QuestionGroup.objects.get(id=group_id).question_group_questions.all()
-            questions = models.QuestionGroup.objects.get(id=group_id).question_group_questions.all()
             sampled_questions = random.sample(list(questions), min(int(selected_groups_num[group_num]), len(questions)))
 
             q_list.extend(sampled_questions)
 
             group_num = group_num + 1
         exam.questions.clear()
+        total_score = sum(question.score for question in q_list)
+        exam.score = total_score
 
         exam.questions.set(q_list)
         exam.save()
