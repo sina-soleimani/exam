@@ -1,0 +1,44 @@
+{% extends "layouts/base.html" %}
+{% load static %}
+
+{% block title %} Results {% endblock %}
+
+<!-- Specific Page CSS goes HERE -->
+{% block stylesheets %}{% endblock stylesheets %}
+
+{% block content %}
+    <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center py-4">
+        <div class="d-block mb-4 mb-md-0">
+            <nav aria-label="breadcrumb" class="d-none d-md-inline-block">
+            </nav>
+            <h2 class="h4">Result detail </h2>
+        </div>
+        <div class="btn-toolbar mb-2 mb-md-0">
+        </div>
+    </div>
+
+    <div class="container-fluid">
+
+        <div class="card custom-card shadow">
+            <div class="card-header  text-white">
+                <h5 class="card-title">Results</h5>
+            </div>
+            <div class="card-body res-det-body" style="height: 100%">
+
+            </div>
+        </div>
+    </div>
+
+{% endblock content %}
+
+<!-- Specific Page JS goes HERE -->
+{% block javascripts %}
+    {#    TODO#}
+    <script>
+
+        var questionGroupsData = JSON.parse('{{ questionGroupsData|escapejs }}');
+    </script>
+
+    <script src="{% static 'js/result-details.js' %}"></script>
+
+{% endblock javascripts %}

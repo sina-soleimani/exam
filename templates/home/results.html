@@ -38,7 +38,9 @@
                             <th>Course Code</th>
                             <th>Course Name</th>
                             <th>Term</th>
+                            <th>Total Score</th>
                             <th>Score</th>
+                            <th>Detail</th>
 
                         </tr>
                         </thead>
@@ -49,7 +51,14 @@
                                 <td>{{ field.exam.course.course_code }}</td>
                                 <td>{{ field.exam.course.course_name }}</td>
                                 <td>{{ field.exam.course.term }}</td>
+                                <td>{{ field.exam.score }}</td>
                                 <td>{{ field.score }}</td>
+                                <td>
+                                    <button type="button" class="btn btn-outline-primary showqbtn"
+                                            onclick="window.location.href='/results/details/{{ field.id }}'">
+                                        <i class="fa fa-eye" aria-hidden="true"></i>
+                                    </button>
+                                </td>
 
 
                             </tr>
