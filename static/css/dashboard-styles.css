@@ -12,6 +12,20 @@
 .custom-card .card-body {
     padding: 20px; /* Add some padding to the card body */
 }
+.q-result-card {
+    background-color: #eae8f5; /* Set your desired background color for the card */
+    border: none; /* Remove the card border */
+    border-radius: 15px; /* Add rounded corners for a nicer look */
+}
+
+.q-result-card .card-header {
+    background-color: #d3e0dc;
+    border-radius: 15px 15px 0 0; /* Set your desired background color for the card title */
+}
+
+.q-result-card .card-body {
+    padding: 20px; /* Add some padding to the card body */
+}
 
 .setting-content {
     height: 600px; /* Set the desired height */
@@ -82,4 +96,34 @@
 .delete-modal {
     max-width: 60%; /* Adjust the width as needed */
     margin: 0 auto;
+}
+.icon-box {
+    display: inline-flex;
+    align-items: center;
+    padding: 15px;
+    border-radius: 8px;
+    background: linear-gradient(135deg, #5e5e5e, #8c8c8c);
+    color: #fff;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    margin-right: 20px;
+}
+
+.icon-box-uncheck {
+    display: inline-flex;
+    align-items: center;
+    padding: 15px;
+    border-radius: 8px;
+    background: linear-gradient(135deg, #2980b9, #2c3e50);
+    color: #fff;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    margin-right: 20px;
+}
+
+
+.danger {
+    color: #e74c3c;
+}
+
+.success {
+    color: #2ecc71;
 }
