@@ -1,4 +1,5 @@
 {% load static %}
+{% load widget_tweaks %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -14,20 +15,23 @@
     <div class="container login-container">
         <h2 class="mt-2">Login</h2>
         <form method="post">
-            {% csrf_token %}
-            <div class="mb-4">
-                <label for="username" class="form-label">Username</label>
-                <input type="text" id="username" name="username" class="form-control" required>
-            </div>
-            <div class="mb-4">
-                <label for="password" class="form-label">Password</label>
-                <input type="password" id="password" name="password" class="form-control" required>
-            </div>
-            <div class="text-center mt-3">
-                <button type="submit" class="btn btn-outline-primary mb-2 mr-2"> Login </button>
-            </div>
-        </form>
-        <p class="text-center mt-3 mb-5">Don't have an account? <a href='/register/' class="btn btn-link">Sign Up</a></p>
+                            {% csrf_token %}
+                            <div class="mb-3">
+                                <label for="username" class="form-label " style="color: #2F4F4F;">Username</label>
+                                {{ form.username|add_class:"form-control" }}
+                            </div>
+                            <div class="mb-3">
+                                <label for="password" class="form-label" style="color: #2F4F4F;" >Password</label>
+                                {{ form.password|add_class:"form-control" }}
+                            </div>
+                            <div class="mb-3" style="display: flex; align-items: center;">
+    {{ form.captcha|add_class:"form-control ml-5" }}
+</div>
+                            <div class="text-center mt-3">
+                                <button type="submit" class="btn btn-dark btn-lg">Login</button>
+                            </div>
+                        </form>
+        <p class="text-center mt-3 mb-5 h6">Welcome To Sattari university online exam</p>
 
     </div>
 </body>
