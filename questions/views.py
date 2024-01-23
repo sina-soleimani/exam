@@ -425,7 +425,7 @@ class CreateUpdateTrueFalseQuestionView(FormView):
 
 def save_question_data(row_data, q_group_import_id):
     question_type, *data = row_data
-    variables = data[:3]
+    variables = data[1:5]
     new_data = [item for item in data if item is not None]
     data = new_data
 
