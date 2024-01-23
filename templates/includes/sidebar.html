@@ -55,12 +55,22 @@
                     <span class="mt-1 ms-1 sidebar-text">Home</span>
                 </a>
             </li>
+            {% if request.user.access_level == 'A' %}
             <li class="nav-item {% if 'transactions' in segment %} active {% endif %}">
                 <a href="{% url 'courses:courselist' %}" class="nav-link">
                   <span class="sidebar-icon">
                   <i class='fas fa-book-open'></i>
                   </span>
                     <span class="ml-1 sidebar-text">Courses</span>
+                </a>
+            </li>
+        {% endif %}
+            <li class="nav-item {% if 'transactions' in segment %} active {% endif %}">
+                <a href="{% url 'user:change_password' %}" class="nav-link">
+                  <span class="sidebar-icon">
+                  <i class="fa fa-key" aria-hidden="true"></i>
+                  </span>
+                    <span class="ml-1 sidebar-text">Change Password</span>
                 </a>
             </li>
             <li class="nav-item {% if 'transactions' in segment %} active {% endif %}">
@@ -81,6 +91,8 @@
                     <span class="ml-1 sidebar-text">Exam History</span>
                 </a>
             </li>
+        {% if request.user.access_level == 'A' %}
+
             <li class="nav-item {% if 'transactions' in segment %} active {% endif %}">
                 <a href="{% url 'user:userList' %}" class="nav-link">
                   <span class="sidebar-icon">
@@ -89,6 +101,7 @@
                     <span class="ml-1 sidebar-text">User</span>
                 </a>
             </li>
+        {% endif %}
             <li class="nav-item {% if 'transactions' in segment %} active {% endif %}">
                 <a href='/login/' class="nav-link">
                   <span class="sidebar-icon">
