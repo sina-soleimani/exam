@@ -1,8 +1,13 @@
 var desiredId = null;
 var candidate_delete_exam = null;
 var candidate_active_exam = null;
+var manual_choose = false;
 $(document).ready(function () {
     $('.open-modal-button').click(function () {
+        manual_choose = true
+        $(".manual-choose").toggle(manual_choose);
+        $(".shuffle-choose").toggle(!manual_choose);
+        $('.q-choose-checkbox').prop('checked', false);
         $('.numberSelect').val(0);
         $('#settingQPropId').attr('hidden', 'hidden')
         $('#table-q-bank').attr('hidden', 'hidden')
@@ -11,26 +16,34 @@ $(document).ready(function () {
         desiredId = $(this).data('id');
         const element = examsData.find(item => item.id === desiredId);
         const countById = {};
-        element['q_bank'].forEach(e => {
-            const id = e['id'];
-            countById[id] = (countById[id] || 0) + 1;
-        });
-        for (const key in countById) {
-            if (countById.hasOwnProperty(key)) {
-                const value = countById[key];
 
-                var $selectElement = $(".numberSelect[data-id=" + key + "]");
-
-                // Set the selected value to 6
-                $selectElement.val(value);
-            }
-        }
-        console.log(countById);
         if (element) {
+            element['q_bank'].forEach(e => {
+                const id = e['q_id'];
+                $('.q-choose-checkbox[data-id="' + id + '"]').prop('checked', true);
+            });
+
+            element['q_bank'].forEach(e => {
+                const id = e['id'];
+                countById[id] = (countById[id] || 0) + 1;
+            });
+            for (const key in countById) {
+                if (countById.hasOwnProperty(key)) {
+                    const value = countById[key];
+
+                    var $selectElement = $(".numberSelect[data-id=" + key + "]");
+
+                    // Set the selected value to 6
+                    $selectElement.val(value);
+                }
+            }
+            $(".shuffle-choose").toggle(!element.choose_manual);
+            manual_choose = element.choose_manual
+            $(".manual-choose").toggle(element.choose_manual);
             $('#label').val(element.label);
             // 'deadline': formattedStr,
             $('#durationInput').val(element.duration);
-            $('#datePicker').val(element.deadline.replaceAll('-', '/'));
+            // $('#datePicker').val(element.deadline.replaceAll('-', '/'));
             $('#selectTypeScore').val(element.score_type);
             $('#passingScore').val(element.point_passing_score);
             // 'percent_passing_score': $('#passingScore').val(),
@@ -42,7 +55,7 @@ $(document).ready(function () {
             $('#label').val('');
             // 'deadline': formattedStr,
             $('#durationInput').val('');
-            $('#datePicker').val('');
+            // $('#datePicker').val('');
             $('#selectTypeScore').val('');
             $('#passingScore').val('');
             // 'percent_passing_score': $('#passingScore').val(),
@@ -75,6 +88,11 @@ $(document).ready(function () {
         }
     });
 
+    $("#toggleColumnsBtn").click(function () {
+        $(".shuffle-choose").toggle(manual_choose);
+        manual_choose = !manual_choose;
+        $(".manual-choose").toggle(manual_choose);
+    });
 });
 
 
@@ -83,7 +101,7 @@ let firstOpen = true;
 let time;
 
 function resetDateTimePicker() {
-    time = firstOpen ? moment().startOf('day') : "01:00 PM";
+    time = firstOpen ? moment().startOf('day') : "01:00:00";
     $('#durationInput').data('DateTimePicker').date(time);
 }
 
@@ -102,24 +120,27 @@ $(document).on('click', '#designExam', function (event) {
 
 $('#durationInput').datetimepicker({
     useCurrent: false,
-    format: "hh:mm:ss"
+    format: "HH:mm:ss",
 }).on('dp.show', resetDateTimePicker);
 
 $('#submitButton').click(function (event) {
-    const str = $('#datePicker').val().replaceAll('/', '-');
-    const endstr = str.substring(str.length - 5, str.length);
-    const startstr = str.substring(0, str.length - 5);
-    const formattedStr = `${endstr.substring(1)}-${startstr}`;
+    // const str = $('#datePicker').val().replaceAll('/', '-');
+    // const endstr = str.substring(str.length - 5, str.length);
+    // const startstr = str.substring(0, str.length - 5);
+    // const formattedStr = `${endstr.substring(1)}-${startstr}`;
+    // console.log(formattedStr)
+    // console.log(typeof formattedStr)
 
     const formData = {
         'csrfmiddlewaretoken': csrfToken,
         'label': $('#label').val(),
-        'deadline': formattedStr,
+        'deadline': '1-05-2024-',
         'duration': $('#durationInput').val(),
         'score_type': $('#selectTypeScore').val(),
         'point_passing_score': $('#passingScore').val(),
         'percent_passing_score': $('#passingScore').val(),
         'incorrect_penalty': $('#incorrectPenalty').val(),
+        'manual_chosen': manual_choose,
         'unanswered_penalty': $('#unAnsweredQuestionCheckBox').prop('checked'),
         'shuffle_answer': $('#shuffleAnswerCheckbox').prop('checked'),
         'selected_groups_id': $('.numberSelect').map(function () {
@@ -128,6 +149,10 @@ $('#submitButton').click(function (event) {
         'selected_groups_num': $('.numberSelect').map(function () {
             return $(this).val();
         }).get(),
+        'q-choose-checkbox': $('.q-choose-checkbox:checked').map(function () {
+            return $(this).data('id');
+        }).get(),
+
     };
     var url;
 
