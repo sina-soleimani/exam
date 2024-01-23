@@ -95,14 +95,19 @@
                 </div>
                 <ul class="navbar-nav navbar-nav-hover align-items-lg-center">
                     <li class="nav-item me-2">
-                        <a href="{% url 'courses:courselist' %}" class="nav-link">Dashboard</a>
+                        {% if request.user.access_level == 'A' %}
+                            <a href="{% url 'courses:courselist' %}" class="nav-link">Dashboard</a>
+                        {% else %}
+                            <a href="{% url 'exams:studentExamList' %}" class="nav-link">Dashboard</a>
+                        {% endif %}
+
                     </li>
                     <li class="nav-item me-2">
                         <a href='/login/' class="nav-link">Login</a>
                     </li>
-                    {#                        <li class="nav-item me-2">#}
-                    {#                            <a href='/register/' class="nav-link">Register</a>#}
-                    {#                        </li>#}
+{#                                                                <li class="nav-item me-2">#}
+{#                                                                    <a href='/register/' class="nav-link">Register</a>#}
+                    {#                                            </li>#}
                 </ul>
             </div>
         </div>

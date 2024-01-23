@@ -39,8 +39,6 @@
                                aria-controls="qPropId" aria-selected="false">Question Properties</a>
                             <a class="nav-link" id="qListId" data-bs-toggle="pill" href="#qListId" role="tab"
                                aria-controls="qListId" aria-selected="false">Question List</a>
-                            <a class="nav-link" id="reportId" data-bs-toggle="pill" href="#reportId" role="tab"
-                               aria-controls="reportId" aria-selected="false">Reporting</a>
                         </div>
                     </div>
                     <!-- Main Content -->
@@ -64,22 +62,22 @@
                                                     <input type="text" class="form-control" id="label" required>
                                                     <div class="valid-feedback">Looks good!</div>
                                                 </div>
-                                                <div class="mb-3">
-                                                    <label for="datePicker">Date of Exam</label>
-                                                    <div class="input-group">
-                                    <span class="input-group-text">
-                                        <svg class="icon icon-xs text-gray-600" fill="currentColor" viewBox="0 0 20 20"
-                                             xmlns="http://www.w3.org/2000/svg">
-                                            <path fill-rule="evenodd"
-                                                  d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z"
-                                                  clip-rule="evenodd"></path>
-                                        </svg>
-                                    </span>
-                                                        <input data-datepicker="" class="form-control datePicker"
-                                                               placeholder="dd/mm/yyyy" id="datePicker" type="text"
-                                                               required>
-                                                    </div>
-                                                </div>
+                                                {#                                                <div class="mb-3">#}
+                                                {#                                                    <label for="datePicker">Date of Exam</label>#}
+                                                {#                                                    <div class="input-group">#}
+                                                {#                                    <span class="input-group-text">#}
+                                                {#                                        <svg class="icon icon-xs text-gray-600" fill="currentColor" viewBox="0 0 20 20"#}
+                                                {#                                             xmlns="http://www.w3.org/2000/svg">#}
+                                                {#                                            <path fill-rule="evenodd"#}
+                                                {#                                                  d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z"#}
+                                                {#                                                  clip-rule="evenodd"></path>#}
+                                                {#                                        </svg>#}
+                                                {#                                    </span>#}
+                                                {#                                                        <input data-datepicker="" class="form-control datePicker"#}
+                                                {#                                                               placeholder="dd/mm/yyyy" id="datePicker" type="text"#}
+                                                {#                                                               required>#}
+                                                {#                                                    </div>#}
+                                                {#                                                </div>#}
 
                                                 <div class="mb-3">
                                                     <label for="durationInput">Duration</label>
@@ -159,11 +157,17 @@
 
 
                                                     <div class="table-q-bank mb-4" id="table-q-bank">
+                                                        <button id="toggleColumnsBtn" type="button"
+                                                                class="btn btn btn-outline-primary">Manual or Shuffle
+                                                            Chosen
+                                                        </button>
+
                                                         <table id="qBankTable" class="table table-striped">
                                                             <thead>
                                                             <tr>
                                                                 <th>Group Name</th>
-                                                                <th>Number Of Question</th>
+                                                                <th class="shuffle-choose">Number Of Question</th>
+                                                                <th class="manual-choose">all Qustions</th>
 
                                                             </tr>
                                                             </thead>
@@ -171,8 +175,8 @@
                                                             {% for field in q_bank %}
                                                                 <tr>
                                                                     <td>{{ field.name }}</td>
-                                                                    {#                <td>{{ field.deadline }}</td>#}
-                                                                    <td>
+                                                                    {#                                                                                    <td>{{ field.deadline }}</td>#}
+                                                                    <td class="shuffle-choose">
                                                                         <label for="numberSelect" class="form-label">Select
                                                                             a Number:</label>
                                                                         <select class="numberSelect form-select"
@@ -185,6 +189,20 @@
                                                                                 }
                                                                             </script>
                                                                         </select>
+                                                                    </td>
+                                                                    <td class="manual-choose">
+                                                                        <ul class="list-group">
+                                                                            {% for question in field.group.question_group_questions.all %}
+                                                                                <li class="list-group-item d-flex justify-content-between align-items-center list-group-item-success">
+                                                                                    {{ question.get_short_description }}
+                                                                                    <div class="form-check form-check-inline">
+                                                                                        <input class="form-check-input q-choose-checkbox"
+                                                                                               type="checkbox"
+                                                                                               data-id="{{ question.id }}">
+                                                                                    </div>
+                                                                                </li>
+                                                                            {% endfor %}
+                                                                        </ul>
                                                                     </td>
                                                                 </tr>
                                                             {% endfor %}
