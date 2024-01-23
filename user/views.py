@@ -1,4 +1,4 @@
-from django.contrib.auth import login
+from django.contrib.auth import login, authenticate
 from django.shortcuts import render, redirect
 from .forms import ProfileCreationForm, ProfileLoginForm
 from django.contrib.auth.views import LogoutView
@@ -11,6 +11,11 @@ from .models import Profile
 from django.views.generic import ListView
 from django.db import transaction
 from django.contrib.auth.hashers import make_password
+
+from django.contrib import messages
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth import update_session_auth_hash
+from django.contrib.auth.forms import PasswordChangeForm
 
 
 def register(request):
@@ -29,9 +34,17 @@ def user_login(request):
     if request.method == 'POST':
         form = ProfileLoginForm(data=request.POST)
         if form.is_valid():
-            user = form.get_user()
-            login(request, user)
-            return redirect('home')
+            # Retrieve username and password from the form
+            username = form.cleaned_data.get('username')
+            password = form.cleaned_data.get('password')
+
+            # Use authenticate to get the user object
+            user = authenticate(request, username=username, password=password)
+
+            if user is not None:
+                # Log in the user
+                login(request, user)
+                return redirect('home')
     else:
         form = ProfileLoginForm()
     return render(request, 'registration/login.html', {'form': form})
@@ -99,3 +112,19 @@ def upload_excel(request):
                                                major_code=new_data[3], access_level=new_data[4], entry_year=new_data[2])
         return JsonResponse({'message': 'File uploaded successfully'})
     return JsonResponse({'message': 'Please select a file to upload.'})
+
+
+@login_required
+def change_password(request):
+    if request.method == 'POST':
+        form = PasswordChangeForm(request.user, request.POST)
+        if form.is_valid():
+            user = form.save()
+            update_session_auth_hash(request, user)  # Important for security
+            messages.success(request, 'Your password was successfully updated!')
+            return redirect('/login/')
+        else:
+            messages.error(request, 'Please correct the error below.')
+    else:
+        form = PasswordChangeForm(request.user)
+    return render(request, 'home/password-change.html', {'form': form})
