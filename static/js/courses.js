@@ -43,10 +43,10 @@ function resetDateTimePicker() {
 
 
 $('#submitButton').click(function (event) {
-    const str = $('#datePicker').val().replaceAll('/', '-');
-    const endstr = str.substring(str.length - 5, str.length);
-    const startstr = str.substring(0, str.length - 5);
-    var formattedStr = `${endstr.substring(1)}-${startstr}`;
+    // const str = $('#datePicker').val().replaceAll('/', '-');
+    // const endstr = str.substring(str.length - 5, str.length);
+    // const startstr = str.substring(0, str.length - 5);
+    // var formattedStr = `${endstr.substring(1)}-${startstr}`;
     const selectedRadioButton = $('input[name="selected_bank"]:checked');
 
     if (selectedRadioButton.length > 0) {
@@ -64,15 +64,16 @@ $('#submitButton').click(function (event) {
 
     if (desiredId) {
         url = desiredId + '/update/'
-        formattedStr = $('#datePicker').val()
+        // formattedStr = $('#datePicker').val()
     } else {
         url = 'course_submit/'
     }
+    // console.log(typeof formattedStr)
 
     const formData = {
         'csrfmiddlewaretoken': csrfToken,
         'course_name': $('#label').val(),
-        'year': formattedStr,
+        'year': '2024-01-04',
         'course_code': $('#courseCode').val(),
         'term': $('#termId').val(),
         'q_bank_id': selectedRadioButton.attr('data-id'),
