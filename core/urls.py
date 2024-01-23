@@ -28,6 +28,7 @@ urlpatterns = [
     path('exams/', include(exam_urls)),
     path('courses/', include(course_urls)),
     path('results/', include(result_urls)),
+    path('captcha/', include('captcha.urls')),
 
     path('admin/', admin.site.urls),
 

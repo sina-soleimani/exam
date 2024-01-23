@@ -37,6 +37,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'django_bootstrap_icons',
+    'widget_tweaks',
 
     'questions',
     'exams',
@@ -44,6 +45,7 @@ INSTALLED_APPS = [
     'course',
     'user',
     'result',
+    'captcha',
 
 ]
 
@@ -79,6 +81,11 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'core.wsgi.application'
+
+
+# RECAPTCHA_PUBLIC_KEY = 'your-public-key'
+# RECAPTCHA_PRIVATE_KEY = 'your-private-key'
+
 
 # Database
 # https://docs.djangoproject.com/en/1.11/ref/settings/#databases
