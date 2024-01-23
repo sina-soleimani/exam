@@ -19,8 +19,6 @@ class ExamListView(ListView):
     def get_queryset(self):
         # Get the 'id' parameter from the URL
         course_id = self.kwargs['id']
-        print('salam')
-        print(course_id)
 
         # Filter the exams by 'id' if it's provided in the URL parameter
         if course_id:
@@ -45,8 +43,9 @@ class ExamListView(ListView):
             'point_passing_score': exam.point_passing_score,
             'duration': exam.duration,
             'deadline': exam.deadline,
+            'choose_manual': exam.manual_chosen,
             'q_bank': [
-                {'id': q.question_group.id, }  # Include 'name' and other properties
+                {'id': q.question_group.id, 'q_id': q.id}  # Include 'name' and other properties
                 for q in exam.questions.all()
             ]
         } for exam in exams]
@@ -57,7 +56,7 @@ class ExamListView(ListView):
 
         if course.question_bank:
             context['q_bank'] = [
-                {'id': q.id, 'name': q.name, 'number': q.question_group_questions.count()}
+                {'id': q.id, 'name': q.name, 'number': q.question_group_questions.count(), 'group': q}
                 for q in course.question_bank.q_bank_q_groups.all()
             ]
         else:
@@ -79,7 +78,7 @@ class StudentExamListView(ListView):
 
     def get_queryset(self):
         # Return only exams where action is True
-        print('salam')
+
         return Exam.objects.filter(exam_status='A')
 
 
@@ -90,7 +89,7 @@ class StudentExamHistoryListView(ListView):
 
     def get_queryset(self):
         # Return only exams where action is True
-        print('salam')
+
         return Exam.objects.filter(exam_status='E')
 
 
@@ -106,17 +105,27 @@ class ExamCreateView(CreateView):
 
     def form_valid(self, form):
         selected_groups_id = self.request.POST.getlist('selected_groups_id[]')
+        q_choose_checkbox = self.request.POST.getlist('q-choose-checkbox[]')
 
         selected_groups_num = self.request.POST.getlist('selected_groups_num[]')
         q_list = []
         group_num = 0
-        for group_id in selected_groups_id:
-            questions = models.QuestionGroup.objects.get(id=group_id).question_group_questions.all()
-            sampled_questions = random.sample(list(questions), min(int(selected_groups_num[group_num]), len(questions)))
 
-            q_list.extend(sampled_questions)
+        if self.request.POST.get('manual_chosen') == 'true':
 
-            group_num = group_num + 1
+            questions = models.Question.objects.filter(id__in=q_choose_checkbox)
+            q_list.extend(questions)
+        else:
+
+            for group_id in selected_groups_id:
+                questions = models.QuestionGroup.objects.get(id=group_id).question_group_questions.all()
+
+                sampled_questions = random.sample(list(questions),
+                                                  min(int(selected_groups_num[group_num]), len(questions)))
+
+                q_list.extend(sampled_questions)
+
+                group_num = group_num + 1
         total_score = sum(question.score for question in q_list)
 
         course = get_object_or_404(Course, id=self.kwargs['id'])
@@ -139,15 +148,21 @@ class ExamUpdateView(UpdateView):
         exam = form.save(commit=False)
         selected_groups_id = self.request.POST.getlist('selected_groups_id[]')
         selected_groups_num = self.request.POST.getlist('selected_groups_num[]')
+        q_choose_checkbox = self.request.POST.getlist('q-choose-checkbox[]')
         q_list = []
         group_num = 0
-        for group_id in selected_groups_id:
-            questions = models.QuestionGroup.objects.get(id=group_id).question_group_questions.all()
-            sampled_questions = random.sample(list(questions), min(int(selected_groups_num[group_num]), len(questions)))
+        if self.request.POST.get('manual_chosen') == 'true':
+            questions = models.Question.objects.filter(id__in=q_choose_checkbox)
+            q_list.extend(questions)
+        else:
+            for group_id in selected_groups_id:
+                questions = models.QuestionGroup.objects.get(id=group_id).question_group_questions.all()
+                sampled_questions = random.sample(list(questions),
+                                                  min(int(selected_groups_num[group_num]), len(questions)))
 
-            q_list.extend(sampled_questions)
+                q_list.extend(sampled_questions)
 
-            group_num = group_num + 1
+                group_num = group_num + 1
         exam.questions.clear()
         total_score = sum(question.score for question in q_list)
         exam.score = total_score

@@ -68,6 +68,7 @@ class Exam(BaseModel):
     )
     unanswered_penalty = models.BooleanField(default=False)
     shuffle_answer = models.BooleanField(default=True)
+    manual_chosen = models.BooleanField(default=False)
 
     class ExamStatus(models.TextChoices):
         READY = 'R', 'READY'
