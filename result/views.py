@@ -52,9 +52,10 @@ class ResultDetailListView(ListView):
 
 class ResultDetailView(View):
     def get(self, request, id):
-        exam = Result.objects.get(id=id).exam
+        result = Result.objects.get(id=id)
+        exam = result.exam
         questions = list(exam.questions.all())
-        user_id = self.request.user.id
+        user_id = result.student_id
         q = []
 
         for question in questions:
