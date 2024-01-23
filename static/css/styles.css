@@ -142,7 +142,11 @@ hr {
 }
 
 .login_body {
-    background-color: #8FBC8B;
+    background-image: url('images/f14.jpg'); /* Replace 'path/to/your/image.jpg' with the actual path to your image file */
+    background-size: cover; /* Cover the entire viewport */
+    background-position: center; /* Center the image */
+    background-repeat: no-repeat; /* Do not repeat the image */
+    margin: 0;
     font-family: 'Open Sans', sans-serif;
 
 }
@@ -151,10 +155,11 @@ hr {
     max-width: 400px;
     margin: 0 auto;
     padding: 20px;
-    background-color: #D8BFD8;
+    background-color: rgba(216, 191, 216, 0); /* Fully transparent background color */
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
     border-radius: 5px;
     margin-top: 100px;
+    backdrop-filter: blur(30px);
 }
 
 .login-container h2 {
