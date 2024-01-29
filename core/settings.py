@@ -45,6 +45,7 @@ INSTALLED_APPS = [
     'course',
     'user',
     'result',
+    'report',
     'captcha',
 
 ]
@@ -62,7 +63,7 @@ MIDDLEWARE = [
 ROOT_URLCONF = 'core.urls'
 
 SESSION_ENGINE = "django.contrib.sessions.backends.db"
-SESSION_COOKIE_AGE = 300
+SESSION_COOKIE_AGE = 600
 
 TEMPLATES = [
     {
@@ -144,8 +145,10 @@ DATA_UPLOAD_MAX_MEMORY_SIZE = None
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
-STATIC_ROOT = ''
+STATIC_ROOT = 'staticfiles'
 
 STATIC_URL = '/static/'
 
 STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
+LOGOUT_REDIRECT_URL = '/login/'
+
