@@ -12,6 +12,7 @@
 .custom-card .card-body {
     padding: 20px; /* Add some padding to the card body */
 }
+
 .q-result-card {
     background-color: #eae8f5; /* Set your desired background color for the card */
     border: none; /* Remove the card border */
@@ -88,15 +89,18 @@
 .incorrect-penalty {
     font-size: 15px;
 }
+
 #submitButton {
     position: relative;
     bottom: 10px;
     right: 10px;
 }
+
 .delete-modal {
     max-width: 60%; /* Adjust the width as needed */
     margin: 0 auto;
 }
+
 .icon-box {
     display: inline-flex;
     align-items: center;
@@ -126,4 +130,42 @@
 
 .success {
     color: #2ecc71;
+}
+
+.navbar {
+    background-color: #6f42c1;
+}
+
+/* Add a subtle transition to make the scaling effect smoother */
+.list-group-item {
+    transition: transform 0.3s ease-in-out, background-color 0.3s ease-in-out;
+}
+
+/* Apply scaling effect on hover and background color change */
+.list-group-item:hover {
+    transform: scale(1.1);
+    background-color: #6c757d;
+}
+
+/* Animation for list items to slide in from the left */
+@keyframes slideIn {
+    from {
+        transform: translateX(-100%);
+    }
+    to {
+        transform: translateX(0);
+    }
+}
+
+.list-group-item {
+    padding: 15px 0;
+    animation: slideIn 0.5s ease-out;
+}
+
+.increased-height {
+    padding: 15px 0; /* Adjust the padding values as needed */
+}
+
+.foot-page {
+    background-color: #6f42c1;
 }
