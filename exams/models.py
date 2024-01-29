@@ -20,6 +20,7 @@ class Exam(BaseModel):
     duration = models.DurationField(default=None)
     action = models.BooleanField(default=False)
     score = models.PositiveIntegerField(default=0, null=True)
+    avg_score = models.PositiveIntegerField(default=0, null=True)
     course = models.ForeignKey(
         'course.Course',
         blank=True,

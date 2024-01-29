@@ -9,7 +9,8 @@ import json
 from django.http import JsonResponse
 from decimal import Decimal
 import random
-
+from decorator import access_level_required
+from user.models import STUDENT_ACCESS, ADMIN_ACCESS
 
 class ExamListView(ListView):
     model = Exam
@@ -27,6 +28,7 @@ class ExamListView(ListView):
         # If 'id' is not provided in the URL, return all exams
         return Exam.objects.all()
 
+    @access_level_required(ADMIN_ACCESS)
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         exams = self.get_queryset()
@@ -76,10 +78,13 @@ class StudentExamListView(ListView):
     template_name = 'home/student-exams.html'
     context_object_name = 'exams'
 
+    @access_level_required(STUDENT_ACCESS)
     def get_queryset(self):
         # Return only exams where action is True
+        user_id=self.request.user.id
 
-        return Exam.objects.filter(exam_status='A')
+
+        return Exam.objects.filter(course__students=user_id,exam_status='A')
 
 
 class StudentExamHistoryListView(ListView):
@@ -87,10 +92,12 @@ class StudentExamHistoryListView(ListView):
     template_name = 'home/student-exams-history.html'
     context_object_name = 'exams'
 
+    @access_level_required(STUDENT_ACCESS)
     def get_queryset(self):
         # Return only exams where action is True
+        user_id = self.request.user.id
 
-        return Exam.objects.filter(exam_status='E')
+        return Exam.objects.filter(course__students=user_id,exam_status='E')
 
 
 class ExamCreateView(CreateView):
@@ -103,6 +110,7 @@ class ExamCreateView(CreateView):
         errors = form.errors.as_json()
         return JsonResponse({'errors': errors}, status=400)
 
+    @access_level_required(ADMIN_ACCESS)
     def form_valid(self, form):
         selected_groups_id = self.request.POST.getlist('selected_groups_id[]')
         q_choose_checkbox = self.request.POST.getlist('q-choose-checkbox[]')
@@ -144,6 +152,7 @@ class ExamUpdateView(UpdateView):
     template_name = 'home/exams.html'
     success_url = '/success/'
 
+    @access_level_required(ADMIN_ACCESS)
     def form_valid(self, form):
         exam = form.save(commit=False)
         selected_groups_id = self.request.POST.getlist('selected_groups_id[]')
@@ -178,6 +187,7 @@ class ExamDelete(DeleteView):
     template_name = 'home/exams.html'
     success_url = '/success/'
 
+    @access_level_required(ADMIN_ACCESS)
     def form_valid(self, form):
         self.object = self.get_object()
         self.object.delete()
@@ -191,6 +201,7 @@ class ActiveExam(UpdateView):
     template_name = 'home/exams.html'
     success_url = '/success/'
 
+    @access_level_required(ADMIN_ACCESS)
     def form_valid(self, form):
         self.object = self.get_object()
         self.object.action = True
