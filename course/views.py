@@ -9,14 +9,20 @@ from decimal import Decimal
 from questions.models import QuestionBank
 from user.models import Profile
 
-
 # Create your views here.
+
+from decorator import access_level_required
+from user.models import ADMIN_ACCESS
 
 
 class CourseListView(ListView):
     model = Course
     template_name = 'home/courses.html'
     context_object_name = 'courses'
+
+    @access_level_required(ADMIN_ACCESS)
+    def get_queryset(self):
+        return Course.objects.filter(teacher=self.request.user)
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -62,6 +68,7 @@ class CourseCreateView(CreateView):
         errors = form.errors.as_json()
         return JsonResponse({'errors': errors}, status=400)
 
+    @access_level_required(ADMIN_ACCESS)
     def form_valid(self, form):
         print("Form is valid!")
         q_bank_id = self.request.POST.get('q_bank_id')
@@ -74,6 +81,7 @@ class CourseCreateView(CreateView):
         elif q_bank_name:
             q_bank = QuestionBank.objects.create(name=q_bank_name)
             course.question_bank = q_bank
+        course.teacher = self.request.user
         course.save()
         response = super().form_valid(form)
 
@@ -92,6 +100,7 @@ class CourseUpdateView(UpdateView):
         print(errors)
         return JsonResponse({'errors': errors}, status=400)
 
+    @access_level_required(ADMIN_ACCESS)
     def form_valid(self, form):
         print("Form is valid!")
         q_bank_id = self.request.POST.get('q_bank_id')
@@ -123,15 +132,14 @@ class CourseDelete(DeleteView):
     template_name = 'home/courses.html'
     success_url = '/success/'
 
+    @access_level_required(ADMIN_ACCESS)
     def form_valid(self, form):
         self.object = self.get_object()
         self.object.delete()
         return JsonResponse({}, status=200)
 
 
-from django.http import JsonResponse
-
-
+@access_level_required(ADMIN_ACCESS)
 def upload_excel(request):
     course_id = request.POST['course_id']
     if request.method == 'POST' and request.FILES['excelFile']:
