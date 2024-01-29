@@ -5,9 +5,12 @@ from django.shortcuts import redirect, render
 from django.views import View
 
 from .models import Result
+from exams.models import Exam
 from django.views.generic import ListView
 from django.views.decorators.csrf import csrf_protect
 from django.http import HttpRequest
+from decorator import access_level_required
+from user.models import STUDENT_ACCESS, ADMIN_ACCESS
 
 
 # Create your views here.
@@ -17,6 +20,7 @@ class ResultListView(ListView):
     template_name = 'home/results.html'
     context_object_name = 'results'
 
+    @access_level_required(ADMIN_ACCESS)
     def get_queryset(self):
         # Get the 'id' parameter from the URL
         exam_id = self.kwargs['id']
@@ -36,6 +40,7 @@ class ResultDetailListView(ListView):
     template_name = 'home/result-details.html'
     context_object_name = 'result'
 
+    @access_level_required(STUDENT_ACCESS)
     def get_queryset(self):
         # Get the 'id' parameter from the URL
         result_id = self.kwargs['id']
@@ -51,6 +56,7 @@ class ResultDetailListView(ListView):
 
 
 class ResultDetailView(View):
+    @access_level_required(STUDENT_ACCESS)
     def get(self, request, id):
         result = Result.objects.get(id=id)
         exam = result.exam
@@ -110,11 +116,14 @@ class ResultDetailView(View):
 
 
 # TODO
+@access_level_required(ADMIN_ACCESS)
 @csrf_protect
 def calc_result(request: HttpRequest):
     exam_id = request.POST.get('exam_id')
     results = Result.objects.filter(exam__pk=exam_id).prefetch_related(
         'result_prof_answers__question__question_answers')
+    exam_sum_score=0
+    result_number=0
 
     for result in results:
         print(result)
@@ -141,7 +150,15 @@ def calc_result(request: HttpRequest):
 
                 if question_answer.is_true == result_prof_answer.is_true:
                     score += result_prof_answer.question.score
+        if score != 0:
+            exam_sum_score=exam_sum_score+score
+            result_number=result_number+1
 
         result.score = score
         result.save()
+    avg_score=exam_sum_score/result_number
+    exam=Exam.objects.get(id=exam_id)
+    exam.avg_score= avg_score
+    exam.save()
+
     return redirect('results:resultList', id=exam_id)
