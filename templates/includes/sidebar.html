@@ -98,12 +98,22 @@
                   <span class="sidebar-icon">
                     <i class="fa fa-user" aria-hidden="true"></i>
                   </span>
-                    <span class="ml-1 sidebar-text">User</span>
+                    <span class="ml-1 sidebar-text">User Manger</span>
+                </a>
+            </li>
+        {% endif %}
+            {% if request.user.access_level == 'A' %}
+            <li class="nav-item {% if 'transactions' in segment %} active {% endif %}">
+                <a href="{% url 'reports:reportList' %}" class="nav-link">
+                  <span class="sidebar-icon">
+                    <i class="fa fa-user" aria-hidden="true"></i>
+                  </span>
+                    <span class="ml-1 sidebar-text">Report</span>
                 </a>
             </li>
         {% endif %}
             <li class="nav-item {% if 'transactions' in segment %} active {% endif %}">
-                <a href='/login/' class="nav-link">
+                <a href='/logout/' class="nav-link">
                   <span class="sidebar-icon">
 
                   <i class="fa fa-sign-out" aria-hidden="true"></i>

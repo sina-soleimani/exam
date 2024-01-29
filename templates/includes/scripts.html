@@ -1,4 +1,4 @@
-
+{% load static %}
 <!-- Core -->
 <script src="/static/assets/vendor/@popperjs/core/dist/umd/popper.min.js"></script>
 <script src="/static/assets/vendor/bootstrap/dist/js/bootstrap.min.js"></script>
@@ -23,7 +23,7 @@
 <script src="/static/assets/vendor/sweetalert2/dist/sweetalert2.all.min.js"></script>
 
 <!-- Moment JS -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.27.0/moment.min.js"></script>
+<script src="{% static 'js/moment/moment.min.js' %}"></script>
 
 <!-- Vanilla JS Datepicker -->
 <script src="/static/assets/vendor/vanillajs-datepicker/dist/js/datepicker.min.js"></script>
