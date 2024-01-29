@@ -16,6 +16,8 @@ from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import update_session_auth_hash
 from django.contrib.auth.forms import PasswordChangeForm
+from decorator import access_level_required
+from user.models import STUDENT_ACCESS, ADMIN_ACCESS
 
 
 def register(request):
@@ -66,6 +68,7 @@ class UserListView(ListView):
     template_name = 'home/profile-mangar.html'
     context_object_name = 'profiles'
 
+    @access_level_required(ADMIN_ACCESS)
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         profiles = self.get_queryset()
@@ -82,6 +85,7 @@ class UserListView(ListView):
         return context
 
 
+@access_level_required(ADMIN_ACCESS)
 def upload_excel(request):
     if request.method == 'POST' and request.FILES['excelFile']:
 
@@ -114,6 +118,7 @@ def upload_excel(request):
     return JsonResponse({'message': 'Please select a file to upload.'})
 
 
+@access_level_required(STUDENT_ACCESS)
 @login_required
 def change_password(request):
     if request.method == 'POST':
@@ -122,7 +127,7 @@ def change_password(request):
             user = form.save()
             update_session_auth_hash(request, user)  # Important for security
             messages.success(request, 'Your password was successfully updated!')
-            return redirect('/login/')
+            return redirect('/logout/')
         else:
             messages.error(request, 'Please correct the error below.')
     else:
