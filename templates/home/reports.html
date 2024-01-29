@@ -1,0 +1,83 @@
+{% extends "layouts/base.html" %}
+{% load static %}
+
+{% block title %} Courses {% endblock %}
+
+<!-- Specific Page CSS goes HERE -->
+{% block stylesheets %}{% endblock stylesheets %}
+
+{% block content %}
+    <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center py-4">
+        <div class="d-block mb-4 mb-md-0">
+            <nav aria-label="breadcrumb" class="d-none d-md-inline-block">
+            </nav>
+            <h2 class="h4">Reports </h2>
+        </div>
+        <div class="btn-toolbar mb-2 mb-md-0">
+            <button class="btn btn-outline-success" onclick="exportToExcel()">Export to Excel
+            </button>
+        </div>
+    </div>
+
+
+
+
+    <div class="container-fluid">
+
+        <div class="card custom-card shadow" style="height: 100vh">
+            <div class="card-header  text-white">
+                <h5 class="card-title">Reports</h5>
+            </div>
+            <div class="card-body" style="height: 100%">
+                <div class="table-settings table-responsive mb-4">
+                    <table id="courseTable" class="table table-striped" style="width:100%; height: 100%">
+                        <thead class="thead-dark">
+                        <tr>
+                            <th>Student UserName</th>
+                            <th>Student Entry year</th>
+                            <th>Course Name</th>
+                            <th>Course Term</th>
+
+
+                            <th>Teacher Name</th>
+                            <th>Exam Label</th>
+                            <th>Passing Score</th>
+                            <th>Max Score</th>
+                            <th>Average Score</th>
+                            <th>Student Score</th>
+
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {% for result in results_data %}
+                            <tr>
+                                <td>{{ result.username }}</td>
+                                <td>{{ result.entry_year }}</td>
+                                <td>{{ result.course_name }}</td>
+                                <td>{{ result.term }}</td>
+                                <td>{{ result.teacher }}</td>
+                                <td>{{ result.exam.label }}</td>
+                                <td>{{ result.pass_score }}</td>
+                                <td>{{ result.max_score }}</td>
+                                <td>{{ result.avg_score }}</td>
+                                <td>{{ result.score }}</td>
+                                <!-- Add other fields as needed -->
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+{% endblock content %}
+
+<!-- Specific Page JS goes HERE -->
+{% block javascripts %}
+    <script>
+        var coursesData = {{ courses_json|safe }};
+    </script>
+    <script src="{% static 'js/reports.js' %}"></script>
+{% endblock javascripts %}

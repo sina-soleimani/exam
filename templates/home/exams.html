@@ -98,7 +98,7 @@
                                                                        class="col-sm-5 col-form-label">Score In:</label>
                                                                 <div class="col-sm-7">
                                                                     <select class="form-control" id="selectTypeScore">
-                                                                        <option value="PE">Percent</option>
+                                                                        {#                                                                        <option value="PE">Percent</option>#}
                                                                         <option value="PO">Points</option>
                                                                     </select>
                                                                 </div>
@@ -113,7 +113,7 @@
                                                             <div class="col-sm-8">
                                                                 <input type="number" class="form-control"
                                                                        id="passingScore"
-                                                                       name="passingScore" max=100>
+                                                                       name="passingScore">
                                                             </div>
 
                                                         </div>
@@ -268,10 +268,24 @@
                         </button>
                     </td>
                     <td>
-                        <button type="button" class="btn btn-outline-warning showqbtn open-active-modal"
-                                data-bs-toggle="modal" data-bs-target="#activeModal" data-id="{{ field.id }}">
-                            <i class="fa fa-bolt" aria-hidden="true"></i>
-                        </button>
+                        {% if  field.exam_status == 'R' %}
+                            <button type="button" class="btn btn-outline-warning showqbtn open-active-modal"
+                                    data-bs-toggle="modal" data-bs-target="#activeModal" data-id="{{ field.id }}">
+                                <i class="fa fa-bolt" aria-hidden="true"></i>
+                            </button>
+                        {% endif %}
+                        {% if  field.exam_status == 'E' %}
+                            <button type="button" class="btn btn-outline-dark showqbtn open-active-modal disabled"
+                                    data-bs-toggle="modal" data-bs-target="#activeModal" data-id="{{ field.id }}">
+                                <i class="fas fa-hourglass-end" aria-hidden="true"></i>
+                            </button>
+                        {% endif %}
+                        {% if  field.exam_status == 'A' %}
+                            <button type="button" class="btn btn-outline-dark showqbtn open-active-modal disabled"
+                                    data-bs-toggle="modal" data-bs-target="#activeModal" data-id="{{ field.id }}">
+                                <i class="fa fa-bell" aria-hidden="true"></i>
+                            </button>
+                        {% endif %}
                     </td>
                     <td>
                         <button type="button" class="btn btn-outline-danger showqbtn open-delete-modal"

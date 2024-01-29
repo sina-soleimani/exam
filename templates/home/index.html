@@ -1,3 +1,4 @@
+{% extends "layouts/base.html" %}
 <!--
 
 =========================================================
@@ -73,175 +74,90 @@
 
 </head>
 <body>
-
-<header class="header-global">
-    <nav id="navbar-main" aria-label="Primary navigation"
-         class="navbar navbar-main navbar-expand-lg navbar-theme-primary pt-4 navbar-dark">
-        <div class="container position-relative">
-            <div class="navbar-collapse collapse me-auto" id="navbar_global">
-                <div class="navbar-collapse-header">
-                    <div class="row">
-                        <div class="col-6 collapse-brand">
-                            <a href="/">
-                                <img src="/static/assets/img/brand/light.svg" alt="Volt logo">
-                            </a>
-                        </div>
-                        <div class="col-6 collapse-close">
-                            <a href="#navbar_global" class="fas fa-times" data-toggle="collapse"
-                               data-target="#navbar_global" aria-controls="navbar_global" aria-expanded="false"
-                               title="close" aria-label="Toggle navigation"></a>
-                        </div>
-                    </div>
-                </div>
-                <ul class="navbar-nav navbar-nav-hover align-items-lg-center">
-                    <li class="nav-item me-2">
-                        {% if request.user.access_level == 'A' %}
-                            <a href="{% url 'courses:courselist' %}" class="nav-link">Dashboard</a>
-                        {% else %}
-                            <a href="{% url 'exams:studentExamList' %}" class="nav-link">Dashboard</a>
-                        {% endif %}
-
-                    </li>
-                    <li class="nav-item me-2">
-                        <a href='/login/' class="nav-link">Login</a>
-                    </li>
-{#                                                                <li class="nav-item me-2">#}
-{#                                                                    <a href='/register/' class="nav-link">Register</a>#}
-                    {#                                            </li>#}
-                </ul>
-            </div>
-        </div>
-    </nav>
-</header>
-
-<main>
-
-    <!-- Hero -->
-    <section>
-        <div class="container">
-            <div class="row">
-                <div class="col-12 text-center">
-                    <div class="bootstrap-big-icon d-none d-lg-block">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="700" height="622" class="d-block my-1"
-                             viewBox="0 0 118 94" role="img"><title>Bootstrap</title>
-                            <path fill-rule="evenodd" clip-rule="evenodd"
-                                  d="M24.509 0c-6.733 0-11.715 5.893-11.492 12.284.214 6.14-.064 14.092-2.066 20.577C8.943 39.365 5.547 43.485 0 44.014v5.972c5.547.529 8.943 4.649 10.951 11.153 2.002 6.485 2.28 14.437 2.066 20.577C12.794 88.106 17.776 94 24.51 94H93.5c6.733 0 11.714-5.893 11.491-12.284-.214-6.14.064-14.092 2.066-20.577 2.009-6.504 5.396-10.624 10.943-11.153v-5.972c-5.547-.529-8.934-4.649-10.943-11.153-2.002-6.484-2.28-14.437-2.066-20.577C105.214 5.894 100.233 0 93.5 0H24.508zM80 57.863C80 66.663 73.436 72 62.543 72H44a2 2 0 01-2-2V24a2 2 0 012-2h18.437c9.083 0 15.044 4.92 15.044 12.474 0 5.302-4.01 10.049-9.119 10.88v.277C75.317 46.394 80 51.21 80 57.863zM60.521 28.34H49.948v14.934h8.905c6.884 0 10.68-2.772 10.68-7.727 0-4.643-3.264-7.207-9.012-7.207zM49.948 49.2v16.458H60.91c7.167 0 10.964-2.876 10.964-8.281 0-5.406-3.903-8.178-11.425-8.178H49.948z"
-                                  fill="currentColor"></path>
-                        </svg>
-                    </div>
-                    <!-- Button Modal -->
-                    <div class="d-flex align-items-center justify-content-center mb-5">
-                        <a href="/dashboard.html" class="btn btn-secondary d-inline-flex align-items-center me-4">
-                            <svg class="icon icon-xs me-2" fill="currentColor" viewBox="0 0 20 20"
-                                 xmlns="http://www.w3.org/2000/svg">
-                                <path fill-rule="evenodd"
-                                      d="M3 3a1 1 0 000 2v8a2 2 0 002 2h2.586l-1.293 1.293a1 1 0 101.414 1.414L10 15.414l2.293 2.293a1 1 0 001.414-1.414L12.414 15H15a2 2 0 002-2V5a1 1 0 100-2H3zm11 4a1 1 0 10-2 0v4a1 1 0 102 0V7zm-3 1a1 1 0 10-2 0v3a1 1 0 102 0V8zM8 9a1 1 0 00-2 0v2a1 1 0 102 0V9z"
-                                      clip-rule="evenodd"></path>
-                            </svg>
-                            Dashboard Demo
-                        </a>
-                    </div>
-
-                </div>
-            </div>
-        </div>
-        <figure class="position-absolute bottom-0 left-0 w-100 d-none d-md-block mb-n2">
-            <svg class="home-pattern" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 3000 185.4">
-                <path d="M3000,0v185.4H0V0c496.4,115.6,996.4,173.4,1500,173.4S2503.6,115.6,3000,0z"></path>
-            </svg>
-        </figure>
-    </section>
+{% block content %}
 
 
-    <section class="section section-sm pt-0">
-        <div class="container">
-            <div class="row justify-content-center mb-5 mb-lg-6">
-                <div class="col-12 text-center">
-                    <h2 class="h1 px-lg-5">Online Exam Application</h2>
-                </div>
-            </div>
-            <div class="row mb-5">
-                <div class="col-6 mb-5">
-                    <a href="{% url 'courses:courselist' %}" class="page-preview scale-up-2">
-                        <img class="shadow-lg rounded scale" src="/static/assets/img/pages/overview.jpg"
-                             alt="Dashboard page preview">
-                        <div class="text-center show-on-hover rounded-bottom">
-                            <h6 class="m-0 text-center d-inline-flex align-items-center text-white">Courses
-                                <svg class="icon icon-xs ms-1" fill="currentColor" viewBox="0 0 20 20"
-                                     xmlns="http://www.w3.org/2000/svg">
-                                    <path d="M11 3a1 1 0 100 2h2.586l-6.293 6.293a1 1 0 101.414 1.414L15 6.414V9a1 1 0 102 0V4a1 1 0 00-1-1h-5z"></path>
-                                    <path d="M5 5a2 2 0 00-2 2v8a2 2 0 002 2h8a2 2 0 002-2v-3a1 1 0 10-2 0v3H5V7h3a1 1 0 000-2H5z"></path>
-                                </svg>
-                            </h6>
-                        </div>
-                    </a>
-                </div>
-                <div class="col-6 mb-5">
-                    <a href="{% url 'exams:studentExamList' %}" class="page-preview scale-up-2">
-                        <img class="shadow-lg rounded scale" src="/static/assets/img/pages/transactions.jpg"
-                             alt="Transactions page preview">
-                        <div class="text-center show-on-hover rounded-bottom">
-                            <h6 class="m-0 text-center d-inline-flex align-items-center text-white">Exam Session
-                                <svg class="icon icon-xs ms-1" fill="currentColor" viewBox="0 0 20 20"
-                                     xmlns="http://www.w3.org/2000/svg">
-                                    <path d="M11 3a1 1 0 100 2h2.586l-6.293 6.293a1 1 0 101.414 1.414L15 6.414V9a1 1 0 102 0V4a1 1 0 00-1-1h-5z"></path>
-                                    <path d="M5 5a2 2 0 00-2 2v8a2 2 0 002 2h8a2 2 0 002-2v-3a1 1 0 10-2 0v3H5V7h3a1 1 0 000-2H5z"></path>
-                                </svg>
-                            </h6>
-                        </div>
-                    </a>
-                </div>
-
-            </div>
-            <div class="row mb-5">
-                <div class="col-6 mb-5">
-                    <a href="{% url 'exams:studentExamListHistory' %}" class="page-preview scale-up-2">
-                        <img class="shadow-lg rounded scale" src="/static/assets/img/pages/overview.jpg"
-                             alt="Dashboard page preview">
-                        <div class="text-center show-on-hover rounded-bottom">
-                            <h6 class="m-0 text-center d-inline-flex align-items-center text-white">Student Exam History
-                                <svg class="icon icon-xs ms-1" fill="currentColor" viewBox="0 0 20 20"
-                                     xmlns="http://www.w3.org/2000/svg">
-                                    <path d="M11 3a1 1 0 100 2h2.586l-6.293 6.293a1 1 0 101.414 1.414L15 6.414V9a1 1 0 102 0V4a1 1 0 00-1-1h-5z"></path>
-                                    <path d="M5 5a2 2 0 00-2 2v8a2 2 0 002 2h8a2 2 0 002-2v-3a1 1 0 10-2 0v3H5V7h3a1 1 0 000-2H5z"></path>
-                                </svg>
-                            </h6>
-                        </div>
-                    </a>
-                </div>
-                <div class="col-6 mb-5">
-                    <a href="{% url 'user:userList' %}" class="page-preview scale-up-2">
-                        <img class="shadow-lg rounded scale" src="/static/assets/img/pages/transactions.jpg"
-                             alt="Transactions page preview">
-                        <div class="text-center show-on-hover rounded-bottom">
-                            <h6 class="m-0 text-center d-inline-flex align-items-center text-white">User Manger
-                                <svg class="icon icon-xs ms-1" fill="currentColor" viewBox="0 0 20 20"
-                                     xmlns="http://www.w3.org/2000/svg">
-                                    <path d="M11 3a1 1 0 100 2h2.586l-6.293 6.293a1 1 0 101.414 1.414L15 6.414V9a1 1 0 102 0V4a1 1 0 00-1-1h-5z"></path>
-                                    <path d="M5 5a2 2 0 00-2 2v8a2 2 0 002 2h8a2 2 0 002-2v-3a1 1 0 10-2 0v3H5V7h3a1 1 0 000-2H5z"></path>
-                                </svg>
-                            </h6>
-                        </div>
-                    </a>
-                </div>
-
-            </div>
-        </div>
-    </section>
-
-
-</main>
-
-<footer class="footer py-6 bg-gray-800 text-white">
-    <div class="container">
-
+    <!-- Content Section -->
+    <div class="container mt-4">
         <div class="row">
+            <div class="col-md-4"> <!-- Increased to col-md-4 -->
+                <!-- List Group with Links -->
+                {% if request.user.access_level == 'A' %}
 
+                    <div class="list-group">
+                        <a href="{% url 'courses:courselist' %}" class="list-group-item list-group-item-action">
+                            <div class="ml-2">
+
+                                <span class="ml-1 sidebar-text">Courses</span>
+                            </div>
+                        </a>
+
+                        <a href="{% url 'user:change_password' %}" class="list-group-item list-group-item-action">
+                            <div class="ml-2">
+                                <span class="ml-1 sidebar-text">Change Password</span>
+                            </div>
+                        </a>
+                        <a href="{% url 'exams:studentExamList' %}" class="list-group-item list-group-item-action">
+                            <div class="ml-2">
+
+                                <span class="ml-1 sidebar-text">Exam Session</span>
+                            </div>
+                        </a>
+                        <a href="{% url 'exams:studentExamListHistory' %}"
+                           class="list-group-item list-group-item-action">
+                            <div class="ml-2">
+
+
+                                <span class="ml-1 sidebar-text">Student Exam History </span>
+                            </div>
+                        </a>
+                        <a href="{% url 'user:userList' %}" class="list-group-item list-group-item-action">
+                            <div class="ml-2">
+                                <span class="ml-1 sidebar-text">User Manger</span>
+                            </div>
+                        </a>
+                        <a href="{% url 'reports:reportList' %}" class="list-group-item list-group-item-action">
+                            <div class="ml-2">
+                                <span class="ml-1 sidebar-text">Report</span>
+                            </div>
+                        </a>
+                        <!-- Add more links as needed -->
+                    </div>
+                {% endif %}
+                {% if request.user.access_level == 'S' %}
+
+                    <div class="list-group">
+
+
+                        <a href="{% url 'user:change_password' %}" class="list-group-item list-group-item-action">
+                            <div class="ml-2">
+                                <span class="ml-1 sidebar-text">Change Password</span>
+                            </div>
+                        </a>
+                        <a href="{% url 'exams:studentExamList' %}" class="list-group-item list-group-item-action">
+                            <div class="ml-2">
+                                <span class="ml-1 sidebar-text">Exam Session</span>
+                            </div>
+                        </a>
+                        <a href="{% url 'exams:studentExamListHistory' %}"
+                           class="list-group-item list-group-item-action">
+                            <div class="ml-2">
+                                <span class="ml-1 sidebar-text">Student Exam History </span>
+                            </div>
+                        </a>
+                        <!-- Add more links as needed -->
+                    </div>
+                {% endif %}
+            </div>
+            <div class="col-md-8"> <!-- Adjusted to col-md-8 -->
+                <!-- Main Content Goes Here -->
+                <h2>Welcome to Online Exam Apllication</h2>
+            </div>
         </div>
     </div>
-</footer>
 
-{% include 'includes/scripts.html' %}
+    {% include 'includes/scripts.html' %}
+{% endblock content %}
 
 </body>
 </html>

@@ -62,22 +62,22 @@
                                                     <input type="text" class="form-control" id="label" required>
                                                     <div class="valid-feedback">Looks good!</div>
                                                 </div>
-{#                                                <div class="mb-3">#}
-{#                                                    <label for="datePicker">Year</label>#}
-{#                                                    <div class="input-group">#}
-{#                                                            <span class="input-group-text">#}
-{#                                        <svg class="icon icon-xs text-gray-600" fill="currentColor" viewBox="0 0 20 20"#}
-{#                                             xmlns="http://www.w3.org/2000/svg">#}
-{#                                            <path fill-rule="evenodd"#}
-{#                                                  d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z"#}
-{#                                                  clip-rule="evenodd"></path>#}
-{#                                        </svg>#}
-{#                                    </span>#}
-{#                                                        <input data-datepicker="" class="form-control datePicker"#}
-{#                                                               placeholder="dd/mm/yyyy" id="datePicker" type="text"#}
-{#                                                               required>#}
-{#                                                    </div>#}
-{#                                                </div>#}
+                                                {#                                                <div class="mb-3">#}
+                                                {#                                                    <label for="datePicker">Year</label>#}
+                                                {#                                                    <div class="input-group">#}
+                                                {#                                                            <span class="input-group-text">#}
+                                                {#                                        <svg class="icon icon-xs text-gray-600" fill="currentColor" viewBox="0 0 20 20"#}
+                                                {#                                             xmlns="http://www.w3.org/2000/svg">#}
+                                                {#                                            <path fill-rule="evenodd"#}
+                                                {#                                                  d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z"#}
+                                                {#                                                  clip-rule="evenodd"></path>#}
+                                                {#                                        </svg>#}
+                                                {#                                    </span>#}
+                                                {#                                                        <input data-datepicker="" class="form-control datePicker"#}
+                                                {#                                                               placeholder="dd/mm/yyyy" id="datePicker" type="text"#}
+                                                {#                                                               required>#}
+                                                {#                                                    </div>#}
+                                                {#                                                </div>#}
                                                 <div id="settingScoreId">
                                                     <div class="form-group row mt-3" id="termContainer">
                                                         <label for="termId"
@@ -191,14 +191,14 @@
                 <h5 class="card-title">Courses</h5>
             </div>
             <div class="card-body" style="height: 100%">
-                <div class="table-settings mb-4">
+                <div class="table-settings table-responsive mb-4">
                     <table id="courseTable" class="table table-striped" style="width:100%; height: 100%">
                         <thead class="thead-dark">
                         <tr>
                             <th>Label</th>
                             <th>Code</th>
                             <th>Term</th>
-{#                            <th>Year</th>#}
+                            {#                            <th>Year</th>#}
                             <th>Setting</th>
                             <th>QBqnk</th>
                             <th>examlist</th>
@@ -212,7 +212,7 @@
                                 <td>{{ field.course_name }}</td>
                                 <td>{{ field.course_code }}</td>
                                 <td>{{ field.term }}</td>
-{#                                <td>{{ field.year }}</td>#}
+                                {#                                <td>{{ field.year }}</td>#}
                                 <td>
                                     <button type="button" class="btn btn-outline-success open-modal-button"
                                             data-bs-toggle="modal"
