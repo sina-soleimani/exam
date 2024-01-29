@@ -13,6 +13,8 @@ from django.db import transaction
 
 from django.views.generic.edit import FormView
 from django.urls import reverse_lazy
+from user.models import STUDENT_ACCESS, ADMIN_ACCESS
+from decorator import access_level_required
 
 
 # Create your views here.
@@ -24,6 +26,7 @@ def index(request):
 class MyForm(View):
     template_name = 'builder.html'
 
+    @access_level_required(ADMIN_ACCESS)
     def get(self, request, id):
         print('GET request')
         question_qroups_form = QuestionGroupForm()
@@ -69,6 +72,7 @@ class MyForm(View):
             'questionGroupsData': json_data,
         })
 
+    @access_level_required(ADMIN_ACCESS)
     def post(self, request, id):
         question_qroups_form = QuestionGroupForm(request.POST)
 
@@ -92,6 +96,7 @@ class MyForm(View):
 class QBank(View):
     template_name = 'builder.html'
 
+    @access_level_required(ADMIN_ACCESS)
     def get(self, request, id):
         question_qroups_form = QuestionGroupForm()
         question_qroups = QuestionGroup.objects.filter(q_bank=id).select_related('q_bank')
@@ -138,6 +143,7 @@ class QBank(View):
             'bank_id': id,
         })
 
+    @access_level_required(ADMIN_ACCESS)
     def post(self, request, id):
         question_qroups_form = QuestionGroupForm(request.POST)
 
@@ -157,6 +163,7 @@ class QBank(View):
 
 
 class QuestionGroupDelete(View):
+    @access_level_required(ADMIN_ACCESS)
     def delete(self, request, id):
         try:
             data = json.loads(request.body.decode('utf-8'))
@@ -178,6 +185,7 @@ class QuestionGroupDelete(View):
 
 # TODO
 class QuestionSort(View):
+    @access_level_required(ADMIN_ACCESS)
     def post(self, request, id):
         print(request.POST["question_id"])
         qg = QuestionGroup.objects.get(id=request.POST["question_group_id"])
@@ -204,6 +212,7 @@ class CreateUpdateMultiQuestionView(FormView):
     def get_form(self, form_class=None):
         return QuestionForm(**self.get_form_kwargs())
 
+    @access_level_required(ADMIN_ACCESS)
     def form_valid(self, form):
         question_group_id = self.request.POST.get('question_group__id')
 
@@ -311,6 +320,7 @@ class CreateUpdateMatchingQuestionView(FormView):
     def get_form(self, form_class=None):
         return QuestionForm(**self.get_form_kwargs())
 
+    @access_level_required(ADMIN_ACCESS)
     def form_valid(self, form):
         question_group_id = self.request.POST.get('question_group__id')
 
@@ -403,6 +413,7 @@ class CreateUpdateTrueFalseQuestionView(FormView):
     #         print('Form is not valid. Errors:', form.errors)
     #         return self.form_invalid(form)
 
+    @access_level_required(ADMIN_ACCESS)
     def form_valid(self, form):
 
         question_group_id = self.request.POST.get('question_group__id')
