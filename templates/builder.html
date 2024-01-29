@@ -153,11 +153,11 @@
                                     <li class="question-group" data-id="{{ question_group.id }}">
                                         <div class="d-flex tag-btn select-btn">
                                             <a class="nest">{{ question_group.name }}</a>
-                                            <button type="button" class="close float-right open-delete-modal"
+                                            <button type="button" class="btn-close float-right open-delete-modal"
                                                     name="question_group"
                                                     data-bs-toggle="modal" data-bs-target="#deleteModalQ"
                                                     data-id="{{ question_group.id }}">
-                                                <span aria-hidden="true">&times;</span>
+                                                {#                                                <span aria-hidden="true">&times;</span>#}
                                             </button>
                                         </div>
 
@@ -210,32 +210,6 @@
                                     please fill descriptiion before submit
                                 </div>
                             </div>
-                            {#                                                        <div class="row">#}
-                            {#                                                            <div class="col-sm-5 col-md-6">#}
-                            {#                                                                <div class="custom-file">#}
-                            {#                                                                    <input type="file" class="custom-file-input" id="questionImageId" lang="pl-Pl">#}
-                            {#                                                                    <label class="custom-file-label" for="questionImageId"><i#}
-                            {#                                                                            class="fa fa-picture-o"#}
-                            {#                                                                            aria-hidden="true"></i></label>#}
-                            {#                                                                    <div class="alert alert-danger mt-3 custom-alert" id="invalidImageAlert"#}
-                            {#                                                                         style="display: none;">#}
-                            {#                                                                        Selected file is not a valid image.#}
-                            {#                                                                    </div>#}
-                            {#                                                                </div>#}
-                            {#                                                            </div>#}
-                            {#                                                            <div class="col-sm-5 offset-sm-2 col-md-6 offset-md-0">#}
-                            {#                                                                <div class="custom-file ">#}
-                            {#                                                                    <input type="file" class="custom-file-input" id="questionAudioId" lang="pl-Pl">#}
-                            {#                                                                    <label class="custom-file-label" for="questionAudioId"> <i#}
-                            {#                                                                            class="fa fa-volume-up"#}
-                            {#                                                                            aria-hidden="true"></i></label>#}
-                            {#                                                                    <div class="alert alert-danger mt-3 custom-alert" id="invalidAudioAlert"#}
-                            {#                                                                         style="display: none;">#}
-                            {#                                                                        Selected file is not a valid audio.#}
-                            {#                                                                    </div>#}
-                            {#                                                                </div>#}
-                            {#                                                            </div>#}
-                            {#                                                        </div>#}
                             <hr>
 
                             <div id="MathingQuestionTable" hidden="hidden" class="mt-4">
@@ -422,18 +396,25 @@
 
 
                             <hr>
+
+
                             <div class="row">
-                                <div class="col-auto mr-auto">
-                                    <div class="form-outline ">
-                                        <input type="number" class="form-control" id="baremId" lang="pl-Pl"
-                                               placeholder="Barem">
+
+                                <div class="row justify-content-between">
+                                    <div class="col-auto">
+                                        <div class="form-outline">
+                                            <input type="number" class="form-control" id="baremId" lang="pl-Pl"
+                                                   placeholder="Barem">
+                                        </div>
+                                    </div>
+                                    <div class="col-auto">
+                                        <button type="submit" class="btn btn-outline-success"
+                                                id="create_question_button">
+                                            Submit
+                                        </button>
                                     </div>
                                 </div>
-                                <div class="col-auto">
-                                    <button type="submit" class="btn btn-outline-success" id="create_question_button">
-                                        Success
-                                    </button>
-                                </div>
+
                             </div>
                         </form>
                     </div>
