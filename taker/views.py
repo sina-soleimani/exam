@@ -11,6 +11,8 @@ from result.models import Result
 from exams.models import Exam
 import json
 from django.contrib.auth.decorators import login_required
+from decorator import access_level_required
+from user.models import STUDENT_ACCESS, ADMIN_ACCESS
 
 
 class LoginRequiredMixin:
@@ -21,6 +23,7 @@ class LoginRequiredMixin:
 
 
 class examSession(LoginRequiredMixin, View):
+    @access_level_required(STUDENT_ACCESS)
     def get(self, request, id):
         exam = Exam.objects.get(id=id)
         if exam.exam_status != 'A':
@@ -115,6 +118,8 @@ class AnswerQuestionView(LoginRequiredMixin, CreateView):
             return ProfileAnswerFormEmpty
         else:
             return ProfileAnswerForm
+
+    @access_level_required(STUDENT_ACCESS)
 
     def form_valid(self, form):
         user_id = self.request.user.id
