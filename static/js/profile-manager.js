@@ -1,10 +1,21 @@
-
 const csrfToken = $("input[name=csrfmiddlewaretoken]").val();
 
 
 $(document).ready(function () {
 
     $('#profileTable').DataTable();
+    $('#profileTable thead tr').clone(true).appendTo('#profileTable thead');
+
+    $('#profileTable thead tr:eq(1) th').each(function (i) {
+
+        var title = $(this).text();
+        $(this).html('<input type="text" placeholder="Search ' + title + '" />');
+        $('input', this).on('keyup change', function () {
+            if (table.column(i).search() !== this.value) {
+                table.column(i).search(this.value).draw();
+            }
+        });
+    });
 
 });
 

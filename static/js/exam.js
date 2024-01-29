@@ -66,7 +66,21 @@ $(document).ready(function () {
         }
 
     });
-    $('#examTable').DataTable();
+    var table = $('#examTable').DataTable();
+
+    $('#examTable thead tr').clone(true).appendTo('#examTable thead');
+    $('#examTable thead tr:eq(1) th').each(function (i) {
+        if (i > 1) {
+            return false;
+        }
+        var title = $(this).text();
+        $(this).html('<input type="text" placeholder="Search ' + title + '" />');
+        $('input', this).on('keyup change', function () {
+            if (table.column(i).search() !== this.value) {
+                table.column(i).search(this.value).draw();
+            }
+        });
+    });
 
     $("#passingScore").on("input", function () {
         if ($(this).attr('max') === '100') {
@@ -184,15 +198,15 @@ document.getElementById('selectTypeScore').addEventListener('change', function (
 
     const passingScore = document.getElementById('passingScore');
 
-    if (selectedOption === 'Percent') {
-
-        passingScore.placeholder = 'Enter a percentage';
-        passingScore.max = 100;
-        passingScore.min = 0;
-    } else if (selectedOption === 'Points') {
-        passingScore.placeholder = 'Enter a number';
-        passingScore.min = 0;
-    }
+    // if (selectedOption === 'Percent') {
+    //
+    //     passingScore.placeholder = 'Enter a percentage';
+    //     passingScore.max = 100;
+    //     passingScore.min = 0;
+    // } else if (selectedOption === 'Points') {
+    passingScore.placeholder = 'Enter a number';
+    passingScore.min = 0;
+    // }
 });
 
 $(document).on('click', '#settingProp', function (event) {
