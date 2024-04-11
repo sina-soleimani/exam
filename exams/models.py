@@ -12,6 +12,19 @@ class BaseModel(models.Model):
     class Meta:
         abstract = True
 
+class ExamQuestion(models.Model):
+    exam = models.ForeignKey(
+        'exams.Exam',
+        on_delete=models.CASCADE,
+        related_name='exam_questions'
+    )
+    question = models.ForeignKey(
+        'questions.Question',
+        on_delete=models.CASCADE,
+        related_name='question_exams',
+        related_query_name='question_exam'
+    )
+
 
 class Exam(BaseModel):
     label = models.CharField(max_length=200)
@@ -30,10 +43,10 @@ class Exam(BaseModel):
     )
 
     questions = models.ManyToManyField(
-        'questions.Question', related_name='question_exams',
-        related_query_name='question_exam',
-        blank=True,
-        null=True
+        'questions.Question',
+        through='ExamQuestion',
+        related_name='exams',
+        related_query_name='exam'
     )
 
     class ScoreType(models.TextChoices):

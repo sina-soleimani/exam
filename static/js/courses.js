@@ -2,7 +2,14 @@ var desiredId = null;
 const csrfToken = $("input[name=csrfmiddlewaretoken]").val();
 var candidate_delete_course = null;
 $(document).ready(function () {
+    $('#update-course-button').click(function() {
+            $('#course-title').text('Update Course');
+        });
+    $('#new-course-button').click(function() {
+            $('#course-title').text('Create New Course');
+        });
     $('.open-modal-button').click(function () {
+        $('#st_tbody').empty()
         desiredId = $(this).data('id');
         const element = coursesData.find(item => item.id === desiredId);
         if (element) {
@@ -11,6 +18,59 @@ $(document).ready(function () {
             $('#termId').val(element.term);
             $('#datePicker').val(element.year);
             $('#' + element.q_bank + '_bank').prop('checked', true);
+// element.students.forEach(function(profile) {
+  // Display profile information
+  // console.log(profile);
+// });
+console.log(typeof element.students)
+// var profiles = JSON.parse('{{ element.students | safe }}');
+var profiles = JSON.parse( element.students );
+
+console.log(profiles);
+// $("#st_table tbody").()
+                        document.getElementById("st_tbody").innerHTML = '';
+
+
+            var tableBody = $("#st_tbody");
+            // tableBody.empty()
+
+profiles.forEach(function(profile) {
+  // Display profile information
+  console.log(profile.fields.username);
+    // Create a new row and cells
+  var newRow = $("<tr>");
+  var cell1 = $("<td>").text(profile.fields.username);
+  // var cell2 = $("<td>").text("New Cell 2");
+  //
+  // Append the cells to the row
+  newRow.append(cell1);
+  // newRow.append(cell2);
+
+  // Append the row to the table body
+  tableBody.append(newRow);
+
+  // console.log(profile.email);
+  // Add more fields as needed
+});
+
+
+
+            // for (let i; i<element.students.length;i++){
+            //     console.log(element.students[i])
+            // }
+
+  // Create a new row and cells
+  // var newRow = $("<tr>");
+  // var cell1 = $("<td>").text("New Cell 1");
+  // var cell2 = $("<td>").text("New Cell 2");
+  //
+  // Append the cells to the row
+  // newRow.append(cell1);
+  // newRow.append(cell2);
+
+  // Append the row to the table body
+  // tableBody.append(newRow);
+
 
             $('#modal-form').modal('show');
         } else {
@@ -95,6 +155,14 @@ $('#submitButton').click(function (event) {
         'q_bank_name': new_bank_name,
 
     };
+    if ($('#label').val() === '' || $('#courseCode').val() === ''|| $('#termId').val() === '') {
+                $("#invalidAlert").show();
+                setTimeout(function () {
+                    $("#invalidAlert").hide();
+                }, 3000);
+                return false;
+            }
+
 
 
     $.ajax({

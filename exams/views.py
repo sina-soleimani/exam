@@ -11,6 +11,7 @@ from decimal import Decimal
 import random
 from decorator import access_level_required
 from user.models import STUDENT_ACCESS, ADMIN_ACCESS
+from django.contrib import messages
 
 class ExamListView(ListView):
     model = Exam
@@ -107,6 +108,7 @@ class ExamCreateView(CreateView):
     success_url = '/success/'
 
     def form_invalid(self, form):
+        print('invalid submit')
         errors = form.errors.as_json()
         return JsonResponse({'errors': errors}, status=400)
 

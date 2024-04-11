@@ -55,7 +55,7 @@
                     <span class="mt-1 ms-1 sidebar-text">Home</span>
                 </a>
             </li>
-            {% if request.user.access_level == 'A' %}
+            {% if request.user.access_level == 'A' or request.user.access_level == 'T' %}
             <li class="nav-item {% if 'transactions' in segment %} active {% endif %}">
                 <a href="{% url 'courses:courselist' %}" class="nav-link">
                   <span class="sidebar-icon">
@@ -91,7 +91,7 @@
                     <span class="ml-1 sidebar-text">Exam History</span>
                 </a>
             </li>
-        {% if request.user.access_level == 'A' %}
+        {% if request.user.access_level == 'A' or request.user.access_level == 'T' %}
 
             <li class="nav-item {% if 'transactions' in segment %} active {% endif %}">
                 <a href="{% url 'user:userList' %}" class="nav-link">
@@ -102,7 +102,7 @@
                 </a>
             </li>
         {% endif %}
-            {% if request.user.access_level == 'A' %}
+            {% if request.user.access_level == 'A' or request.user.access_level == 'T' %}
             <li class="nav-item {% if 'transactions' in segment %} active {% endif %}">
                 <a href="{% url 'reports:reportList' %}" class="nav-link">
                   <span class="sidebar-icon">

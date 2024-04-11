@@ -151,6 +151,19 @@ hr {
 
 }
 
+.login-intro {
+    margin: 0 auto;
+    background-color: rgba(216, 191, 216, 0); /* Fully transparent background color */
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    border-radius: 5px;
+    backdrop-filter: blur(30px);
+    text-align: center;
+    height: 100%;
+    font-family: "Vazir", sans-serif;
+
+}
+
+
 .login-container {
     max-width: 400px;
     margin: 0 auto;
@@ -162,6 +175,40 @@ hr {
     backdrop-filter: blur(30px);
 }
 
+
+.login-init-container {
+      position: absolute;
+      top: 5%;
+      left: 5%;
+      padding: 2%;
+      /* OR */
+      /* margin: 2%; */
+    }
+
+    @media (max-width: 768px) {
+      .login-init-container {
+        top: 10%;
+        left: 10%;
+        padding: 5%;
+        /* OR */
+        /* margin: 5%; */
+      }
+    }
+/*.login-init-container {*/
+    /*max-width: 400px;*/
+    /*margin: 0 auto;*/
+    /*padding: 20px;*/
+    /*background-color: rgba(216, 191, 216, 0); !* Fully transparent background color *!*/
+    /*box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);*/
+    /*border-radius: 5px;*/
+    /*margin-top: 100px;*/
+    /*backdrop-filter: blur(30px);*/
+/*}*/
+/*@font-face {*/
+/*  font-family: Vazir;*/
+/*  src: url('/static/js/font/font-face.css/Vazir-Regular.ttf') format('truetype');*/
+/*   ... */
+/*}*/
 .login-container h2 {
     text-align: center;
     margin-bottom: 20px;

@@ -2,7 +2,7 @@ from datetime import datetime
 from django.forms import model_to_dict
 from django.http import Http404
 from django.shortcuts import render
-from django.views.generic import View, CreateView
+from django.views.generic import View, CreateView, UpdateView
 from questions import models
 from user.models import Profile
 from .models import ProfileAnswer, ProfMatch
@@ -48,7 +48,7 @@ class examSession(LoginRequiredMixin, View):
                 key=lambda x: hash((x['id'], user_id))
             )
 
-            answer = question.question_prof_answers.filter(student_id=user_id).first()
+            answer = question.question_prof_answers.filter(student_id=user_id, exam_id=exam.id).first()
 
             if answer:
                 for match in answer.match.all():
@@ -105,13 +105,16 @@ class examSession(LoginRequiredMixin, View):
             'questionGroupsData': json_data,
             'questions': questions,
             'remain_time': s_remain_time,
-            'result_id': result[0].id})
+            'result_id': result[0].id,
+            'exam_id': exam.id,
+        })
 
 
 class AnswerQuestionView(LoginRequiredMixin, CreateView):
     model = ProfileAnswer
     template_name = 'home/taker.html'
     success_url = '/success/'
+    form_class = None
 
     def get_form_class(self):
         if self.request.POST.get('q_type') == 'MC':
@@ -120,22 +123,22 @@ class AnswerQuestionView(LoginRequiredMixin, CreateView):
             return ProfileAnswerForm
 
     @access_level_required(STUDENT_ACCESS)
-
     def form_valid(self, form):
         user_id = self.request.user.id
         match_ids = self.request.POST.getlist('match_ids[]')
         match_texts = self.request.POST.getlist('match_texts[]')
         item_ids = self.request.POST.getlist('item_ids[]')
         item_texts = self.request.POST.getlist('item_texts[]')
-
-        # Now you can use match_ids as needed
+        exam_id = self.request.POST.get('exam_id')
+        profile_answer = form.instance
 
         if self.request.POST.get('pf_answer_id') is not None and self.request.POST.get('pf_answer_id') != '':
-            profile_answer = ProfileAnswer.objects.get(id=self.request.POST.get('pf_answer_id'))
+            profile_answer = ProfileAnswer.objects.filter(exam_id=exam_id).get(id=self.request.POST.get('pf_answer_id'))
+
             if self.request.POST.get('q_type') == 'MC':
                 choice = models.Choice.objects.get(id=self.request.POST.get('mc_id'))
                 profile_answer.choice = choice
-            if self.request.POST.get('q_type') == 'MG':
+            elif self.request.POST.get('q_type') == 'MG':
                 existing_matches = profile_answer.match.all()
 
                 for match_id, item_id, item_text, match_text in zip(match_ids, item_ids, item_texts, match_texts):
@@ -147,19 +150,20 @@ class AnswerQuestionView(LoginRequiredMixin, CreateView):
                         existing_match.match_text = match_text
                         existing_match.save()
 
-            if self.request.POST.get('q_type') == 'TF':
+            elif self.request.POST.get('q_type') == 'TF':
                 profile_answer.is_true = self.request.POST.get('is_true')
+
             profile_answer.save()
         else:
-
             profile_answer = form.save(commit=False)
             question = models.Question.objects.get(id=self.request.POST.get('question_id'))
             profile_answer.question = question
             result = Result.objects.get(id=self.request.POST.get('result_id'))
+
             if self.request.POST.get('q_type') == 'MC':
                 choice = models.Choice.objects.get(id=self.request.POST.get('mc_id'))
                 profile_answer.choice = choice
-            if self.request.POST.get('q_type') == 'MG':
+            elif self.request.POST.get('q_type') == 'MG':
                 matches_objects = []
 
                 for match_id, item_id, item_text, match_text in zip(match_ids, item_ids, item_texts, match_texts):
@@ -178,5 +182,7 @@ class AnswerQuestionView(LoginRequiredMixin, CreateView):
             profile_answer.result = result
             profile = Profile.objects.get(id=user_id)
             profile_answer.student = profile
+            profile_answer.exam = Exam.objects.get(id=exam_id)
             profile_answer.save()
+
         return super().form_valid(form)

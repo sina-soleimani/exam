@@ -47,7 +47,6 @@ INSTALLED_APPS = [
     'result',
     'report',
     'captcha',
-
 ]
 
 MIDDLEWARE = [
@@ -63,7 +62,7 @@ MIDDLEWARE = [
 ROOT_URLCONF = 'core.urls'
 
 SESSION_ENGINE = "django.contrib.sessions.backends.db"
-SESSION_COOKIE_AGE = 600
+SESSION_COOKIE_AGE = 1500
 
 TEMPLATES = [
     {

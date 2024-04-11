@@ -7,10 +7,6 @@ $(document).ready(function () {
 
     $('#courseTable thead tr').clone(true).appendTo('#courseTable thead');
         $('#courseTable thead tr:eq(1) th').each(function (i) {
-            // if(i>2){
-            //     return false;
-            //
-            // }
             var title = $(this).text();
             $(this).html('<input type="text" placeholder="Search ' + title + '" />');
 

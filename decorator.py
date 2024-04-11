@@ -26,7 +26,7 @@ def access_level_required(required_level):
                 # If self.request.user is not available or any other unexpected error occurs
                 raise PermissionDenied("You don't have permission to access this page")
 
-            if user_access_level == required_level or user_access_level == 'A':
+            if user_access_level == required_level or user_access_level == 'A' or user_access_level == 'T':
                 return view_func(self, *args, **kwargs)
             else:
                 # Delay the redirection by 5 seconds

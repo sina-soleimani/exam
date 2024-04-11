@@ -20,10 +20,12 @@ class AccessLevel(BaseModel):
         return self.name
 
 STUDENT_ACCESS = 'S'
+TEACHER_ACCESS = 'T'
 ADMIN_ACCESS = 'A'
 ACCESS_LEVEL_CHOICES = [
     (STUDENT_ACCESS, 'Student'),
     (ADMIN_ACCESS, 'Admin'),
+    (TEACHER_ACCESS, 'Teacher'),
 ]
 class Profile(AbstractUser):
     # Add any additional fields you need for your user model here

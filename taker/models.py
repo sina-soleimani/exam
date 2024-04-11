@@ -21,6 +21,11 @@ class ProfileAnswer(BaseModel):
         blank=True,
         on_delete=models.CASCADE,
     )
+    exam = models.ForeignKey(
+        'exams.Exam',
+        on_delete=models.CASCADE,
+        related_name='exam_answer', null=True
+    )
     result = models.ForeignKey(
         'result.Result',
         related_name='result_prof_answers',

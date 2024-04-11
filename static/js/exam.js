@@ -3,7 +3,29 @@ var candidate_delete_exam = null;
 var candidate_active_exam = null;
 var manual_choose = false;
 $(document).ready(function () {
+    $('#durationInput').datetimepicker({
+    format: 'HH:mm:ss',
+    defaultDate: moment().startOf('day').add(2, 'hours'),
+    icons: {
+      time: 'fa fa-clock-o',
+      date: 'fa fa-calendar',
+      up: 'fa fa-chevron-up',
+      down: 'fa fa-chevron-down',
+      previous: 'fa fa-chevron-left',
+      next: 'fa fa-chevron-right',
+      today: 'fa fa-crosshairs',
+      clear: 'fa fa-trash',
+      close: 'fa fa-times',
+    }
+  });
+    $('#update-exam-button').click(function() {
+            $('.modal-body h2').text('Update Exam');
+        });
+    $('#new-exam-button').click(function() {
+            $('.modal-body h2').text('Create New Exam');
+        });
     $('.open-modal-button').click(function () {
+
         manual_choose = true
         $(".manual-choose").toggle(manual_choose);
         $(".shuffle-choose").toggle(!manual_choose);
@@ -132,10 +154,10 @@ $(document).on('click', '#designExam', function (event) {
     });
 });
 
-$('#durationInput').datetimepicker({
-    useCurrent: false,
-    format: "HH:mm:ss",
-}).on('dp.show', resetDateTimePicker);
+// $('#durationInput').datetimepicker({
+//     useCurrent: false,
+//     format: "HH:mm:ss",
+// }).on('dp.show', resetDateTimePicker);
 
 $('#submitButton').click(function (event) {
     // const str = $('#datePicker').val().replaceAll('/', '-');
@@ -150,7 +172,7 @@ $('#submitButton').click(function (event) {
         'label': $('#label').val(),
         'deadline': '1-05-2024-',
         'duration': $('#durationInput').val(),
-        'score_type': $('#selectTypeScore').val(),
+        'score_type': 'PO',
         'point_passing_score': $('#passingScore').val(),
         'percent_passing_score': $('#passingScore').val(),
         'incorrect_penalty': $('#incorrectPenalty').val(),
@@ -170,6 +192,14 @@ $('#submitButton').click(function (event) {
     };
     var url;
 
+    if ($('#label').val() === '' || $('#durationInput').val() === '') {
+                $("#invalidAlert").show();
+                setTimeout(function () {
+                    $("#invalidAlert").hide();
+                }, 3000);
+                return false;
+            }
+
     if (desiredId) {
         url = 'update/' + desiredId + '/'
         console.log(typeof url)
@@ -187,6 +217,7 @@ $('#submitButton').click(function (event) {
             window.location.href = '/exams/' + examsData[0].course_id + '/list';
         },
         error: (error) => {
+            console.log('error')
             console.error(error);
         }
     });

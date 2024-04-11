@@ -9,12 +9,22 @@
     <link rel="stylesheet" href="{% static 'js/bootstrap/bootstrap.min.css' %}">
     <script src="{% static 'js/jquery/jquery.min.js' %}"></script>
     <script src="{% static 'js/bootstrap/bootstrap.min.js' %}"></script>
+      <link href="https://cdn.jsdelivr.net/npm/vazir-font/dist/font-face.css" rel="stylesheet">
+
 
 
     <link rel="stylesheet" href="{% static 'css/styles.css' %}">
 </head>
-<body class="login_body">
-<div class="container login-container">
+
+
+<body class="login_body ">
+<div class=" row mt-4 mx-4">
+<div class="login-intro  col-md-2 mt-4 mx-4">دانشگاه علوم و فنون هوایی دانشگاه ستاری
+<br><img src="{% static 'css/images/sattari_arm.svg' %}" class="card-img-top" alt="Your Image">
+    <br>سامانه آزمون آنلاین
+
+</div>
+<div class="container login-container col-md-6">
     <h2 class="mt-2">Login</h2>
     <form method="post">
         {% csrf_token %}
@@ -33,8 +43,32 @@
             <button type="submit" class="btn btn-dark btn-lg">Login</button>
         </div>
     </form>
+{#{% if messages %}#}
+{#  <ul class="messages">#}
+{#    {% for message in messages %}#}
+{#      <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>#}
+{#    {% endfor %}#}
+{#  </ul>#}
+{#{% endif %}#}
+
+<script>
+
+  $(document).ready(function() {
+    {% if messages %}
+      var errorMessages = [];
+      {% for message in messages %}
+        errorMessages.push("{{ message }}");
+      {% endfor %}
+      alert(errorMessages.join("\n"));
+    {% endif %}
+  });
+</script>
     <p class="text-center mt-3 mb-5 h6">Welcome To Sattari university online exam</p>
 
 </div>
+    <div class="col-md-2"></div>
+</div>
 </body>
+<script src="{% static 'js/login.js' %}"></script>
+
 </html>

@@ -175,6 +175,7 @@
     <script>
         var questionGroupsData = JSON.parse('{{ questionGroupsData|escapejs }}');
         var remaining_time ={{ remain_time }};
+        var exam_id ={{ exam_id }};
         var user_id = {{ request.user.id }};
         const nextQuestion = questionGroupsData.find(question => !question.question_answers || !question.question_answers.pf_answer_id);
 

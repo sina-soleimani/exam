@@ -13,6 +13,9 @@ from user.models import Profile
 
 from decorator import access_level_required
 from user.models import ADMIN_ACCESS
+from django.db import transaction
+from django.core import serializers
+
 
 
 class CourseListView(ListView):
@@ -33,6 +36,7 @@ class CourseListView(ListView):
             'course_code': course.course_code,
             'term': course.term,
             'year': course.year,
+            'students': serializers.serialize('json', course.students.all()),
             'q_bank': None if not course.question_bank else course.question_bank.id,
         } for course in courses]
 
@@ -74,12 +78,13 @@ class CourseCreateView(CreateView):
         q_bank_id = self.request.POST.get('q_bank_id')
         q_bank_name = self.request.POST.get('q_bank_name')
         course = form.save(commit=False)
-        if q_bank_id:
+        if q_bank_id and type (q_bank_id) == 'number':
             q_bank = QuestionBank.objects.get(id=q_bank_id)
             course.question_bank = q_bank
 
         elif q_bank_name:
-            q_bank = QuestionBank.objects.create(name=q_bank_name)
+            with transaction.atomic():
+                q_bank = QuestionBank.objects.create(name=q_bank_name)
             course.question_bank = q_bank
         course.teacher = self.request.user
         course.save()
@@ -107,10 +112,11 @@ class CourseUpdateView(UpdateView):
         q_bank_name = self.request.POST.get('q_bank_name')
         course = form.save(commit=False)
         if q_bank_name:
-            q_bank = QuestionBank.objects.create(name=q_bank_name)
+            with transaction.atomic():
+                q_bank = QuestionBank.objects.create(name=q_bank_name)
             course.question_bank = q_bank
 
-        elif q_bank_id:
+        elif q_bank_id and type (q_bank_id) == 'number':
             q_bank = QuestionBank.objects.get(id=q_bank_id)
             course.question_bank = q_bank
 
@@ -153,6 +159,9 @@ def upload_excel(request):
             column_data = [cell.value for cell in sheet['A']]
             profiles = Profile.objects.filter(username__in=column_data)
             course = Course.objects.get(id=course_id)
+
+            course.students.clear()
+
             course.students.set(profiles)
 
             return JsonResponse({'message': 'File uploaded successfully', 'column_data': column_data})

@@ -197,6 +197,13 @@ function createQuestion() {
         formData.append("question_type", questionType);
         // formData.append("image", file);
         var tFChoiced;
+        if ($("#baremId").val() === '') {
+                $("#invalidScoreAlert").show();
+                setTimeout(function () {
+                    $("#invalidScoreAlert").hide();
+                }, 3000);
+                return false;
+            }
         if (questionType === 'TF') {
 
             const isTrue = $("#questionTrueId").is(":checked");
@@ -211,6 +218,7 @@ function createQuestion() {
                 }, 3000);
                 return false;
             }
+
             formData.append("is_true", trueFalseChoice);
         } else if (questionType === 'MC') {
             var choices = $('.muti_q_choices').map(function () {

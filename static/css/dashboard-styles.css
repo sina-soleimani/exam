@@ -138,13 +138,14 @@
 
 /* Add a subtle transition to make the scaling effect smoother */
 .list-group-item {
+    background: linear-gradient(to right, #C0C0C0, #D3D3D3);
     transition: transform 0.3s ease-in-out, background-color 0.3s ease-in-out;
 }
 
 /* Apply scaling effect on hover and background color change */
 .list-group-item:hover {
     transform: scale(1.1);
-    background-color: #6c757d;
+    background: linear-gradient(to right, #5C258D, #4389A2);
 }
 
 /* Animation for list items to slide in from the left */
@@ -162,10 +163,80 @@
     animation: slideIn 0.5s ease-out;
 }
 
+@keyframes slideIn {
+  from {
+    transform: translateX(100%);
+  }
+  to {
+    transform: translateX(0);
+  }
+}
 .increased-height {
     padding: 15px 0; /* Adjust the padding values as needed */
 }
 
 .foot-page {
     background-color: #6f42c1;
+}
+.question-description {
+    width: 200px; /* Adjust the width as needed */
+    height: 50px; /* Adjust the height as needed */
+    overflow: auto;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    padding: 5px;
+    scrollbar-width: thin;
+    scrollbar-color: #888 #eee;
+}
+
+.question-description::-webkit-scrollbar {
+    width: 8px;
+}
+
+.question-description::-webkit-scrollbar-track {
+    background-color: #eee;
+}
+
+.question-description::-webkit-scrollbar-thumb {
+    background-color: #888;
+    border-radius: 4px;
+}
+
+.scrollable-text {
+    white-space: pre-wrap;
+    word-wrap: break-word;
+}
+
+.background-index {
+    background-image: url('images/f14.jpg'); /* Replace 'path/to/your/image.jpg' with the actual path to your image file */
+    background-size: cover; /* Cover the entire viewport */
+    background-position: center; /* Center the image */
+    background-repeat: no-repeat; /* Do not repeat the image */
+    margin: 0;
+    font-family: 'Open Sans', sans-serif;
+}
+
+/* Adjust the appearance of the duration input field */
+.input-group-text {
+  background-color: #f8f9fa;
+  border-color: #ced4da;
+  color: #6c757d;
+}
+
+.form-control.timePicker {
+  border-color: #ced4da;
+}
+
+/* Adjust the size and spacing of the duration input field */
+#durationInput {
+  width: 200px;
+}
+
+.modal-wide .modal-dialog {
+  max-width: 800px; /* Adjust the width as desired */
+}
+
+.ch-pass-alert {
+    padding: 0.5rem 1rem; /* Adjust padding as needed */
+    font-size: 0.875rem; /* Adjust font size as needed */
 }

@@ -14,7 +14,7 @@
             <h2 class="h4">All Exams</h2>
         </div>
         <div class="btn-toolbar mb-2 mb-md-0">
-            <button type="button" class="btn btn-outline-success open-modal-button" data-bs-toggle="modal"
+            <button id="new-exam-button" type="button" class="btn btn-outline-success open-modal-button" data-bs-toggle="modal"
                     data-bs-target="#modal-form">
                 <i class="fa fa-plus" aria-hidden="true"></i> New Exam
             </button>
@@ -33,10 +33,10 @@
                             <a class="nav-link active" id="settingProp" data-bs-toggle="pill" href="#settingProp"
                                role="tab"
                                aria-controls="prop" aria-selected="true">General Properties</a>
-                            <a class="nav-link" id="settingScore" data-bs-toggle="pill" href="#settingScore" role="tab"
-                               aria-controls="propId" aria-selected="false">Quiz Scoring</a>
-                            <a class="nav-link" id="settingQProp" data-bs-toggle="pill" href="#settingQProp" role="tab"
-                               aria-controls="qPropId" aria-selected="false">Question Properties</a>
+{#                            <a class="nav-link" id="settingScore" data-bs-toggle="pill" href="#settingScore" role="tab"#}
+{#                               aria-controls="propId" aria-selected="false">Quiz Scoring</a>#}
+{#                            <a class="nav-link" id="settingQProp" data-bs-toggle="pill" href="#settingQProp" role="tab"#}
+{#                               aria-controls="qPropId" aria-selected="false">Question Properties</a>#}
                             <a class="nav-link" id="qListId" data-bs-toggle="pill" href="#qListId" role="tab"
                                aria-controls="qListId" aria-selected="false">Question List</a>
                         </div>
@@ -79,26 +79,20 @@
                                                 {#                                                    </div>#}
                                                 {#                                                </div>#}
 
-                                                <div class="mb-3">
-                                                    <label for="durationInput">Duration</label>
-                                                    <div class="input-group date">
-                                                    <span class="input-group-text"><i class="fa fa-clock-o"
-                                                                                      aria-hidden="true"></i></span>
-                                                        <input type="text" id="durationInput"
-                                                               class="form-control timePicker" required>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="container mt-4">
-                                                <div class="row">
-                                                    <div id="settingScoreId">
-                                                        <div class="col-md-6">
-                                                            <div class="form-group row">
+                                                <div class="mb-4">
+  <label for="durationInput" class="form-label">Duration</label>
+  <div class="input-group date">
+    <span class="input-group-text"><i class="fa fa-clock-o" aria-hidden="true"></i></span>
+    <input type="text" id="durationInput" class="form-control" required>
+  </div>
+</div>
+                                                <div class="col-md-6">
+                                                            <div class="form-group row " hidden="hidden">
                                                                 <label for="selectTypeScore"
                                                                        class="col-sm-5 col-form-label">Score In:</label>
                                                                 <div class="col-sm-7">
                                                                     <select class="form-control" id="selectTypeScore">
-                                                                        {#                                                                        <option value="PE">Percent</option>#}
+{#                                                                                                                                                <option value="PE">Percent</option>#}
                                                                         <option value="PO">Points</option>
                                                                     </select>
                                                                 </div>
@@ -117,15 +111,20 @@
                                                             </div>
 
                                                         </div>
+
+                                            </div>
+                                            <div class="container mt-4">
+                                                <div class="row">
+                                                    <div id="settingScoreId">
                                                         <div class="alert alert-danger custom-alert mt-2 mx-4"
                                                              id="invalidNumberAlert"
                                                              style="display: none;">
                                                             Passing score can not be more than 100 percent
                                                         </div>
                                                     </div>
-                                                    <div id="settingQPropId">
+                                                    <div id="settingQPropId" >
 
-                                                        <div class="form-group row mt-3" id="incorrectPenaltyContainer">
+                                                        <div class="form-group row mt-3" id="incorrectPenaltyContainer" hidden="hidden">
                                                             <label for="incorrectPenalty"
                                                                    class="col-sm-7 col-form-label incorrect-penalty">Penalty
                                                                 point for incorrect answer:</label>
@@ -137,7 +136,7 @@
                                                         </div>
 
 
-                                                        <div class="form-check mt-3">
+                                                        <div class="form-check mt-3" hidden="hidden">
                                                             <input class="form-check-input" type="checkbox"
                                                                    id="unAnsweredQuestionCheckBox">
                                                             <label class="form-check-label"
@@ -146,7 +145,7 @@
                                                             </label>
                                                         </div>
 
-                                                        <div class="form-check mt-3">
+                                                        <div class="form-check mt-3" hidden="hidden">
                                                             <input class="form-check-input" type="checkbox"
                                                                    id="shuffleAnswerCheckbox">
                                                             <label class="form-check-label" for="shuffleAnswerCheckbox">
@@ -194,7 +193,10 @@
                                                                         <ul class="list-group">
                                                                             {% for question in field.group.question_group_questions.all %}
                                                                                 <li class="list-group-item d-flex justify-content-between align-items-center list-group-item-success">
-                                                                                    {{ question.get_short_description }}
+
+                                                                                    <div class="question-description">
+            <div class="scrollable-text">{{ question.description }}</div>
+        </div>
                                                                                     <div class="form-check form-check-inline">
                                                                                         <input class="form-check-input q-choose-checkbox"
                                                                                                type="checkbox"
@@ -219,6 +221,10 @@
                                             </button>
                                         </div>
                                     </form>
+                                <div class="alert alert-danger custom-alert mt-1  mb-1" id="invalidAlert"
+                             style="display: none;">
+                            please fill all feilds
+                        </div>
 
                                 </div>
                             </div>
@@ -250,7 +256,7 @@
                     {#                <td>{{ field.deadline }}</td>#}
                     <td>{{ field.duration }}</td>
                     <td>
-                        <button type="button" class="btn btn-outline-success open-modal-button" data-bs-toggle="modal"
+                        <button id="update-exam-button" type="button" class="btn btn-outline-success open-modal-button" data-bs-toggle="modal"
                                 data-bs-target="#modal-form" data-id={{ field.id }}>
                             <i class="fa fa-cog" aria-hidden="true"></i>
                         </button>

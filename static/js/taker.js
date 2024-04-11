@@ -204,10 +204,13 @@ $("#submitQAnswser").on("submit", function (event) {
     } else {
         console.log('No radio button selected');
     }
+    console.log('exam_id')
+    console.log(exam_id)
 
     const formData = {
         'csrfmiddlewaretoken': csrfToken,
         'is_true': trueFalseChoice,
+        'exam_id':exam_id,
         'question_id': question.id,
         'pf_answer_id': question.question_answers ? question.question_answers.pf_answer_id : null,
         'mc_id': selectedChoiceId,
