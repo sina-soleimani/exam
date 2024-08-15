@@ -1,0 +1,548 @@
+{% extends "layouts/edu-base.html" %}
+{% load static %}
+{% load widget_tweaks %}
+
+{% block title %} مدیریت دروس {% endblock %}
+
+<!-- Specific Page CSS goes HERE -->
+{% block stylesheets %}{% endblock stylesheets %}
+
+{% block content %}
+      {% csrf_token %}
+
+    <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center py-4">
+        <div class="d-block mb-4 mb-md-0">
+            <nav aria-label="breadcrumb" class="d-none d-md-inline-block">
+            </nav>
+            <h2 class="">پرونده های آموزشی</h2>
+        </div>
+{#        <div class="btn-toolbar mb-2 mb-md-0">#}
+{#            <button id="new-course-button" type="button" class="btn btn-outline-success open-modal-button" data-bs-toggle="modal"#}
+{#                    data-bs-target="#modal-form">#}
+{#                <i class="fa fa-plus" aria-hidden="true"></i> ایجاد درس جدید#}
+{#            </button>#}
+{#        </div>#}
+    </div>
+
+
+        <div class="card custom-card shadow" >
+            <div class="card-header  text-white">
+                <h5 class="card-title">ثبت پرواز</h5>
+            </div>
+            <div class="card-body" style="height: 100%">
+                <div class="row">
+                    <div class="col-md-6">
+
+{#                <div class="row">#}
+{#                    <div class="col-md-6">#}
+
+                        <!-- create_profile.html -->
+<form method="post">
+  {% csrf_token %}
+
+      <div class="mb-2">
+      <label for="fly_choice" class="form-label " style="color: #2F4F4F;"> انتخاب پرواز </label>
+                                {{ form.fly_choice|add_class:"form-control" }}
+
+
+  </div>
+
+  <div class="mb-2">
+      <label for="instructor_number" class="form-label " style="color: #2F4F4F;"> شماره دستور </label>
+                                {{ form.instructor_number|add_class:"form-control" }}
+
+
+  </div>
+  <div class="mb-2">
+      <label for="student_number" class="form-label " style="color: #2F4F4F;">شماره دانشجویی </label>
+                                {{ form.student_number|add_class:"form-control" }}
+{#    <label for="password" class="form-label ">Password:</label>#}
+{#    {{ form.password }}#}
+  </div>
+  <div class="mb-2">
+{##}
+      <label for="lesson_identity" class="form-label " style="color: #2F4F4F;">شناسه درس </label>
+                                {{ form.lesson_identity|add_class:"form-control" }}
+{##}
+{#    <label for="entry_year" class="form-label ">Entry Year:</label>#}
+{#    {{ form.entry_year }}#}
+  </div>
+  <div class="mb-2">
+      <label for="flying_time" class="form-label " style="color: #2F4F4F;">مدت زمان پرو.از</label>
+                                {{ form.flying_time|add_class:"form-control" }}
+
+
+{#    <label for="major_code" class="form-label ">Major Code:</label>#}
+{#    {{ form.major_code }}#}
+  </div>
+
+{#    <div class="mb-2">#}
+{#      <label for="takeoff_time" class="form-label " style="color: #2F4F4F;">کد کاربری</label>#}
+{#                                {{ form.takeoff_time|add_class:"form-control" }}#}
+
+
+{#    <label for="major_code" class="form-label ">Major Code:</label>#}
+{#    {{ form.major_code }}#}
+{#  </div>#}
+    <div class="mb-2">
+      <label for="effective_date" class="form-label " style="color: #2F4F4F;">تاریخ پرواز</label>
+                                {{ form.effective_date|add_class:"form-control" }}
+
+
+{#    <label for="major_code" class="form-label ">Major Code:</label>#}
+{#    {{ form.major_code }}#}
+  </div>
+    <div class="mb-2">
+      <label for="number_of_landing" class="form-label " style="color: #2F4F4F;">تعداد فرود </label>
+                                {{ form.number_of_landing|add_class:"form-control" }}
+
+
+{#    <label for="major_code" class="form-label ">Major Code:</label>#}
+{#    {{ form.major_code }}#}
+  </div>
+    <div class="mb-2">
+      <label for="overhead_patterns" class="form-label " style="color: #2F4F4F;">سرریز الگوهای</label>
+                                {{ form.overhead_patterns|add_class:"form-control" }}
+
+
+{#    <label for="major_code" class="form-label ">Major Code:</label>#}
+{#    {{ form.major_code }}#}
+  </div>
+{#    <div class="mb-2">#}
+{#      <label for="night_flight" class="form-label " style="color: #2F4F4F;">کد کاربری</label>#}
+{#                                {{ form.night_flight|add_class:"form-control" }}#}
+
+
+{#    <label for="major_code" class="form-label ">Major Code:</label>#}
+{#    {{ form.major_code }}#}
+{#  </div>#}
+    <div class="mb-2">
+      <label for="pattern" class="form-label " style="color: #2F4F4F;">الگو</label>
+                                {{ form.pattern|add_class:"form-control" }}
+
+
+{#    <label for="major_code" class="form-label ">Major Code:</label>#}
+{#    {{ form.major_code }}#}
+  </div>
+    <div class="mb-2">
+      <label for="type_lesson" class="form-label " style="color: #2F4F4F;">نوع آموزش</label>
+                                {{ form.type_lesson|add_class:"form-control" }}
+
+
+{#    <label for="major_code" class="form-label ">Major Code:</label>#}
+{#    {{ form.major_code }}#}
+  </div>
+    <div class="mb-2">
+      <label for="landing_currency" class="form-label " style="color: #2F4F4F;">هزینه پرواز </label>
+                                {{ form.landing_currency|add_class:"form-control" }}
+
+
+{#    <label for="major_code" class="form-label ">Major Code:</label>#}
+{#    {{ form.major_code }}#}
+  </div>
+
+
+
+
+
+
+    <div class="mb-2">
+      <label for="special_syllabus_reqmts" class="form-label " style="color: #2F4F4F;"> special_syllabus_reqmts </label>
+                                {{ tr.special_syllabus_reqmts|add_class:"form-control" }}
+  </div>
+
+
+    <div class="mb-2">
+      <label for="to_and_landing_data" class="form-label " style="color: #2F4F4F;"> to_and_landing_data </label>
+                                {{ tr.to_and_landing_data|add_class:"form-control" }}
+  </div>
+
+    <div class="mb-2">
+      <label for="emergency_producer" class="form-label " style="color: #2F4F4F;"> emergency_producer </label>
+                                {{ tr.emergency_producer|add_class:"form-control" }}
+  </div>
+    <div class="mb-2">
+      <label for="ground_operation" class="form-label " style="color: #2F4F4F;"> ground_operation </label>
+                                {{ tr.ground_operation|add_class:"form-control" }}
+  </div>
+
+    <div class="mb-2">
+      <label for="take_off" class="form-label " style="color: #2F4F4F;"> take_off </label>
+                                {{ tr.take_off|add_class:"form-control" }}
+  </div>
+    <div class="mb-2">
+      <label for="level_off" class="form-label " style="color: #2F4F4F;"> level_off </label>
+                                {{ tr.level_off|add_class:"form-control" }}
+  </div>
+    <div class="mb-2">
+      <label for="turns" class="form-label " style="color: #2F4F4F;"> turns </label>
+                                {{ tr.turns|add_class:"form-control" }}
+  </div>
+    <div class="mb-2">
+      <label for="inflight_check" class="form-label " style="color: #2F4F4F;"> inflight_check </label>
+                                {{ tr.inflight_check|add_class:"form-control" }}
+  </div>
+    <div class="mb-2">
+      <label for="mission_planning" class="form-label " style="color: #2F4F4F;"> mission_planning </label>
+                                {{ tr.mission_planning|add_class:"form-control" }}
+  </div>
+    <div class="mb-2">
+      <label for="system_operation" class="form-label " style="color: #2F4F4F;"> system_operation </label>
+                                {{ tr.system_operation|add_class:"form-control" }}
+  </div>
+    <div class="mb-2">
+      <label for="judgment" class="form-label " style="color: #2F4F4F;"> judgment </label>
+                                {{ tr.judgment|add_class:"form-control" }}
+  </div>
+    <div class="mb-2">
+      <label for="attitude" class="form-label " style="color: #2F4F4F;"> attitude </label>
+                                {{ tr.attitude|add_class:"form-control" }}
+  </div>
+    <div class="mb-2">
+      <label for="steep_turn" class="form-label " style="color: #2F4F4F;"> steep_turn </label>
+                                {{ tr.steep_turn|add_class:"form-control" }}
+  </div>
+    <div class="mb-2">
+      <label for="forced_landing_sm" class="form-label " style="color: #2F4F4F;"> forced_landing_sm </label>
+                                {{ tr.forced_landing_sm|add_class:"form-control" }}
+  </div>
+    <div class="mb-2">
+      <label for="traffic_exit_climb" class="form-label " style="color: #2F4F4F;"> traffic_exit_climb </label>
+                                {{ tr.traffic_exit_climb|add_class:"form-control" }}
+  </div>
+    <div class="mb-2">
+      <label for="radio_procedures" class="form-label " style="color: #2F4F4F;"> radio_procedures </label>
+                                {{ tr.radio_procedures|add_class:"form-control" }}
+  </div>
+    <div class="mb-2">
+      <label for="use_of_trim" class="form-label " style="color: #2F4F4F;"> use_of_trim </label>
+                                {{ tr.use_of_trim|add_class:"form-control" }}
+  </div>
+    <div class="mb-2">
+      <label for="clearing" class="form-label " style="color: #2F4F4F;"> clearing </label>
+                                {{ tr.clearing|add_class:"form-control" }}
+  </div>
+    <div class="mb-2">
+      <label for="area_operation" class="form-label " style="color: #2F4F4F;"> area_operation </label>
+                                {{ tr.area_operation|add_class:"form-control" }}
+  </div>
+    <div class="mb-2">
+      <label for="power_on_stall" class="form-label " style="color: #2F4F4F;"> power_on_stall </label>
+                                {{ tr.power_on_stall|add_class:"form-control" }}
+  </div>
+    <div class="mb-2">
+      <label for="traffic_pattern_stalls_normal" class="form-label " style="color: #2F4F4F;"> traffic_pattern_stalls_normal </label>
+                                {{ tr.traffic_pattern_stalls_normal|add_class:"form-control" }}
+  </div>
+    <div class="mb-2">
+      <label for="traffic_pattern_stalls_no_flap" class="form-label " style="color: #2F4F4F;"> traffic_pattern_stalls_no_flap </label>
+                                {{ tr.traffic_pattern_stalls_no_flap|add_class:"form-control" }}
+  </div>
+    <div class="mb-2">
+      <label for="slow_flight" class="form-label " style="color: #2F4F4F;"> slow_flight </label>
+                                {{ tr.slow_flight|add_class:"form-control" }}
+  </div>
+    <div class="mb-2">
+      <label for="invert_recovery" class="form-label " style="color: #2F4F4F;"> invert_recovery </label>
+                                {{ tr.invert_recovery|add_class:"form-control" }}
+  </div>
+    <div class="mb-2">
+      <label for="high_speed_dive_recovery" class="form-label " style="color: #2F4F4F;"> high_speed_dive_recovery </label>
+                                {{ tr.high_speed_dive_recovery|add_class:"form-control" }}
+  </div>
+    <div class="mb-2">
+      <label for="vertical_recovery" class="form-label " style="color: #2F4F4F;"> vertical_recovery </label>
+                                {{ tr.vertical_recovery|add_class:"form-control" }}
+  </div>
+    <div class="mb-2">
+      <label for="spin_operation" class="form-label " style="color: #2F4F4F;"> spin_operation </label>
+                                {{ tr.spin_operation|add_class:"form-control" }}
+  </div>
+    <div class="mb-2">
+      <label for="normal_spin" class="form-label " style="color: #2F4F4F;"> normal_spin </label>
+                                {{ tr.normal_spin|add_class:"form-control" }}
+  </div>
+    <div class="mb-2">
+      <label for="coordination_exercise" class="form-label " style="color: #2F4F4F;"> coordination_exercise </label>
+                                {{ tr.coordination_exercise|add_class:"form-control" }}
+  </div>
+    <div class="mb-2">
+      <label for="lazy_eight" class="form-label " style="color: #2F4F4F;"> lazy_eight </label>
+                                {{ tr.lazy_eight|add_class:"form-control" }}
+  </div>
+    <div class="mb-2">
+      <label for="run_away_trim" class="form-label " style="color: #2F4F4F;"> run_away_trim </label>
+                                {{ tr.run_away_trim|add_class:"form-control" }}
+  </div>
+    <div class="mb-2">
+      <label for="chandlle" class="form-label " style="color: #2F4F4F;"> chandlle </label>
+                                {{ tr.chandlle|add_class:"form-control" }}
+  </div>
+    <div class="mb-2">
+      <label for="aileron_eoll" class="form-label " style="color: #2F4F4F;"> aileron_eoll </label>
+                                {{ tr.aileron_eoll|add_class:"form-control" }}
+  </div>
+    <div class="mb-2">
+      <label for="loop" class="form-label " style="color: #2F4F4F;"> loop </label>
+                                {{ tr.loop|add_class:"form-control" }}
+  </div>
+    <div class="mb-2">
+      <label for="split_s" class="form-label " style="color: #2F4F4F;"> split_s </label>
+                                {{ tr.split_s|add_class:"form-control" }}
+  </div>
+    <div class="mb-2">
+      <label for="immelmanin" class="form-label " style="color: #2F4F4F;"> immelmanin </label>
+                                {{ tr.immelmanin|add_class:"form-control" }}
+  </div>
+    <div class="mb-2">
+      <label for="cuban_eight" class="form-label " style="color: #2F4F4F;"> cuban_eight </label>
+                                {{ tr.cuban_eight|add_class:"form-control" }}
+  </div>
+    <div class="mb-2">
+      <label for="cloverleaf" class="form-label " style="color: #2F4F4F;"> cloverleaf </label>
+                                {{ tr.cloverleaf|add_class:"form-control" }}
+  </div>
+    <div class="mb-2">
+      <label for="barrel_roll" class="form-label " style="color: #2F4F4F;"> barrel_roll </label>
+                                {{ tr.barrel_roll|add_class:"form-control" }}
+  </div>
+    <div class="mb-2">
+      <label for="letdown_and_traffic_entery" class="form-label " style="color: #2F4F4F;"> letdown_and_traffic_entery </label>
+                                {{ tr.letdown_and_traffic_entery|add_class:"form-control" }}
+  </div>
+    <div class="mb-2">
+      <label for="normal_pattern_rt" class="form-label " style="color: #2F4F4F;"> normal_pattern_rt </label>
+                                {{ tr.normal_pattern_rt|add_class:"form-control" }}
+  </div>
+    <div class="mb-2">
+      <label for="normal_pattern_lt" class="form-label " style="color: #2F4F4F;"> normal_pattern_lt </label>
+                                {{ tr.normal_pattern_lt|add_class:"form-control" }}
+  </div>
+    <div class="mb-2">
+      <label for="ss_pattern_rt" class="form-label " style="color: #2F4F4F;"> ss_pattern_rt </label>
+                                {{ tr.ss_pattern_rt|add_class:"form-control" }}
+  </div>
+    <div class="mb-2">
+      <label for="ss_pattern_lt" class="form-label " style="color: #2F4F4F;"> ss_pattern_lt </label>
+                                {{ tr.ss_pattern_lt|add_class:"form-control" }}
+  </div>
+    <div class="mb-2">
+      <label for="on_flap_pattern_overhead" class="form-label " style="color: #2F4F4F;"> on_flap_pattern_overhead </label>
+                                {{ tr.on_flap_pattern_overhead|add_class:"form-control" }}
+  </div>
+    <div class="mb-2">
+      <label for="staright_in_app_normal" class="form-label " style="color: #2F4F4F;"> staright_in_app_normal </label>
+                                {{ tr.staright_in_app_normal|add_class:"form-control" }}
+  </div>
+    <div class="mb-2">
+      <label for="staright_in_app_no_flap" class="form-label " style="color: #2F4F4F;"> staright_in_app_no_flap </label>
+                                {{ tr.staright_in_app_no_flap|add_class:"form-control" }}
+  </div>
+    <div class="mb-2">
+      <label for="landing" class="form-label " style="color: #2F4F4F;"> landing </label>
+                                {{ tr.landing|add_class:"form-control" }}
+  </div>
+    <div class="mb-2">
+      <label for="closed_traffic" class="form-label " style="color: #2F4F4F;"> closed_traffic </label>
+                                {{ tr.closed_traffic|add_class:"form-control" }}
+  </div>
+    <div class="mb-2">
+      <label for="go_arounds" class="form-label " style="color: #2F4F4F;"> go_arounds </label>
+                                {{ tr.go_arounds|add_class:"form-control" }}
+  </div>
+ <div class="mb-2">
+      <label for="no_flap_landing" class="form-label " style="color: #2F4F4F;"> no_flap_landing </label>
+                                {{ tr.no_flap_landing|add_class:"form-control" }}
+  </div>
+
+
+
+
+    <div class="mb-4">
+{#      <label for="access_level" class="form-label " style="color: #2F4F4F;"> Access Level</label>#}
+{#                                {{ form.access_level|add_class:"form-control" }}#}
+
+{#        {% if user.access_level == 'A' %}#}
+{#    {{ form.access_level|add_class:"form-control" }}#}
+{#{% elif user.access_level == 'T' %}#}
+{##}
+{#    {{ form.access_level|add_class:"form-control" }}#}
+{##}
+{#{% elif user.access_level == 'H' %}#}
+{##}
+{#    {{ form.access_level|add_class:"form-control" }}#}
+{#    <input type="hidden" name="access_level" value="{{ form.access_level.value }}">#}
+{#    Student#}
+{#{% endif %}#}
+
+
+{#    <label for="major_code" class="form-label ">Major Code:</label>#}
+{#    {{ form.major_code }}#}
+  </div>
+                                <button type="submit"
+                                    class="btn btn-outline-success mx-1">
+                                ثبت پرواز
+                            </button>
+{#  <button type="submit">Create Profile</button>#}
+</form>
+                    {% if messages %}
+    <div class="alert alert-danger  custom-alert mt-2 mx-4" id="error-messages">
+
+{#  <div id="error-messages" class="card text-white bg-danger mt-2 mb-3 ch-pass-alert">#}
+    <div class="card-body ">
+      <ul class="list-unstyled">
+        {% for message in messages %}
+          <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+        {% endfor %}
+      </ul>
+    </div>
+  </div>
+{% endif %}
+
+<script>
+  setTimeout(function() {
+    var errorMessages = document.getElementById('error-messages');
+    if (errorMessages) {
+      errorMessages.style.display = 'none';
+    }
+  }, 3000);
+</script>
+
+                    </div>
+                </div>
+
+{#                        <form method="post">#}
+{#  {% csrf_token %}#}
+{#  {{ form.as_p }}#}
+{#  <button type="submit">Create Profile</button>#}
+{#</form>#}
+{##}
+{#                        <form method="post">#}
+{#                            {% csrf_token %}#}
+{#                            <div class="mb-3">#}
+{#                                <label for="old_password" class="form-label " style="color: #2F4F4F;">Old#}
+{#                                    Password</label>#}
+{#                                {{ form.old_password|add_class:"form-control" }}#}
+{#                            </div>#}
+{#                            <div class="mb-3">#}
+{#                                <label for="new_password1" class="form-label" style="color: #2F4F4F;">New#}
+{#                                    Password</label>#}
+{#                                {{ form.new_password1|add_class:"form-control" }}#}
+{#                            </div>#}
+{#                            <div class="mb-3">#}
+{#                                <label for="password" class="form-label" style="color: #2F4F4F;">New Password#}
+{#                                    Confirmation</label>#}
+{#                                {{ form.new_password2|add_class:"form-control" }}#}
+{#                            </div>#}
+                            {#                    {{ form.as_p }}#}
+{#                            <button type="submit" id="createQuestionGroupButton"#}
+{#                                    class="btn btn-outline-success mx-1">#}
+{#                                Change Password#}
+{#                            </button>#}
+{#                        </form>#}
+{#                    </div>#}
+
+
+{#            </div>#}
+        </div>
+    </div>
+{#    </div>#}
+
+
+{#    <div class="container-fluid">#}
+{##}
+{#        <div class="card custom-card shadow" style="height: 100vh">#}
+{#            <div class="card-header  text-white">#}
+{#                <h5 class="card-title">دروس</h5>#}
+{#            </div>#}
+{#            <div class="card-body" style="height: 100%">#}
+{#                <div class="table-settings table-responsive mb-4">#}
+{#                    <table id="courseTable" class="table table-striped" style="width:100%; height: 100%">#}
+{#                        <thead class="thead-dark">#}
+{#                        <tr>#}
+{#                            <th>نام درس</th>#}
+{#                            <th>کد درس</th>#}
+{#                            <th>ترم</th>#}
+                            {#                            <th>Year</th>#}
+{#                            <th>تنظیمات</th>#}
+{#                            <th>بانک سوال</th>#}
+{#                            <th>مدبربت آزمون ها</th>#}
+{#                            <th>حذف</th>#}
+{##}
+{#                        </tr>#}
+{#                        </thead>#}
+{#                        <tbody>#}
+{#                        {% for field in courses %}#}
+{#                            <tr>#}
+{#                                <td>{{ field.course_name }}</td>#}
+{#                                <td>{{ field.course_code }}</td>#}
+{#                                <td>{{ field.term }}</td>#}
+                                {#                                <td>{{ field.year }}</td>#}
+{#                                <td>#}
+{#                                    <button id="update-course-button" type="button" class="btn btn-outline-success open-modal-button"#}
+{#                                            data-bs-toggle="modal"#}
+{#                                            data-bs-target="#modal-form" data-id={{ field.id }}>#}
+{#                                        <i class="fa fa-cog" aria-hidden="true"></i>#}
+{#                                    </button>#}
+{#                                </td>#}
+{##}
+{#                                <td>#}
+{#                                    <button type="button" class="btn btn-outline-primary showqbtn"#}
+{#                                            onclick="window.location.href='/builder/{{ field.question_bank.id }}/q_bank'">#}
+{#                                        <i class="fa fa-bank" aria-hidden="true"></i>#}
+{#                                    </button>#}
+{#                                </td>#}
+{#                                <td>#}
+{#                                    <button type="button" class="btn btn-outline-warning showqbtn"#}
+{#                                            onclick="window.location.href='/exams/{{ field.id }}/list'">#}
+{#                                        <i class="fa fa-list" aria-hidden="true"></i>#}
+{#                                    </button>#}
+{#                                </td>#}
+{#                                <td>#}
+{#                                    <button type="button" class="btn btn-outline-danger showqbtn open-delete-modal"#}
+{#                                            data-bs-toggle="modal" data-bs-target="#deleteModal"#}
+{#                                            data-id="{{ field.id }}">#}
+{#                                        <i class='fa fa-trash'></i>#}
+{#                                    </button>#}
+{#                                </td>#}
+{##}
+{##}
+{#                            </tr>#}
+{#                        {% endfor %}#}
+{#                        </tbody>#}
+{#                    </table>#}
+{#                </div>#}
+{##}
+{#                <div class="modal fade" id="deleteModal" tabindex="-1" data-bs-backdrop="static"#}
+{#                     data-bs-keyboard="false"#}
+{#                     aria-labelledby="deleteModalLabel" aria-hidden="true">#}
+{#                    <div class="modal-dialog">#}
+{#                        <div class="modal-content">#}
+{#                            <div class="modal-header">#}
+{#                                <h5 class="modal-title" id="deleteModalLabel">حذف درس</h5>#}
+{#                                <button type="button" class="btn-close" data-bs-dismiss="modal"#}
+{#                                        aria-label="Close"></button>#}
+{#                            </div>#}
+{#                            <div class="modal-body">#}
+{#آبا مطمئنید که میخواهید درس مورد نظر را حذف کنبد؟#}
+{#                            </div>#}
+{#                            <div class="modal-footer">#}
+{#                                <button type="button" class="btn btn-secondary " data-bs-dismiss="modal">بستن</button>#}
+{#                                <button type="button" class="btn btn-danger delete-course">حذف</button>#}
+{#                            </div>#}
+{#                        </div>#}
+{#                    </div>#}
+{#                </div>#}
+{#            </div>#}
+{#        </div>#}
+{#    </div>#}
+
+{% endblock content %}
+
+<!-- Specific Page JS goes HERE -->
+{% block javascripts %}
+    <script>
+        {#var coursesData = {{ courses_json|safe }};#}
+    </script>
+{#    <script src="{% static 'js/courses.js' %}"></script>#}
+{% endblock javascripts %}
