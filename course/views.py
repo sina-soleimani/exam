@@ -17,7 +17,6 @@ from django.db import transaction
 from django.core import serializers
 
 
-
 class CourseListView(ListView):
     model = Course
     template_name = 'home/courses.html'
@@ -51,6 +50,8 @@ class CourseListView(ListView):
         banks_json = json.dumps(banks_data, cls=DecimalEncoder, indent=4, sort_keys=True, default=str)
         context['courses_json'] = courses_json
         context['banks_data'] = banks_data
+        print('context')
+        print(context)
 
         return context
 
@@ -78,7 +79,7 @@ class CourseCreateView(CreateView):
         q_bank_id = self.request.POST.get('q_bank_id')
         q_bank_name = self.request.POST.get('q_bank_name')
         course = form.save(commit=False)
-        if q_bank_id and type (q_bank_id) == 'number':
+        if q_bank_id and type(q_bank_id) == 'number':
             q_bank = QuestionBank.objects.get(id=q_bank_id)
             course.question_bank = q_bank
 
@@ -116,7 +117,7 @@ class CourseUpdateView(UpdateView):
                 q_bank = QuestionBank.objects.create(name=q_bank_name)
             course.question_bank = q_bank
 
-        elif q_bank_id and type (q_bank_id) == 'number':
+        elif q_bank_id and type(q_bank_id) == 'number':
             q_bank = QuestionBank.objects.get(id=q_bank_id)
             course.question_bank = q_bank
 
