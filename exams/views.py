@@ -1,4 +1,5 @@
-from datetime import datetime
+import jdatetime
+from datetime import datetime, timedelta
 from django.shortcuts import get_object_or_404
 from django.views.generic import CreateView, ListView, UpdateView, DeleteView
 from .models import Exam
@@ -11,7 +12,7 @@ from decimal import Decimal
 import random
 from decorator import access_level_required
 from user.models import STUDENT_ACCESS, ADMIN_ACCESS
-from django.contrib import messages
+
 
 class ExamListView(ListView):
     model = Exam
@@ -45,6 +46,8 @@ class ExamListView(ListView):
             'percent_passing_score': exam.percent_passing_score,
             'point_passing_score': exam.point_passing_score,
             'duration': exam.duration,
+            'exam_date': exam.exam_date,
+            'exam_time': exam.exam_time,
             'deadline': exam.deadline,
             'choose_manual': exam.manual_chosen,
             'q_bank': [
@@ -82,10 +85,20 @@ class StudentExamListView(ListView):
     @access_level_required(STUDENT_ACCESS)
     def get_queryset(self):
         # Return only exams where action is True
-        user_id=self.request.user.id
+        user_id = self.request.user.id
+        print(datetime.now())
 
+        x = jdatetime.date.fromgregorian(date=datetime.now())
+        # t = datetime.datetime(2012, 2, 23, 0, 0)
+        y = x.strftime('%m/%d/%Y')
+        print(y[4:])
+        print(y[:5])
+        z = y[4:] + '/' + y[:5]
+        print(z)
+        print(z[2:])
+        print('yyyyyyyyyyyyy')
 
-        return Exam.objects.filter(course__students=user_id,exam_status='A')
+        return Exam.objects.filter(course__students=user_id, exam_date=z[2:])
 
 
 class StudentExamHistoryListView(ListView):
@@ -98,7 +111,7 @@ class StudentExamHistoryListView(ListView):
         # Return only exams where action is True
         user_id = self.request.user.id
 
-        return Exam.objects.filter(course__students=user_id,exam_status='E')
+        return Exam.objects.filter(course__students=user_id, exam_status='E')
 
 
 class ExamCreateView(CreateView):
@@ -207,7 +220,7 @@ class ActiveExam(UpdateView):
     def form_valid(self, form):
         self.object = self.get_object()
         self.object.action = True
-        current_time = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+        current_time = datetime.now().strftime("%Y-%m-%d")
         self.object.active_time = current_time
         self.object.exam_status = 'A'
         self.object.save()
