@@ -21,6 +21,6 @@ class Result(BaseModel):
         'user.Profile', blank=True, null=True, on_delete=models.CASCADE,
         related_name='student_results', related_query_name='student_result',
     )
-    score = models.PositiveIntegerField(default=0)
+    score = models.PositiveIntegerField(default=1000)
     max_score = models.PositiveIntegerField(default=0)
 
