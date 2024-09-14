@@ -1,6 +1,6 @@
 # from django.conf.urls import path
 from .views import QuestionGroupDelete, QuestionSort, CreateUpdateTrueFalseQuestionView, MyForm, QBank, \
-    CreateUpdateMultiQuestionView, CreateUpdateMatchingQuestionView, upload_q_excel
+    CreateUpdateMultiQuestionView, CreateUpdateMatchingQuestionView, upload_q_excel, upload_mp_excel
 from django.urls import path, include
 
 app_name = 'question'
@@ -18,6 +18,7 @@ urlpatterns = [
          name='true_false_question'),
     path('matching_question/', CreateUpdateMatchingQuestionView.as_view(), name='matching_question'),
     path('upload_q_excel/', upload_q_excel, name='upload_q_excel'),
+    path('upload_mp_excel/', upload_mp_excel, name='upload_mp_excel'),
 
     path('<str:id>/form', MyForm.as_view(), name='formList'),
     path('<str:id>/q_bank', QBank.as_view(), name='qBank'),
