@@ -1,5 +1,6 @@
 from django.db import models
 from django.core.validators import MinValueValidator, MaxValueValidator
+import jdatetime
 
 
 # Create your models here.
@@ -11,6 +12,7 @@ class BaseModel(models.Model):
 
     class Meta:
         abstract = True
+
 
 class ExamQuestion(models.Model):
     exam = models.ForeignKey(
@@ -27,6 +29,12 @@ class ExamQuestion(models.Model):
 
 
 class Exam(BaseModel):
+    exam_date = models.CharField(
+        max_length=20,
+        verbose_name='Persian Datetime',
+        default=jdatetime.datetime.now().strftime('%Y/%m/%d')
+    )
+    exam_time = models.TimeField(null=True, blank=True)
     label = models.CharField(max_length=200)
     deadline = models.DateField(blank=True, null=True)
     active_time = models.DateTimeField(blank=True, null=True)
@@ -97,3 +105,9 @@ class Exam(BaseModel):
 
     def __str__(self):
         return self.label
+
+    def save(self, *args, **kwargs):
+        if self.exam_date:
+            jdt = jdatetime.datetime.strptime(self.exam_date, '%Y/%m/%d')
+            self.my_datetime_field = jdt
+        super().save(*args, **kwargs)
