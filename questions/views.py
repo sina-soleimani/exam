@@ -524,3 +524,62 @@ def upload_q_excel(request):
                 save_question_data(row_data, q_group_import_id)
         # return JsonResponse({'message': 'File uploaded successfully'})
     return JsonResponse({'message': 'Please select a file to upload.'})
+
+
+def upload_mp_excel(request):
+    q_group_import_id = request.POST['q_group_import_id']
+    if request.method == 'POST' and request.FILES['excelFile']:
+
+        excel_file = request.FILES['excelFile']
+
+        # Use Django's transaction.atomic to ensure all data is saved or none at all
+        with transaction.atomic():
+            workbook = openpyxl.load_workbook(excel_file, data_only=True)
+            sheet = workbook.active
+
+            max_row = sheet.max_row
+
+            # Iterate over each row
+            for row in range(2, max_row + 1):  # Assuming the first row is header
+                # Get values for each cell in the row and convert them to a list
+                row_data = [cell.value for cell in sheet[row]]
+
+                # Save data to Django models
+                save_question_mp_data(row_data, q_group_import_id)
+        # return JsonResponse({'message': 'File uploaded successfully'})
+    return JsonResponse({'message': 'Please select a file to upload.'})
+
+
+thisdict = {
+    "a": 0,
+    "b": 1,
+    "c": 2,
+    "d": 3,
+
+}
+
+
+def save_question_mp_data(row_data, q_group_import_id):
+    data = row_data
+    variables = row_data[1:5]
+    t_choice = row_data[5]
+    new_data = [item for item in data if item is not None]
+    question = Question.objects.create(
+        description=data[0],
+        score=1,
+        question_type='MC',
+        question_group_id=q_group_import_id
+    )
+    i = 0
+    for choice in variables:
+        if thisdict[t_choice] == i:
+            ch_res = True
+        else:
+            ch_res = False
+
+        Choice.objects.create(
+            question=question,
+            choice_text=choice,
+            is_true=ch_res
+        )
+        i = i + 1
