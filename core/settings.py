@@ -25,7 +25,7 @@ SECRET_KEY = 'bq-*%(bxqnrdu(vkes(mf6-1j+-!u2m0qv^pql$24m55c9o!@t'
 DEBUG = True
 
 AUTH_USER_MODEL = 'user.Profile'
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 # Application definition
 
@@ -46,7 +46,10 @@ INSTALLED_APPS = [
     'user',
     'result',
     'report',
+    'resources',
     'captcha',
+    'education_forms',
+    'simplemathcaptcha',
 ]
 
 MIDDLEWARE = [

@@ -22,12 +22,14 @@ from exams import urls as exam_urls
 from user import urls as usr_urls
 from course import urls as course_urls
 from result import urls as result_urls
+from education_forms import urls as edu_urls
 
 urlpatterns = [
     path('builder/', include(q_urls)),
     path('taker/', include(taker_url)),
     path('report/', include(report_url)),
     path('exams/', include(exam_urls)),
+    path('edu/', include(edu_urls)),
     path('courses/', include(course_urls)),
     path('results/', include(result_urls)),
     path('captcha/', include('captcha.urls')),
