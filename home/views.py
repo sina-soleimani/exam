@@ -15,6 +15,13 @@ def index(request):
     context = {'segment': 'index'}
 
     html_template = loader.get_template('home/index.html')
+    return HttpResponse(html_template.render(context, request))\
+
+@login_required(login_url="/login/")
+def exam_index(request):
+    context = {'segment': 'index'}
+
+    html_template = loader.get_template('home/index-exam.html')
     return HttpResponse(html_template.render(context, request))
 
 
