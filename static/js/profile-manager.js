@@ -3,7 +3,7 @@ const csrfToken = $("input[name=csrfmiddlewaretoken]").val();
 
 $(document).ready(function () {
 
-    var table=$('#profileTable').DataTable();
+    var table = $('#profileTable').DataTable();
     $('#profileTable thead tr').clone(true).appendTo('#profileTable thead');
     console.log('pro')
 
