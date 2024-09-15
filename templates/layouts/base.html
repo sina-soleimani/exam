@@ -23,8 +23,8 @@
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
     <!-- Primary Meta Tags -->
 
-    <title>
-        Django Volt Dashboard - {% block title %}{% endblock %} | AppSeed
+    <title id="base-title">
+        آموزش آنلاین - {% block title %}{% endblock %}
     </title>
 
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
@@ -56,9 +56,9 @@
     <link rel="stylesheet" href="{% static 'js/datatables/dataTables.bootstrap5.min.css' %}">
 
     <link rel="stylesheet" href="{% static 'js/datetimepicker/bootstrap-datetimepicker.min.css' %}">
-<link rel="apple-touch-icon" sizes="120x120" href="/static/assets/img/favicon/apple-touch-icon.png">
-    <link rel="icon" type="image/png" sizes="32x32" href="/static/assets/img/favicon/favicon-32x32.png">
-    <link rel="icon" type="image/png" sizes="16x16" href="/static/assets/img/favicon/favicon-16x16.png">
+    <link rel="apple-touch-icon" sizes="120x120" href="/static/css/images/icon-allah-000.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/static/css/images/icon-allah-000.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/static/css/images/icon-allah-000.png">
     <link rel="manifest" href="/static/assets/img/favicon/site.webmanifest">
     <link rel="mask-icon" href="/static/assets/img/favicon/safari-pinned-tab.svg" color="#ffffff">
     <meta name="msapplication-TileColor" content="#ffffff">
@@ -69,9 +69,11 @@
     <link type="text/css" href="/static/assets/vendor/notyf/notyf.min.css" rel="stylesheet">
     <link type="text/css" href="/static/assets/css/volt.css" rel="stylesheet">
     <link rel="stylesheet" href="{% static 'js/bootstrap/bootstrap.min.5.3.1.css' %}">
+    {#<link href="https://cdn.jsdelivr.net/npm/vazir-font/dist/font-face.css" rel="stylesheet">#}
     <link rel="stylesheet" href="{% static 'js/fontawesome/all.min.css' %}">
-<link href="https://cdn.jsdelivr.net/gh/rastikerdar/vazir-font@v30.1.0/dist/font-face.css" rel="stylesheet" type="text/css" />
+    <link rel="stylesheet" href="{% static 'js/jalali/kamadatepicker.min.css' %}">
 
+    {#<link href="https://cdn.jsdelivr.net/gh/rastikerdar/vazir-font@v30.1.0/dist/font-face.css" rel="stylesheet" type="text/css" />#}
 
 
     <link rel="stylesheet" href="{% static 'css/dashboard-styles.css' %}">
@@ -80,7 +82,7 @@
     {% block stylesheets %}{% endblock stylesheets %}
 
 </head>
-<body>
+<body class="body-template">
 
 {% include 'includes/sidebar.html' %}
 
@@ -98,6 +100,7 @@
 
 {% include 'includes/scripts.html' %}
 <script src="{% static 'js/jquery/jquery.min.js' %}"></script>
+
 <script src="{% static 'js/moment/moment.min.js' %}"></script>
 <script src="{% static 'js/bootstrap/bootstrap.min.js' %}"></script>
 <script src="{% static 'js/datatables/jquery.dataTables.min.js' %}"></script>
@@ -109,6 +112,9 @@
 
 
 <script src="{% static 'js/bootstrap/bootstrap.bundle.min.js' %}"></script>
+/
+
+<script src="{% static 'js/jalali/kamadatepicker.min.js' %}"></script>
 
 <!-- Include xlsx library -->
 
