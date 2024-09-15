@@ -1,7 +1,7 @@
 const csrfToken = $("input[name=csrfmiddlewaretoken]").val();
 let question;
 const qTypeMap = new Map();
-var urlString = "http://localhost:8000/taker/33/exam_session";
+var urlString = window.location.href
 
 var dummyAnchor = document.createElement("a");
 dummyAnchor.href = urlString;
@@ -87,10 +87,34 @@ $(document).on('click', 'button.showqbtn', async function (event) {
 
     }
 )
-$(document).on('click', '#exam_done', async function (event) {
-        window.location.href = protocol + '//' + host
-    }
-)
+
+$('#exam_done').click(function (event) {
+// $("#exam_done").on("submit", function (event) {
+    console.log('abcdefghij')
+        // window.location.href = protocol + '//' + host
+    const formData = {
+
+            'csrfmiddlewaretoken': csrfToken,
+
+        'exam_id':exam_id,
+
+            'result_id': $('#result_id').data('id'),
+
+        };
+    $.ajax({
+        url: '/taker/exam_done/' + $('#result_id').data('id'),
+        type: 'post',
+        dataType: 'json',
+        data: formData,
+        success: (response) => {
+            console.log(response);
+        },
+        error: (error) => {
+            console.error(error);
+        }
+    });
+});
+
 $('.MG_item').sortable({
     connectWith: '.sortable-item',
 });
@@ -116,6 +140,27 @@ function findQuestionById(questionGroupsData, questionId) {
 }
 
 $(document).ready(function () {
+    console.log(window.location.href)
+    console.log(result_score)
+    if( result_score !== 1000){
+
+    $('#score_id_modal').click()
+        var max_score =0
+
+        questionGroupsData.forEach(e => {
+            max_score=max_score + e.score
+
+        });
+
+        $('#stScore').text(result_score+' از '+ max_score)
+
+        setTimeout(function () {
+
+
+            window.location.href = '/logout/'
+                }, 10000);
+    }
+
     function formatTime(s) {
         var hours = Math.floor(s / 3600);
         var minutes = Math.floor((s % 3600) / 60);
