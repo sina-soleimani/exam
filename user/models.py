@@ -22,28 +22,19 @@ class AccessLevel(BaseModel):
 STUDENT_ACCESS = 'S'
 TEACHER_ACCESS = 'T'
 ADMIN_ACCESS = 'A'
+HEAD_ADMIN_ACCESS = 'H'
 ACCESS_LEVEL_CHOICES = [
     (STUDENT_ACCESS, 'Student'),
     (ADMIN_ACCESS, 'Admin'),
+    (HEAD_ADMIN_ACCESS, 'Head Admin'),
     (TEACHER_ACCESS, 'Teacher'),
 ]
 class Profile(AbstractUser):
-    # Add any additional fields you need for your user model here
-    # For example, you might want to add a profile picture or user type.
-    # Just define them as regular fields.
-    # access_level = models.ForeignKey(AccessLevel, on_delete=models.PROTECT)
-    # ACCESS_LEVEL_CHOICES = [
-    #     ('S', 'Student'),
-    #     ('A', 'Admin'),
-    # ]
+
 
     access_level = models.CharField(max_length=1, choices=ACCESS_LEVEL_CHOICES, blank=True, null=True)
 
-    # username = models.CharField(max_length=30, unique=True)
-    # email = models.EmailField(unique=True)
-    # first_name = models.CharField(max_length=30, blank=True)
-    # last_name = models.CharField(max_length=30, blank=True)
-    # is_active = models.BooleanField(default=True)
+
     entry_year = models.CharField(null=True, blank=True)
     major_code = models.CharField(null=True, blank=True)
 
