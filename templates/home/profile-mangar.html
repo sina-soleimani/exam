@@ -2,7 +2,7 @@
 {% load static %}
 {% load widget_tweaks %}
 
-{% block title %} Transactions {% endblock %}
+{% block title %} مدیریت کاربران {% endblock %}
 
 <!-- Specific Page CSS goes HERE -->
 {% block stylesheets %}{% endblock stylesheets %}
@@ -15,7 +15,7 @@
         <div class="d-block mb-4 mb-md-0">
             <nav aria-label="breadcrumb" class="d-none d-md-inline-block">
             </nav>
-            <h2 class="h4">Profiles Manger</h2>
+            <h2 class="">مدیریت کاربران</h2>
         </div>
 
         <div class="btn-toolbar mb-2 mb-md-0">
@@ -27,15 +27,14 @@
 
         <div class="card custom-card shadow">
             <div class="card-header  text-white">
-                <h5 class="card-title">Import Profile</h5>
+                <h5 class="card-title">بارگزاری کاربران</h5>
             </div>
             <div class="card-body" style="height: 100%">
                 <div id="student_import">
                     <input type="file" id="excelFileInput" class="form-control mb-3"
                            accept=".xlsx, .xls" lang="pl-Pl">
 
-                    <button class="btn btn-outline-success" onclick="uploadExcelFile( )">Upload
-                        Excel File
+                    <button class="btn btn-outline-success" onclick="uploadExcelFile( )">بارگزاری فایل اکسل
                     </button>
                 </div>
             </div>
@@ -45,142 +44,109 @@
     <div class="container-fluid mb-5">
 
 
-
-    <div class="card custom-card shadow" >
+        <div class="card custom-card shadow">
             <div class="card-header  text-white">
-                <h5 class="card-title">Add New Profile</h5>
+                <h5 class="card-title">افزودن کاربر جدید</h5>
             </div>
             <div class="card-body" style="height: 100%">
                 <div class="row">
                     <div class="col-md-6">
 
-{#                <div class="row">#}
-{#                    <div class="col-md-6">#}
+                        <form method="post">
+                            {% csrf_token %}
 
-                        <!-- create_profile.html -->
-<form method="post">
-  {% csrf_token %}
-
-  <div class="mb-2">
-      <label for="username" class="form-label " style="color: #2F4F4F;"> UserName</label>
+                            <div class="mb-2">
+                                <label for="username" class="form-label " style="color: #2F4F4F;"> نام کاربری</label>
                                 {{ form.username|add_class:"form-control" }}
 
-{#    <label for="username" class="form-label ">Username:</label>#}
-{#    {{ form.username }}#}
-  </div>
-  <div class="mb-2">
-      <label for="password" class="form-label " style="color: #2F4F4F;">Password</label>
+                                {#    <label for="username" class="form-label ">Username:</label>#}
+                                {#    {{ form.username }}#}
+                            </div>
+                            <div class="mb-2">
+                                <label for="password" class="form-label " style="color: #2F4F4F;">رمز عبور</label>
                                 {{ form.password|add_class:"form-control" }}
-{#    <label for="password" class="form-label ">Password:</label>#}
-{#    {{ form.password }}#}
-  </div>
-  <div class="mb-2">
+                                {#    <label for="password" class="form-label ">Password:</label>#}
+                                {#    {{ form.password }}#}
+                            </div>
+                            <div class="mb-2">
 
-      <label for="entry_year" class="form-label " style="color: #2F4F4F;">Entry Year</label>
+                                <label for="entry_year" class="form-label " style="color: #2F4F4F;">سال ورود</label>
                                 {{ form.entry_year|add_class:"form-control" }}
 
-{#    <label for="entry_year" class="form-label ">Entry Year:</label>#}
-{#    {{ form.entry_year }}#}
-  </div>
-  <div class="mb-2">
-      <label for="major_code" class="form-label " style="color: #2F4F4F;"> Major Code</label>
+                                {#    <label for="entry_year" class="form-label ">Entry Year:</label>#}
+                                {#    {{ form.entry_year }}#}
+                            </div>
+                            <div class="mb-2">
+                                <label for="major_code" class="form-label " style="color: #2F4F4F;">کد کاربری</label>
                                 {{ form.major_code|add_class:"form-control" }}
 
 
-{#    <label for="major_code" class="form-label ">Major Code:</label>#}
-{#    {{ form.major_code }}#}
-  </div>
-    <div class="mb-4">
-{#      <label for="access_level" class="form-label " style="color: #2F4F4F;"> Access Level</label>#}
-{#                                {{ form.access_level|add_class:"form-control" }}#}
+                                {#    <label for="major_code" class="form-label ">Major Code:</label>#}
+                                {#    {{ form.major_code }}#}
+                            </div>
+                            <div class="mb-4">
+                                {#      <label for="access_level" class="form-label " style="color: #2F4F4F;"> Access Level</label>#}
+                                {#                                {{ form.access_level|add_class:"form-control" }}#}
 
-        {% if user.access_level == 'A' %}
-    {{ form.access_level|add_class:"form-control" }}
-{% elif user.access_level == 'T' %}
+                                {% if user.access_level == 'A' %}
+                                    {{ form.access_level|add_class:"form-control" }}
+                                {% elif user.access_level == 'T' %}
 
-    {{ form.access_level|add_class:"form-control" }}
-{#    <input type="hidden" name="access_level" value="{{ form.access_level.value }}">#}
-{#    Student#}
-{% endif %}
+                                    {{ form.access_level|add_class:"form-control" }}
+
+                                {% elif user.access_level == 'H' %}
+
+                                    {{ form.access_level|add_class:"form-control" }}
+                                    {#    <input type="hidden" name="access_level" value="{{ form.access_level.value }}">#}
+                                    {#    Student#}
+                                {% endif %}
 
 
-{#    <label for="major_code" class="form-label ">Major Code:</label>#}
-{#    {{ form.major_code }}#}
-  </div>
-                                <button type="submit"
+                                {#    <label for="major_code" class="form-label ">Major Code:</label>#}
+                                {#    {{ form.major_code }}#}
+                            </div>
+                            <button type="submit"
                                     class="btn btn-outline-success mx-1">
-                                Create Profile
+                                ثبت کاربر جدید
                             </button>
-{#  <button type="submit">Create Profile</button>#}
-</form>
-                    {% if messages %}
-    <div class="alert alert-danger  custom-alert mt-2 mx-4" id="error-messages"
+                            {#  <button type="submit">Create Profile</button>#}
+                        </form>
+                        {% if messages %}
+                            <div class="alert alert-danger  custom-alert mt-2 mx-4" id="error-messages">
 
-{#  <div id="error-messages" class="card text-white bg-danger mt-2 mb-3 ch-pass-alert">#}
-    <div class="card-body ">
-      <ul class="list-unstyled">
-        {% for message in messages %}
-          <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
-        {% endfor %}
-      </ul>
-    </div>
-  </div>
-{% endif %}
+                                {#  <div id="error-messages" class="card text-white bg-danger mt-2 mb-3 ch-pass-alert">#}
+                                <div class="card-body ">
+                                    <ul class="list-unstyled">
+                                        {% for message in messages %}
+                                            <li{% if message.tags %}
+                                                class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+                                        {% endfor %}
+                                    </ul>
+                                </div>
+                            </div>
+                        {% endif %}
 
-<script>
-  setTimeout(function() {
-    var errorMessages = document.getElementById('error-messages');
-    if (errorMessages) {
-      errorMessages.style.display = 'none';
-    }
-  }, 3000);
-</script>
+                        <script>
+                            setTimeout(function () {
+                                var errorMessages = document.getElementById('error-messages');
+                                if (errorMessages) {
+                                    errorMessages.style.display = 'none';
+                                }
+                            }, 3000);
+                        </script>
 
                     </div>
                 </div>
 
-{#                        <form method="post">#}
-{#  {% csrf_token %}#}
-{#  {{ form.as_p }}#}
-{#  <button type="submit">Create Profile</button>#}
-{#</form>#}
-{##}
-{#                        <form method="post">#}
-{#                            {% csrf_token %}#}
-{#                            <div class="mb-3">#}
-{#                                <label for="old_password" class="form-label " style="color: #2F4F4F;">Old#}
-{#                                    Password</label>#}
-{#                                {{ form.old_password|add_class:"form-control" }}#}
-{#                            </div>#}
-{#                            <div class="mb-3">#}
-{#                                <label for="new_password1" class="form-label" style="color: #2F4F4F;">New#}
-{#                                    Password</label>#}
-{#                                {{ form.new_password1|add_class:"form-control" }}#}
-{#                            </div>#}
-{#                            <div class="mb-3">#}
-{#                                <label for="password" class="form-label" style="color: #2F4F4F;">New Password#}
-{#                                    Confirmation</label>#}
-{#                                {{ form.new_password2|add_class:"form-control" }}#}
-{#                            </div>#}
-                            {#                    {{ form.as_p }}#}
-{#                            <button type="submit" id="createQuestionGroupButton"#}
-{#                                    class="btn btn-outline-success mx-1">#}
-{#                                Change Password#}
-{#                            </button>#}
-{#                        </form>#}
-{#                    </div>#}
-
-
-{#            </div>#}
+            </div>
         </div>
-    </div>
     </div>
 
     <div class="container-fluid">
 
         <div class="card custom-card shadow" style="height: 100vh">
             <div class="card-header  text-white">
-                <h5 class="card-title">Profile Lists</h5>
+                <h5 class="card-title">لیست کاربران</h5>
             </div>
             <div class="card-body" style="height: 100%">
 
@@ -188,10 +154,10 @@
                     <table id="profileTable" class="table table-striped">
                         <thead>
                         <tr>
-                            <th>Username</th>
-                            <th>Major Code</th>
-                            <th>Entry Year</th>
-                            <th>Access Level</th>
+                            <th>نام کاربری</th>
+                            <th>کد کاربری</th>
+                            <th>سال ورودی</th>
+                            <th>سطج دسترسی</th>
                         </tr>
                         </thead>
                         <tbody>
@@ -201,11 +167,13 @@
                                 <td>{{ field.major_code }}</td>
                                 <td>{{ field.entry_year }}</td>
                                 <td>{% if  field.access_level == 'A' %}
-                                    Admin
+                                    ادمین
+                                {% elif field.access_level == 'H' %}
+                                    سوپر ادمین
                                 {% elif field.access_level == 'T' %}
-                                    Teacher
+                                    استاد
                                 {% elif field.access_level == 'S' %}
-                                    Student
+                                    دانشجو
                                 {% endif %}</td>
                             </tr>
                         {% endfor %}

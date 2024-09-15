@@ -1,7 +1,7 @@
 {% extends "layouts/base.html" %}
 {% load static %}
 
-{% block title %} Transactions {% endblock %}
+{% block title %} مدیریت آزمون ها {% endblock %}
 
 <!-- Specific Page CSS goes HERE -->
 {% block stylesheets %}{% endblock stylesheets %}
@@ -11,12 +11,13 @@
         <div class="d-block mb-4 mb-md-0">
             <nav aria-label="breadcrumb" class="d-none d-md-inline-block">
             </nav>
-            <h2 class="h4">All Exams</h2>
+            <h2 class="">مدیریت آزمون ها</h2>
         </div>
         <div class="btn-toolbar mb-2 mb-md-0">
-            <button id="new-exam-button" type="button" class="btn btn-outline-success open-modal-button" data-bs-toggle="modal"
+            <button id="new-exam-button" type="button" class="btn btn-outline-success open-modal-button"
+                    data-bs-toggle="modal"
                     data-bs-target="#modal-form">
-                <i class="fa fa-plus" aria-hidden="true"></i> New Exam
+                <i class="fa fa-plus" aria-hidden="true"></i> ایجاد آزمون جدید
             </button>
         </div>
     </div>
@@ -32,13 +33,13 @@
                              aria-orientation="vertical">
                             <a class="nav-link active" id="settingProp" data-bs-toggle="pill" href="#settingProp"
                                role="tab"
-                               aria-controls="prop" aria-selected="true">General Properties</a>
-{#                            <a class="nav-link" id="settingScore" data-bs-toggle="pill" href="#settingScore" role="tab"#}
-{#                               aria-controls="propId" aria-selected="false">Quiz Scoring</a>#}
-{#                            <a class="nav-link" id="settingQProp" data-bs-toggle="pill" href="#settingQProp" role="tab"#}
-{#                               aria-controls="qPropId" aria-selected="false">Question Properties</a>#}
+                               aria-controls="prop" aria-selected="true">تنظیمات</a>
+                            {#                            <a class="nav-link" id="settingScore" data-bs-toggle="pill" href="#settingScore" role="tab"#}
+                            {#                               aria-controls="propId" aria-selected="false">Quiz Scoring</a>#}
+                            {#                            <a class="nav-link" id="settingQProp" data-bs-toggle="pill" href="#settingQProp" role="tab"#}
+                            {#                               aria-controls="qPropId" aria-selected="false">Question Properties</a>#}
                             <a class="nav-link" id="qListId" data-bs-toggle="pill" href="#qListId" role="tab"
-                               aria-controls="qListId" aria-selected="false">Question List</a>
+                               aria-controls="qListId" aria-selected="false"> لیست سوالات</a>
                         </div>
                     </div>
                     <!-- Main Content -->
@@ -47,7 +48,7 @@
                             <button type="button" class="btn-close position-absolute top-0 end-0 m-2"
                                     data-bs-dismiss="modal" aria-label="Close"></button>
                             <div class="text-center mb-4">
-                                <h2 class="mb-0 h4">Create New Exam</h2>
+                                <h2 class="mb-0 h4" id="exam-title">ایجاد درس جدید</h2>
                             </div>
 
                             <div class=" modal-body p-0">
@@ -58,59 +59,62 @@
                                         <div class="form-group">
                                             <div id="settingPropId">
                                                 <div class="mb-3">
-                                                    <label for="label">Label</label>
+                                                    <label for="label">نام آزمون</label>
                                                     <input type="text" class="form-control" id="label" required>
                                                     <div class="valid-feedback">Looks good!</div>
                                                 </div>
-                                                {#                                                <div class="mb-3">#}
-                                                {#                                                    <label for="datePicker">Date of Exam</label>#}
-                                                {#                                                    <div class="input-group">#}
-                                                {#                                    <span class="input-group-text">#}
-                                                {#                                        <svg class="icon icon-xs text-gray-600" fill="currentColor" viewBox="0 0 20 20"#}
-                                                {#                                             xmlns="http://www.w3.org/2000/svg">#}
-                                                {#                                            <path fill-rule="evenodd"#}
-                                                {#                                                  d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z"#}
-                                                {#                                                  clip-rule="evenodd"></path>#}
-                                                {#                                        </svg>#}
-                                                {#                                    </span>#}
-                                                {#                                                        <input data-datepicker="" class="form-control datePicker"#}
-                                                {#                                                               placeholder="dd/mm/yyyy" id="datePicker" type="text"#}
-                                                {#                                                               required>#}
-                                                {#                                                    </div>#}
-                                                {#                                                </div>#}
+
 
                                                 <div class="mb-4">
-  <label for="durationInput" class="form-label">Duration</label>
-  <div class="input-group date">
-    <span class="input-group-text"><i class="fa fa-clock-o" aria-hidden="true"></i></span>
-    <input type="text" id="durationInput" class="form-control" required>
-  </div>
-</div>
+                                                    <label for="durationInput" class="form-label">مدت زمان آزمون</label>
+                                                    <div class="input-group date">
+                                                        <span class="input-group-text"><i class="fa fa-clock-o"
+                                                                                          aria-hidden="true"></i></span>
+                                                        <input type="text" id="durationInput" class="form-control"
+                                                               required>
+                                                    </div>
+                                                </div>
+                                                <div class="mb-4">
+                                                    <label for="exam_date" class="form-label">تاریخ برگزاری
+                                                        آزمون</label>
+                                                    <div class="input-group date">
+                                                        <span class="input-group-text"><i aria-hidden="true"></i></span>
+                                                        <input type="text" id="exam_date" class="form-control" required>
+                                                    </div>
+                                                </div>
+                                                <div class="mb-4">
+                                                    <label for="exam_time" class="form-label">زمان برگزاری آزمون</label>
+                                                    <div class="input-group date">
+                                                        <span class="input-group-text"><i aria-hidden="true"></i></span>
+                                                        <input type="text" id="exam_time" class="form-control" required>
+                                                    </div>
+                                                </div>
+
                                                 <div class="col-md-6">
-                                                            <div class="form-group row " hidden="hidden">
-                                                                <label for="selectTypeScore"
-                                                                       class="col-sm-5 col-form-label">Score In:</label>
-                                                                <div class="col-sm-7">
-                                                                    <select class="form-control" id="selectTypeScore">
-{#                                                                                                                                                <option value="PE">Percent</option>#}
-                                                                        <option value="PO">Points</option>
-                                                                    </select>
-                                                                </div>
-                                                            </div>
-
-
+                                                    <div class="form-group row " hidden="hidden">
+                                                        <label for="selectTypeScore"
+                                                               class="col-sm-5 col-form-label">Score In:</label>
+                                                        <div class="col-sm-7">
+                                                            <select class="form-control" id="selectTypeScore">
+                                                                {#                                                                                                                                                <option value="PE">Percent</option>#}
+                                                                <option value="PO">Points</option>
+                                                            </select>
                                                         </div>
+                                                    </div>
 
-                                                        <div class="form-group row mt-3" id="passingScoreContainer">
-                                                            <label for="passingScore" class="col-sm-4 col-form-label">Passing
-                                                                Score:</label>
-                                                            <div class="col-sm-8">
-                                                                <input type="number" class="form-control"
-                                                                       id="passingScore"
-                                                                       name="passingScore">
-                                                            </div>
 
-                                                        </div>
+                                                </div>
+
+                                                <div class="form-group row mt-3" id="passingScoreContainer">
+                                                    <label for="passingScore" class="col-sm-4 col-form-label">نمره
+                                                        قبولی </label>
+                                                    <div class="col-sm-8">
+                                                        <input type="number" class="form-control"
+                                                               id="passingScore"
+                                                               name="passingScore">
+                                                    </div>
+
+                                                </div>
 
                                             </div>
                                             <div class="container mt-4">
@@ -122,9 +126,10 @@
                                                             Passing score can not be more than 100 percent
                                                         </div>
                                                     </div>
-                                                    <div id="settingQPropId" >
+                                                    <div id="settingQPropId">
 
-                                                        <div class="form-group row mt-3" id="incorrectPenaltyContainer" hidden="hidden">
+                                                        <div class="form-group row mt-3" id="incorrectPenaltyContainer"
+                                                             hidden="hidden">
                                                             <label for="incorrectPenalty"
                                                                    class="col-sm-7 col-form-label incorrect-penalty">Penalty
                                                                 point for incorrect answer:</label>
@@ -157,16 +162,15 @@
 
                                                     <div class="table-q-bank mb-4" id="table-q-bank">
                                                         <button id="toggleColumnsBtn" type="button"
-                                                                class="btn btn btn-outline-primary">Manual or Shuffle
-                                                            Chosen
+                                                                class="btn btn btn-outline-primary">انتخاب درهم یا دستی
                                                         </button>
 
                                                         <table id="qBankTable" class="table table-striped">
                                                             <thead>
                                                             <tr>
-                                                                <th>Group Name</th>
-                                                                <th class="shuffle-choose">Number Of Question</th>
-                                                                <th class="manual-choose">all Qustions</th>
+                                                                <th>نام گروه</th>
+                                                                <th class="shuffle-choose">تعداد سوالات</th>
+                                                                <th class="manual-choose">همه سوالات</th>
 
                                                             </tr>
                                                             </thead>
@@ -176,8 +180,8 @@
                                                                     <td>{{ field.name }}</td>
                                                                     {#                                                                                    <td>{{ field.deadline }}</td>#}
                                                                     <td class="shuffle-choose">
-                                                                        <label for="numberSelect" class="form-label">Select
-                                                                            a Number:</label>
+                                                                        <label for="numberSelect" class="form-label">انتخاب
+                                                                            تعداد سوالات</label>
                                                                         <select class="numberSelect form-select"
                                                                                 data-id="{{ field.id }}">
                                                                             <script>
@@ -195,8 +199,8 @@
                                                                                 <li class="list-group-item d-flex justify-content-between align-items-center list-group-item-success">
 
                                                                                     <div class="question-description">
-            <div class="scrollable-text">{{ question.description }}</div>
-        </div>
+                                                                                        <div class="scrollable-text">{{ question.description }}</div>
+                                                                                    </div>
                                                                                     <div class="form-check form-check-inline">
                                                                                         <input class="form-check-input q-choose-checkbox"
                                                                                                type="checkbox"
@@ -221,10 +225,10 @@
                                             </button>
                                         </div>
                                     </form>
-                                <div class="alert alert-danger custom-alert mt-1  mb-1" id="invalidAlert"
-                             style="display: none;">
-                            please fill all feilds
-                        </div>
+                                    <div class="alert alert-danger custom-alert mt-1  mb-1" id="invalidAlert"
+                                         style="display: none;">
+                                        please fill all feilds
+                                    </div>
 
                                 </div>
                             </div>
@@ -239,13 +243,13 @@
         <table id="examTable" class="table table-striped">
             <thead>
             <tr>
-                <th>Label</th>
-                <th>Duration</th>
-                <th>Setting</th>
-                <th>Preview</th>
-                <th>Results</th>
-                <th>Active</th>
-                <th>Delete</th>
+                <th>نام آزمون</th>
+                <th>مدت زمان آزمون</th>
+                <th>تنظیمات</th>
+                <th>مشاهده</th>
+                <th>نتایج</th>
+                <th>وضعیت آزمون</th>
+                <th>حذف</th>
 
             </tr>
             </thead>
@@ -256,7 +260,8 @@
                     {#                <td>{{ field.deadline }}</td>#}
                     <td>{{ field.duration }}</td>
                     <td>
-                        <button id="update-exam-button" type="button" class="btn btn-outline-success open-modal-button" data-bs-toggle="modal"
+                        <button id="update-exam-button" type="button" class="btn btn-outline-success open-modal-button"
+                                data-bs-toggle="modal"
                                 data-bs-target="#modal-form" data-id={{ field.id }}>
                             <i class="fa fa-cog" aria-hidden="true"></i>
                         </button>
@@ -309,15 +314,15 @@
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="deleteModalLabel">Delete Exam</h5>
+                    <h5 class="modal-title" id="deleteModalLabel">حذف آزمون</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    Are you sure to delete exam
+                    آیا مطمئن هستید که میخواهید آمون موردنظر را حذف کنید؟
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary " data-bs-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-danger delete-exam">Delete</button>
+                    <button type="button" class="btn btn-secondary " data-bs-dismiss="modal">بستن</button>
+                    <button type="button" class="btn btn-danger delete-exam">حذف</button>
                 </div>
             </div>
         </div>
@@ -332,11 +337,11 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    Are you sure to active exam
+                    آیا مطمئن هستید که میخواهید آزمون موردنظر را فعال کنید؟
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary " data-bs-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-warning active-exam">Active</button>
+                    <button type="button" class="btn btn-secondary " data-bs-dismiss="modal">بستن</button>
+                    <button type="button" class="btn btn-warning active-exam">فعال</button>
                 </div>
             </div>
         </div>
