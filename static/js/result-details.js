@@ -16,11 +16,11 @@ $(document).ready(function () {
                 }
 
                 const q = '<div class="card q-result-card shadow mt-3" ><div class="card-header  text-white">' +
-                    '<h5 class="card-title">Question ' + q_num + '</h5></div><div class="card-body" style="height: 100%">' +
-                    '<div class="font-weight-bold my-1" >Description : ' + question.description + '</div>' +
-                    '<div class="row"><div class="col-md-3"><div class="font-weight-bold"> score: ' + question.score + '</div></div>' +
-                    '<div class="col-md-3"><div class="font-weight-bold " > Student Answer: ' + question.question_answers.is_true + '</div></div>' +
-                    '<div class="col-md-3"><div class="font-weight-bold " >Question Answer:' + question.question_answers.q_is_true + '</div></div>' +
+                    '<h5 class="card-title">سوال ' + q_num + '</h5></div><div class="card-body" style="height: 100%">' +
+                    '<div class="font-weight-bold my-1" >صورت سوال : ' + question.description + '</div>' +
+                    '<div class="row"><div class="col-md-3"><div class="font-weight-bold"> بارم: ' + question.score + '</div></div>' +
+                    '<div class="col-md-3"><div class="font-weight-bold " > جواب دانشجو: ' + question.question_answers.is_true + '</div></div>' +
+                    '<div class="col-md-3"><div class="font-weight-bold " >جواب صحیح:' + question.question_answers.q_is_true + '</div></div>' +
                     '<div class="col-md-3"><div class="font-weight-bold " >' + check +
                     '</div></div></div></div></div>'
                 ;
@@ -47,11 +47,11 @@ $(document).ready(function () {
                 }
                 //
                 const q_mc = '<div class="card q-result-card shadow mt-3" ><div class="card-header  text-white">' +
-                    '<h5 class="card-title">Question ' + q_num + '</h5></div><div class="card-body" style="height: 100%">' +
-                    '<div class="font-weight-bold my-1" >Description : ' + question.description + '</div>' +
-                    '<div class="row"><div class="col-md-3"><div class="font-weight-bold"> score: ' + question.score + '</div></div>' +
-                    '<div class="col-md-3"><div class="font-weight-bold " > Student Answer: ' + prof_choice.choice_text + '</div></div>' +
-                    '<div class="col-md-3"><div class="font-weight-bold " >Question Answer:' + true_choice.choice_text + '</div></div>' +
+                    '<h5 class="card-title">سوال ' + q_num + '</h5></div><div class="card-body" style="height: 100%">' +
+                    '<div class="font-weight-bold my-1" >صورت سوال : ' + question.description + '</div>' +
+                    '<div class="row"><div class="col-md-3"><div class="font-weight-bold"> بارم: ' + question.score + '</div></div>' +
+                    '<div class="col-md-3"><div class="font-weight-bold " > جواب دانشجو: ' + prof_choice.choice_text + '</div></div>' +
+                    '<div class="col-md-3"><div class="font-weight-bold " >جواب صحیح:' + true_choice.choice_text + '</div></div>' +
                     '<div class="col-md-3"><div class="font-weight-bold " >' + check +
                     '</div></div></div></div></div>'
                 ;
@@ -99,15 +99,15 @@ $(document).ready(function () {
                 }
 
                 const q_mg = '<div class="card q-result-card mt-1 shadow mt-3" ><div class="card-header  text-white">' +
-                    '<h5 class="card-title">Question ' + q_num + '</h5></div><div class="card-body" style="height: 100%">' +
-                    '<div class="font-weight-bold my-1" id="descriptionContent">Description: </div><div class="row">' +
-                    '<div class="col-md-6"><div class="font-weight-bold " id="score">Score: </div></div>' +
+                    '<h5 class="card-title">سوال ' + q_num + '</h5></div><div class="card-body" style="height: 100%">' +
+                    '<div class="font-weight-bold my-1" id="descriptionContent">صورت سوال: </div><div class="row">' +
+                    '<div class="col-md-6"><div class="font-weight-bold " id="score">بارم: </div></div>' +
                     '<div class="col-md-6"><div class="font-weight-bold " id="score">' + mg_check + '</div></div><div class="row">' +
-                    '<div class="col-md-6"><div class="font-weight-bold " id="score">Student Answer:' +
+                    '<div class="col-md-6"><div class="font-weight-bold " id="score">جواب دانشجو:' +
                     '<div class="row">' +
                     '<div class="col-md-3 MG_item">' + st_answer_items + '</div>' +
                     '<div class="col-md-3 MG_match">' + st_answer_match + '</div></div></div></div> <div class="col-md-6">' +
-                    '<div class="font-weight-bold " id="score">Question Answer:<div class="row">' +
+                    '<div class="font-weight-bold " id="score">جواب صحیح:<div class="row">' +
                     '<div class="col-md-3 MG_item">' + q_items + '</div><div class="col-md-3 MG_match">'
                     + q_match + '</div></div></div></div></div></div></div></div>'
 
