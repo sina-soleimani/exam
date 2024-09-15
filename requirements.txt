@@ -7,10 +7,13 @@ django-bootstrap-icons==0.8.3
 django-ranged-response==0.2.0
 django-recaptcha==4.0.0
 django-simple-captcha==0.6.0
+django-simple-math-captcha==2.0.1
 django-widget-tweaks==1.5.0
 djangorestframework==3.14.0
 et-xmlfile==1.1.0
 idna==3.4
+jalali_core==1.0.0
+jdatetime==5.0.0
 mysqlclient==2.2.0
 openpyxl==3.1.2
 Pillow==10.0.0
