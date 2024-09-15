@@ -1,7 +1,7 @@
 {% extends "layouts/base.html" %}
 {% load static %}
 
-{% block title %} Courses {% endblock %}
+{% block title %} مدیریت دروس {% endblock %}
 
 <!-- Specific Page CSS goes HERE -->
 {% block stylesheets %}{% endblock stylesheets %}
@@ -11,12 +11,13 @@
         <div class="d-block mb-4 mb-md-0">
             <nav aria-label="breadcrumb" class="d-none d-md-inline-block">
             </nav>
-            <h2 class="h4">all Courses </h2>
+            <h2 class="">مدیریت دروس</h2>
         </div>
         <div class="btn-toolbar mb-2 mb-md-0">
-            <button id="new-course-button" type="button" class="btn btn-outline-success open-modal-button" data-bs-toggle="modal"
+            <button id="new-course-button" type="button" class="btn btn-outline-success open-modal-button"
+                    data-bs-toggle="modal"
                     data-bs-target="#modal-form">
-                <i class="fa fa-plus" aria-hidden="true"></i> New Courses
+                <i class="fa fa-plus" aria-hidden="true"></i> ایجاد درس جدید
             </button>
         </div>
     </div>
@@ -32,13 +33,13 @@
                              aria-orientation="vertical">
                             <a class="nav-link active" id="settingProp" data-bs-toggle="pill" href="#settingProp"
                                role="tab"
-                               aria-controls="prop" aria-selected="true">Course Properties</a>
+                               aria-controls="prop" aria-selected="true">مشخصات درس</a>
                             <a class="nav-link" id="settingQBank" data-bs-toggle="pill" href="#settingQBank"
                                role="tab"
-                               aria-controls="propId" aria-selected="false">Question Bank</a>
+                               aria-controls="propId" aria-selected="false">بانک سوال</a>
                             <a class="nav-link" id="settingStudents" data-bs-toggle="pill" href="#settingStudents"
                                role="tab"
-                               aria-controls="qPropId" aria-selected="false">Students</a>
+                               aria-controls="qPropId" aria-selected="false">دانشجویان</a>
                         </div>
                     </div>
                     <!-- Main Content -->
@@ -47,7 +48,7 @@
                             <button type="button" class="btn-close position-absolute top-0 end-0 m-2"
                                     data-bs-dismiss="modal" aria-label="Close"></button>
                             <div class="text-center mb-4">
-                                <h2 id="course-title" class="mb-0 h4">Create New Course</h2>
+                                <h2 id="course-title" class="mb-0 h4">ایجاد درس جدید</h2>
                             </div>
 
                             <div class=" modal-body p-0">
@@ -58,30 +59,15 @@
                                         <div class="form-group">
                                             <div id="settingPropId">
                                                 <div class="mb-3">
-                                                    <label for="label">Course Name</label>
+                                                    <label for="label">نام درس</label>
                                                     <input type="text" class="form-control" id="label" required>
                                                     <div class="valid-feedback">Looks good!</div>
                                                 </div>
-                                                {#                                                <div class="mb-3">#}
-                                                {#                                                    <label for="datePicker">Year</label>#}
-                                                {#                                                    <div class="input-group">#}
-                                                {#                                                            <span class="input-group-text">#}
-                                                {#                                        <svg class="icon icon-xs text-gray-600" fill="currentColor" viewBox="0 0 20 20"#}
-                                                {#                                             xmlns="http://www.w3.org/2000/svg">#}
-                                                {#                                            <path fill-rule="evenodd"#}
-                                                {#                                                  d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z"#}
-                                                {#                                                  clip-rule="evenodd"></path>#}
-                                                {#                                        </svg>#}
-                                                {#                                    </span>#}
-                                                {#                                                        <input data-datepicker="" class="form-control datePicker"#}
-                                                {#                                                               placeholder="dd/mm/yyyy" id="datePicker" type="text"#}
-                                                {#                                                               required>#}
-                                                {#                                                    </div>#}
-                                                {#                                                </div>#}
+
                                                 <div id="settingScoreId">
                                                     <div class="form-group row mt-3" id="termContainer">
                                                         <label for="termId"
-                                                               class="col-sm-4 col-form-label">Term:</label>
+                                                               class="col-sm-4 col-form-label">ترم</label>
                                                         <div class="col-sm-8">
                                                             <input type="number" class="form-control"
                                                                    id="termId"
@@ -94,8 +80,7 @@
 
                                                 <div class="form-group row mt-3" id="courseCodeContainer">
                                                     <label for="courseCode"
-                                                           class="col-sm-7 col-form-label incorrect-penalty">Course
-                                                        Code:
+                                                           class="col-sm-7 col-form-label incorrect-penalty">کد درس
                                                     </label>
                                                     <div class="col-sm-5">
                                                         <input type="number" class="form-control"
@@ -111,8 +96,8 @@
                                                     <thead>
 
                                                     <tr>
-                                                        <th scope="col" style="width: 16.66%">Select</th>
-                                                        <th scope="col">Question Bank</th>
+                                                        <th scope="col" style="width: 16.66%">انتخاب</th>
+                                                        <th scope="col">بانک سوال</th>
                                                     </tr>
                                                     </thead>
                                                     <tbody id="tbodyMultiQ">
@@ -160,44 +145,43 @@
                                                 <div class="d-grid mt-4">
                                                     <button type="submit" id="submitButton"
                                                             class="btn btn-outline-success">
-                                                        Submit
+                                                        ثبت
                                                     </button>
                                                 </div>
                                             </div>
                                         </div>
                                     </form>
 
-                                <div class="alert alert-danger custom-alert mt-1  mb-1" id="invalidAlert"
-                             style="display: none;">
-                            please fill all feilds
-                        </div>
+                                    <div class="alert alert-danger custom-alert mt-1  mb-1" id="invalidAlert"
+                                         style="display: none;">
+                                        please fill all feilds
+                                    </div>
                                     <div id="student_import">
-                                        <input type="file" id="excelFileInput" class="form-control mb-3"
-                                               accept=".xlsx, .xls" lang="pl-Pl">
+                                        <input type="file" id="excelFileInput" class="input-style form-control mb-3"
+                                               accept=".xlsx, .xls" lang="pl-Pl" placeholder="sakkfj">
 
-                                        <button class="btn btn-outline-success" onclick="uploadExcelFile( )">Upload
-                                            Excel File
+                                        <button class="btn btn-outline-success" onclick="uploadExcelFile( )">بارگذاری
+                                            فابل اکسل
                                         </button>
 
 
+                                        <div>
 
-                                            <div >
+                                            <table id="st_table" class="table table-striped table-bordered mt-1">
+                                                <thead>
 
-                                                <table id="st_table" class="table table-striped table-bordered mt-1">
-                                                    <thead>
+                                                <tr>
+                                                    {#                                                        <th scope="col" style="width: 16.66%">Number</th>#}
+                                                    <th scope="col">نام کاربری</th>
+                                                </tr>
+                                                </thead>
+                                                <tbody id="st_tbody">
 
-                                                    <tr>
-{#                                                        <th scope="col" style="width: 16.66%">Number</th>#}
-                                                        <th scope="col">Username</th>
-                                                    </tr>
-                                                    </thead>
-                                                    <tbody id="st_tbody">
-
-                                                    </tbody>
-                                                </table>
+                                                </tbody>
+                                            </table>
 
 
-                                            </div>
+                                        </div>
 
                                     </div>
 
@@ -214,21 +198,21 @@
 
         <div class="card custom-card shadow" style="height: 100vh">
             <div class="card-header  text-white">
-                <h5 class="card-title">Courses</h5>
+                <h5 class="card-title">دروس</h5>
             </div>
             <div class="card-body" style="height: 100%">
                 <div class="table-settings table-responsive mb-4">
                     <table id="courseTable" class="table table-striped" style="width:100%; height: 100%">
                         <thead class="thead-dark">
                         <tr>
-                            <th>Label</th>
-                            <th>Code</th>
-                            <th>Term</th>
+                            <th>نام درس</th>
+                            <th>کد درس</th>
+                            <th>ترم</th>
                             {#                            <th>Year</th>#}
-                            <th>Setting</th>
-                            <th>QBqnk</th>
-                            <th>examlist</th>
-                            <th>Delete</th>
+                            <th>تنظیمات</th>
+                            <th>بانک سوال</th>
+                            <th>مدبربت آزمون ها</th>
+                            <th>حذف</th>
 
                         </tr>
                         </thead>
@@ -240,7 +224,8 @@
                                 <td>{{ field.term }}</td>
                                 {#                                <td>{{ field.year }}</td>#}
                                 <td>
-                                    <button id="update-course-button" type="button" class="btn btn-outline-success open-modal-button"
+                                    <button id="update-course-button" type="button"
+                                            class="btn btn-outline-success open-modal-button"
                                             data-bs-toggle="modal"
                                             data-bs-target="#modal-form" data-id={{ field.id }}>
                                         <i class="fa fa-cog" aria-hidden="true"></i>
@@ -280,16 +265,16 @@
                     <div class="modal-dialog">
                         <div class="modal-content">
                             <div class="modal-header">
-                                <h5 class="modal-title" id="deleteModalLabel">Delete Course</h5>
+                                <h5 class="modal-title" id="deleteModalLabel">حذف درس</h5>
                                 <button type="button" class="btn-close" data-bs-dismiss="modal"
                                         aria-label="Close"></button>
                             </div>
                             <div class="modal-body">
-                                Are you sure to delete course ?
+                                آبا مطمئنید که میخواهید درس مورد نظر را حذف کنبد؟
                             </div>
                             <div class="modal-footer">
-                                <button type="button" class="btn btn-secondary " data-bs-dismiss="modal">Close</button>
-                                <button type="button" class="btn btn-danger delete-course">Delete</button>
+                                <button type="button" class="btn btn-secondary " data-bs-dismiss="modal">بستن</button>
+                                <button type="button" class="btn btn-danger delete-course">حذف</button>
                             </div>
                         </div>
                     </div>
