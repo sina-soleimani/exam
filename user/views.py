@@ -37,6 +37,7 @@ def user_login(request):
     if request.method == 'POST':
         print('1')
         form = ProfileLoginForm(data=request.POST)
+        print(form.errors)
         if form.is_valid():
             print('2')
             # Retrieve username and password from the form
@@ -60,7 +61,7 @@ def user_login(request):
     else:
         print('4')
         form = ProfileLoginForm()
-    return render(request, 'registration/login.html', {'form': form})
+    return render(request, 'registration/login-new.html', {'form': form})
 
 
 class UserLogoutView(LogoutView):
@@ -101,8 +102,9 @@ class UserListView(ListView):
         profiles_json = json.dumps(profiles_data, cls=DecimalEncoder, indent=4, sort_keys=True, default=str)
         context['profiles_json'] = profiles_json
         return context
+
     def post(self, request, *args, **kwargs):
-        form = AddProfileForm(request.POST ,user=request.user)
+        form = AddProfileForm(request.POST, user=request.user)
         if form.is_valid():
             # Process the form data and save the new profile
             form.save()
@@ -141,7 +143,7 @@ def upload_excel(request):
                         existing_user.password = make_password(str(new_data[1]))
                         existing_user.major_code = new_data[3]
                         if request.user.access_level == new_data[4] or new_data[4] == 'A':
-                            x=1/0
+                            x = 1 / 0
                         existing_user.access_level = new_data[4]
                         existing_user.entry_year = new_data[2]
                         existing_user.save()
@@ -183,7 +185,7 @@ def create_profile(request):
     print('32')
     if request.method == 'POST':
         print('1')
-        form = AddProfileForm(request.POST , user= request.user)
+        form = AddProfileForm(request.POST, user=request.user)
         if form.is_valid():
             print('2')
             # Save the username, password, entry_year, and major_code
@@ -204,6 +206,6 @@ def create_profile(request):
         # print(form.error_message)
 
     else:
-        form = AddProfileForm(user= request.user)
+        form = AddProfileForm(user=request.user)
 
     return render(request, 'home/profile-mangar.html', {'form': form})
