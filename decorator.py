@@ -7,7 +7,6 @@ from django.urls import reverse
 from django.shortcuts import render, HttpResponseRedirect
 
 
-
 def access_level_required(required_level):
     def decorator(view_func):
         @wraps(view_func)
@@ -26,7 +25,7 @@ def access_level_required(required_level):
                 # If self.request.user is not available or any other unexpected error occurs
                 raise PermissionDenied("You don't have permission to access this page")
 
-            if user_access_level == required_level or user_access_level == 'A' or user_access_level == 'T':
+            if user_access_level == required_level or user_access_level == 'A' or user_access_level == 'H' or user_access_level == 'T':
                 return view_func(self, *args, **kwargs)
             else:
                 # Delay the redirection by 5 seconds
@@ -34,9 +33,6 @@ def access_level_required(required_level):
 
                 # Redirect to the logout URL
 
-        # return redirect(reverse('user:logout'))
-
         return wrapper
-
 
     return decorator
