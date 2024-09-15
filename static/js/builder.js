@@ -82,8 +82,6 @@ function addQuestionToQuestionGroupsData(qu, qgId) {
     return null;
 }
 
-// deleteAudio();
-// questionAudioListener();
 showQuestions();
 
 
@@ -186,8 +184,6 @@ function createQuestion() {
             // Validation failed, do not proceed with form submission
             return;
         }
-        // const imageInput = document.querySelector("#showImageId");
-        // console.log(imageInput)
         const formData = new FormData(this);
         formData.append("question__id", create_question_flag);
         formData.append("csrfmiddlewaretoken", csrfToken);
@@ -198,12 +194,12 @@ function createQuestion() {
         // formData.append("image", file);
         var tFChoiced;
         if ($("#baremId").val() === '') {
-                $("#invalidScoreAlert").show();
-                setTimeout(function () {
-                    $("#invalidScoreAlert").hide();
-                }, 3000);
-                return false;
-            }
+            $("#invalidScoreAlert").show();
+            setTimeout(function () {
+                $("#invalidScoreAlert").hide();
+            }, 3000);
+            return false;
+        }
         if (questionType === 'TF') {
 
             const isTrue = $("#questionTrueId").is(":checked");
@@ -403,46 +399,6 @@ function sortQuestions() {
 
 }
 
-//
-// function chooseImage() {
-//     $('#questionImageId').change(function () {
-//         file = this.files[0];
-//         const invalidImageAlert = $('#invalidImageAlert');
-//         if (file) {
-//             // Check if the selected file is an image
-//             if (isValidImageType(file.type)) {
-//                 const reader = new FileReader();
-//                 reader.onload = function (event) {
-//                     $('#imageHandler').removeAttr('hidden');
-//                     $('#showImageId').attr('src', event.target.result);
-//                     invalidImageAlert.hide(); // Hide the alert if it was previously shown
-//                 };
-//                 reader.onerror = function () {
-//                     // Handle errors, e.g., display an error message
-//                     console.error('Error reading the image file.');
-//                 };
-//                 reader.readAsDataURL(file);
-//             } else {
-//                 // Display the Bootstrap alert for invalid image file
-//                 invalidImageAlert.show();
-//                 // Hide the image if it was previously displayed
-//                 $('#imageHandler').attr('hidden', 'hidden');
-//                 setTimeout(function () {
-//                     invalidImageAlert.hide();
-//                 }, 3000);
-//             }
-//         } else {
-//             // Handle the case where no file is selected
-//             console.error('No image file selected.');
-//         }
-//     });
-// }
-
-// Function to check if the file type is an image
-// function isValidImageType(fileType) {
-//     return /^image\//.test(fileType);
-// }
-
 
 $(document).on('click', 'button.remove-option', function (event) {
     $(this).closest('tr.q-option').remove();
@@ -518,69 +474,6 @@ function showQuestions() {
 }
 
 
-// function changeHandler({target}) {
-//     if (!target.files.length) return;
-//     const allowedAudioTypes = ['audio/mpeg', 'audio/wav', 'audio/mp3', 'audio/ogg', 'audio/flac']; // Add more audio types if needed
-//
-//     const file = target.files[0];
-//     const invalidAudioAlert = $('#invalidAudioAlert');
-//
-//     if (!allowedAudioTypes.includes(file.type)) {
-//         const alertDiv = document.createElement('div');
-//         alertDiv.classList.add('alert', 'alert-danger');
-//         alertDiv.innerHTML = 'Invalid file type. Please select an audio file.';
-//         invalidAudioAlert.show();
-//         setTimeout(function () {
-//             invalidAudioAlert.hide();
-//         }, 3000);
-//
-//
-//         console.log('Invalid file type');
-//         return;
-//     }
-//     if (file) {
-//         let reader = new FileReader();
-//         reader.onload = function (event) {
-//             audioFile = event.target.result;
-//         }
-//         reader.readAsDataURL(file);
-//     }
-//     Create a blob that we can use as an src for our audio element
-// const urlObj = URL.createObjectURL(target.files[0]);
-//
-// document.getElementById("audioQuestionBase").innerHTML = '';
-// Create an audio element
-// audio = document.createElement("audio");
-// audio.setAttribute('id', 'showAudioId')
-
-
-// Clean up the URL Object after we are done with it
-// audio.addEventListener("load", () => {
-//     URL.revokeObjectURL(urlObj);
-// });
-
-// Append the audio element
-// document.getElementById("audioHidden").removeAttribute('hidden')
-// document.getElementById("audioQuestionBase").appendChild(audio);
-// Allow us to control the audio
-// audio.controls = "true";
-
-// Set the src and start loading the audio from the file
-// audio.src = urlObj;
-// }
-
-// function questionAudioListener() {
-//     document.getElementById("questionAudioId")
-//         .addEventListener("change", changeHandler, false);
-// }
-
-// function deleteAudio() {
-//     $(document).on('click', '#deleteAudioId', function (event) {
-//         $('#audioQuestionBase').empty();
-//         $('#audioHidden').prop('hidden', true);
-//     })
-// }
-
 function globalRestartForm() {
     $("#questionTextarea").val('')
     $("#baremId").val('')
@@ -600,6 +493,7 @@ $(document).on('click', '#matchingDropDown', function (event) {
     $('#multiLableId').attr('hidden', 'hidden')
     $('#tfLableId').attr('hidden', 'hidden')
     $('#MathingQuestionTable').removeAttr('hidden')
+    $('#matchingLableId').removeAttr('hidden')
 
 })
 
@@ -648,24 +542,19 @@ function multiplePageProceess() {
     $('#tfLableId').attr('hidden', 'hidden')
     $('#multiLableId').removeAttr('hidden')
     $('#MathingQuestionTable').attr('hidden', 'hidden')
+    $('#matchingLableId').attr('hidden', 'hidden')
 }
 
 function matchingPageProceess() {
     questionType = 'MG'
     globalRestartForm()
     $('#MathingQuestionTable').removeAttr('hidden')
+    $('#matchingLableId').removeAttr('hidden')
     $('#TrueFalseQuestionTable').attr('hidden', 'hidden')
     $('#tfLableId').attr('hidden', 'hidden')
-    $('#multiLableId').removeAttr('hidden')
+    $('#multiLableId').attr('hidden', 'hidden')
     $('#multiQuestionTable').attr('hidden', 'hidden')
 }
-
-// function deleteImage() {
-//     $('#deleteImageId').on('click', function () {
-//         $('#showImageId').removeAttr('src');
-//         $('#imageHandler').attr('hidden', true);
-//     })
-// }
 
 
 function addMatchingOption() {
@@ -702,10 +591,8 @@ function addMultipleOption() {
 }
 
 $(document).on('click', '.open-import-modal', function (event) {
-    // candidate_delete_course = $(this).data('id')
-    // $('#deleteModalLabel').html('Delete   Course')
+
     console.log('salam');
-    // $('#importModal').modal('toggle')
 })
 
 function uploadExcelQFile(id) {
@@ -720,6 +607,34 @@ function uploadExcelQFile(id) {
 
         $.ajax({
             url: '/builder/upload_q_excel/', // URL where you'll handle the upload in your Django application
+            type: 'POST',
+            data: formData,
+            processData: false,
+            contentType: false,
+            success: function (response) {
+                window.location.href = '/builder/' + bank_id + '/q_bank'
+            },
+            error: function () {
+                alert('File upload failed.');
+            }
+        });
+    } else {
+        alert('Please select an Excel file to upload.');
+    }
+}
+
+function uploadExcelMPFile(id) {
+    var fileInput = document.getElementById('excelFileMPInput');
+    var file = fileInput.files[0];
+
+    if (file) {
+        var formData = new FormData();
+        formData.append('excelFile', file);
+        formData.append('csrfmiddlewaretoken', csrfToken);
+        formData.append('q_group_import_id', q_group_import_id);
+
+        $.ajax({
+            url: '/builder/upload_mp_excel/', // URL where you'll handle the upload in your Django application
             type: 'POST',
             data: formData,
             processData: false,
