@@ -2,12 +2,13 @@ var desiredId = null;
 const csrfToken = $("input[name=csrfmiddlewaretoken]").val();
 var candidate_delete_course = null;
 $(document).ready(function () {
-    $('#update-course-button').click(function() {
-            $('#course-title').text('Update Course');
-        });
-    $('#new-course-button').click(function() {
-            $('#course-title').text('Create New Course');
-        });
+    console.log(window.location.href)
+    $('#update-course-button').click(function () {
+        $('#course-title').text('ویرایش درس');
+    });
+    $('#new-course-button').click(function () {
+        $('#course-title').text('ایجاد درس جدید');
+    });
     $('.open-modal-button').click(function () {
         $('#st_tbody').empty()
         desiredId = $(this).data('id');
@@ -18,58 +19,34 @@ $(document).ready(function () {
             $('#termId').val(element.term);
             $('#datePicker').val(element.year);
             $('#' + element.q_bank + '_bank').prop('checked', true);
-// element.students.forEach(function(profile) {
-  // Display profile information
-  // console.log(profile);
-// });
-console.log(typeof element.students)
-// var profiles = JSON.parse('{{ element.students | safe }}');
-var profiles = JSON.parse( element.students );
 
-console.log(profiles);
-// $("#st_table tbody").()
-                        document.getElementById("st_tbody").innerHTML = '';
+            console.log(typeof element.students)
+            var profiles = JSON.parse(element.students);
+
+            console.log(profiles);
+            document.getElementById("st_tbody").innerHTML = '';
 
 
             var tableBody = $("#st_tbody");
-            // tableBody.empty()
 
-profiles.forEach(function(profile) {
-  // Display profile information
-  console.log(profile.fields.username);
-    // Create a new row and cells
-  var newRow = $("<tr>");
-  var cell1 = $("<td>").text(profile.fields.username);
-  // var cell2 = $("<td>").text("New Cell 2");
-  //
-  // Append the cells to the row
-  newRow.append(cell1);
-  // newRow.append(cell2);
+            profiles.forEach(function (profile) {
+                // Display profile information
+                console.log(profile.fields.username);
+                // Create a new row and cells
+                var newRow = $("<tr>");
+                var cell1 = $("<td>").text(profile.fields.username);
+                // var cell2 = $("<td>").text("New Cell 2");
+                //
+                // Append the cells to the row
+                newRow.append(cell1);
+                // newRow.append(cell2);
 
-  // Append the row to the table body
-  tableBody.append(newRow);
+                // Append the row to the table body
+                tableBody.append(newRow);
 
-  // console.log(profile.email);
-  // Add more fields as needed
-});
-
-
-
-            // for (let i; i<element.students.length;i++){
-            //     console.log(element.students[i])
-            // }
-
-  // Create a new row and cells
-  // var newRow = $("<tr>");
-  // var cell1 = $("<td>").text("New Cell 1");
-  // var cell2 = $("<td>").text("New Cell 2");
-  //
-  // Append the cells to the row
-  // newRow.append(cell1);
-  // newRow.append(cell2);
-
-  // Append the row to the table body
-  // tableBody.append(newRow);
+                // console.log(profile.email);
+                // Add more fields as needed
+            });
 
 
             $('#modal-form').modal('show');
@@ -118,10 +95,6 @@ function resetDateTimePicker() {
 
 
 $('#submitButton').click(function (event) {
-    // const str = $('#datePicker').val().replaceAll('/', '-');
-    // const endstr = str.substring(str.length - 5, str.length);
-    // const startstr = str.substring(0, str.length - 5);
-    // var formattedStr = `${endstr.substring(1)}-${startstr}`;
     const selectedRadioButton = $('input[name="selected_bank"]:checked');
 
     if (selectedRadioButton.length > 0) {
@@ -155,14 +128,13 @@ $('#submitButton').click(function (event) {
         'q_bank_name': new_bank_name,
 
     };
-    if ($('#label').val() === '' || $('#courseCode').val() === ''|| $('#termId').val() === '') {
-                $("#invalidAlert").show();
-                setTimeout(function () {
-                    $("#invalidAlert").hide();
-                }, 3000);
-                return false;
-            }
-
+    if ($('#label').val() === '' || $('#courseCode').val() === '' || $('#termId').val() === '') {
+        $("#invalidAlert").show();
+        setTimeout(function () {
+            $("#invalidAlert").hide();
+        }, 3000);
+        return false;
+    }
 
 
     $.ajax({
@@ -181,7 +153,7 @@ $('#submitButton').click(function (event) {
 
 $(document).on('click', '.open-delete-modal', function (event) {
     candidate_delete_course = $(this).data('id')
-    $('#deleteModalLabel').html('Delete ' + findCourseById(coursesData, candidate_delete_course).course_name + ' Course')
+    $('#deleteModalLabel').html('حذف درس ' + findCourseById(coursesData, candidate_delete_course).course_name + ' ')
 })
 
 
