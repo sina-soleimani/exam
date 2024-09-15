@@ -3,7 +3,7 @@ var candidate_delete_exam = null;
 var candidate_active_exam = null;
 var manual_choose = false;
 $(document).ready(function () {
-    $('#durationInput').datetimepicker({
+$('#durationInput').datetimepicker({
     format: 'HH:mm:ss',
     defaultDate: moment().startOf('day').add(2, 'hours'),
     icons: {
@@ -18,11 +18,91 @@ $(document).ready(function () {
       close: 'fa fa-times',
     }
   });
+$('#exam_time').datetimepicker({
+    format: 'HH:mm:ss',
+    defaultDate: moment().startOf('day').add(2, 'hours'),
+    icons: {
+      time: 'fa fa-clock-o',
+      date: 'fa fa-calendar',
+      up: 'fa fa-chevron-up',
+      down: 'fa fa-chevron-down',
+      previous: 'fa fa-chevron-left',
+      next: 'fa fa-chevron-right',
+      today: 'fa fa-crosshairs',
+      clear: 'fa fa-trash',
+      close: 'fa fa-times',
+    }
+  });
+  kamaDatepicker('exam_date');
+kamaDatepicker('exam_date', {
+
+  // placeholder text
+  placeholder: "",
+
+  // enable 2 digits
+  twodigit: true,
+
+  // close calendar after select
+  closeAfterSelect: true,
+
+  // nexy / prev buttons
+  nextButtonIcon: "بعدی",
+  previousButtonIcon: "قبلی ",
+
+  // color of buttons
+  buttonsColor: "پیشفرض ",
+
+  // force Farsi digits
+  forceFarsiDigits: false,
+
+  // highlight today
+  markToday: false,
+
+  // highlight holidays
+  markHolidays: false,
+
+  // highlight user selected day
+  highlightSelectedDay: false,
+
+  // true or false
+  sync: false,
+
+  // display goto today button
+  gotoToday: false,
+
+  // the number of years to be selected before this year
+  pastYearsCount: 95,
+
+  // the number of years to be selected after this year
+  futureYearsCount: 6,
+
+  // auto swaps next/prev buttons
+  swapNextPrev: false,
+
+  // define custom holidays here
+  holidays: [
+    { month: 1, day: 1 },
+    { month: 1, day: 2 },
+    { month: 1, day: 3 },
+    { month: 1, day: 4 },
+    { month: 1, day: 12 },
+    { month: 1, day: 13 },
+    { month: 3, day: 14 },
+    { month: 3, day: 15 },
+    { month: 11, day: 22 },
+    { month: 12, day: 29 },
+  ],
+
+  // set disabled holidays
+  disableHolidays: false
+
+});
+
     $('#update-exam-button').click(function() {
-            $('.modal-body h2').text('Update Exam');
+            $('.modal-body h2').text('ویرایش آزمون');
         });
     $('#new-exam-button').click(function() {
-            $('.modal-body h2').text('Create New Exam');
+            $('.modal-body h2').text('ایجاد آزمون جدید');
         });
     $('.open-modal-button').click(function () {
 
@@ -65,6 +145,8 @@ $(document).ready(function () {
             $('#label').val(element.label);
             // 'deadline': formattedStr,
             $('#durationInput').val(element.duration);
+            $('#exam_date').val(element.exam_date);
+            $('#exam_time').val(element.exam_time);
             // $('#datePicker').val(element.deadline.replaceAll('-', '/'));
             $('#selectTypeScore').val(element.score_type);
             $('#passingScore').val(element.point_passing_score);
@@ -77,6 +159,8 @@ $(document).ready(function () {
             $('#label').val('');
             // 'deadline': formattedStr,
             $('#durationInput').val('');
+            $('#exam_time').val('');
+            $('#exam_date').val('');
             // $('#datePicker').val('');
             $('#selectTypeScore').val('');
             $('#passingScore').val('');
@@ -154,24 +238,16 @@ $(document).on('click', '#designExam', function (event) {
     });
 });
 
-// $('#durationInput').datetimepicker({
-//     useCurrent: false,
-//     format: "HH:mm:ss",
-// }).on('dp.show', resetDateTimePicker);
 
 $('#submitButton').click(function (event) {
-    // const str = $('#datePicker').val().replaceAll('/', '-');
-    // const endstr = str.substring(str.length - 5, str.length);
-    // const startstr = str.substring(0, str.length - 5);
-    // const formattedStr = `${endstr.substring(1)}-${startstr}`;
-    // console.log(formattedStr)
-    // console.log(typeof formattedStr)
 
     const formData = {
         'csrfmiddlewaretoken': csrfToken,
         'label': $('#label').val(),
         'deadline': '1-05-2024-',
         'duration': $('#durationInput').val(),
+        'exam_date': $('#exam_date').val(),
+        'exam_time': $('#exam_time').val(),
         'score_type': 'PO',
         'point_passing_score': $('#passingScore').val(),
         'percent_passing_score': $('#passingScore').val(),
@@ -229,12 +305,6 @@ document.getElementById('selectTypeScore').addEventListener('change', function (
 
     const passingScore = document.getElementById('passingScore');
 
-    // if (selectedOption === 'Percent') {
-    //
-    //     passingScore.placeholder = 'Enter a percentage';
-    //     passingScore.max = 100;
-    //     passingScore.min = 0;
-    // } else if (selectedOption === 'Points') {
     passingScore.placeholder = 'Enter a number';
     passingScore.min = 0;
     // }
@@ -270,7 +340,7 @@ $(document).on('click', '#qListId', function (event) {
 })
 $(document).on('click', '.open-delete-modal', function (event) {
     candidate_delete_exam = $(this).data('id')
-    $('#deleteModalLabel').html('Delete ' + findExamById(examsData, candidate_delete_exam).label + ' Exam')
+    $('#deleteModalLabel').html('حذف آزمون ' + findExamById(examsData, candidate_delete_exam).label + ' ')
 })
 
 function findExamById(examsData, examId) {
@@ -298,7 +368,7 @@ $(document).on('click', '.delete-exam', function (event) {
 })
 $(document).on('click', '.open-active-modal', function (event) {
     candidate_active_exam = $(this).data('id')
-    $('#activeModalLabel').html('Active ' + findExamById(examsData, candidate_active_exam).label + ' Exam')
+    $('#activeModalLabel').html('فعال کردن آزمون  ' + findExamById(examsData, candidate_active_exam).label + ' ')
 })
 
 $(document).on('click', '.active-exam', function (event) {
