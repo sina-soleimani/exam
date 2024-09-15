@@ -17,7 +17,7 @@ $(document).ready(function () {
             success: function (data) {
                 console.log('success')
 
-            window.location.href = '/results/list/'+id;
+                window.location.href = '/results/list/' + id;
                 // Handle the response if needed
             }
         });
