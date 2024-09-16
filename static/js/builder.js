@@ -139,6 +139,13 @@ function createQuestion() {
         }
 
         var question_group__id = (qg_selected_id === null) ? $('.menu-list li:first').attr('data-id') : qg_selected_id;
+        if($('.menu-list li:first').attr('data-id')===undefined){
+            $("#notExistQGAlert").show();
+            setTimeout(function () {
+                $("#notExistQGAlert").hide();
+            }, 3000);
+            return false;
+        }
 
         const formData = new FormData(this);
         formData.append("question__id", create_question_flag);
