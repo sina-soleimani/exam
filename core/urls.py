@@ -15,18 +15,18 @@ Including another URLconf
 """
 from django.urls import path, include
 from django.contrib import admin
-from core import views as project_views
-from questions import views, urls
+from questions import urls as q_urls
 from taker import urls as taker_url
-
-
-
+from exams import urls as exam_urls
 
 urlpatterns = [
-    path('tasks/', include(urls)),
+    path('builder/', include(q_urls)),
     path('taker/', include(taker_url)),
-    path('create_question/', views.createQuestion, name='createQuestion'),
+    path('taker/', include(taker_url)),
+    path('exams/', include(exam_urls)),
 
     path('admin/', admin.site.urls),
-    path('form', views.MyForm.as_view(), name='formList'),
+
+    path("", include("authentication.urls")),  # Auth routes - login / register
+    path("", include("home.urls")),
 ]

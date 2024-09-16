@@ -1,246 +1,437 @@
 {% extends 'base.html' %}
+{% load static %}
 
 {% block title %}
 
 
-Exam Creator
+    Exam Creator
 
 {% endblock title %}
 {% block body_content %}
-{% csrf_token %}
-<!--TOP BAR-->
-<div class="top-bar d-flex flex-row  mt-3  builder-color">
-    <div class=" mt-3 mr-1">
-        <div class="dropdown">
-            <button class="btn btn-light btn-sm  btn-outline-secondary dropdown-toggle" type="button"
-                    id="dropdownMenuButton"
-                    data-toggle="dropdown"
-                    aria-haspopup="true" aria-expanded="false">
-                <i class='fa fa-question-circle-o'></i>
-                Question
-            </button>
-            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                <a class="dropdown-item" href="#">
-                    <i class="fa fa-remove"></i>/<i class="fa fa-check"></i> true/false</a>
-                <a class="dropdown-item" href="#">Another action</a>
-                <a class="dropdown-item" href="#">Something else here</a>
-            </div>
-        </div>
+    {% csrf_token %}
+    <!--TOP BAR-->
+    <div class="top-bar d-flex flex-row  mt-3  builder-color">
+        <div class=" mt-3 mr-1">
+            <div class="dropdown">
+                <button class="btn btn-light btn-sm  btn-outline-secondary dropdown-toggle" type="button"
+                        id="dropdownMenuButton"
+                        data-toggle="dropdown"
+                        aria-haspopup="true" aria-expanded="false">
+                    <i class='fa fa-question-circle-o'></i>
+                    Question
+                </button>
 
-    </div>
-    <div class="mt-3 mr-1 "><a href="#" class="btn btn-light btn-sm  btn-outline-secondary " role="button"
-                               aria-disabled="true">
-        <i class='fa-solid fa-rectangle-list'></i> Question Group
-    </a></div>
-    <div class="mt-3 mr-1 ">
-        <a href="#" class="btn btn-light btn-sm  btn-outline-secondary  " role="button" aria-disabled="true">
-            <i class='fa-solid fa-file-export'></i> Publish
-        </a></div>
-    <div class="mt-3 mr-1 ">
-        <a href="#" class="btn btn-light btn-sm  btn-outline-secondary" role="button" aria-disabled="true">
-            <i class="fa fa-cog" aria-hidden="true"></i> Publish
-        </a></div>
-</div>
-<div id="mmenu_screen" class="container-fluid" style="height: 100%">
-    <div class="row flex-fill modal-body flex-lg-nowrap">
-        <!--LEFT BAR-->
-        <div class="left-bar col-12 col-md-3 col-lg-3 bd-sidebar   border-secondary">
-
-            <div class="container">
-                <div class=" justify-content-center">
-
-                    <div class=" mt-5">
-                        <form class="form-inline justify-content-center" data-url="{% url 'formList' %}"
-                              id="createQuestionGroupForm" method="post">
-                            {% csrf_token %}
-
-                            {% for field in question_qroups_form %}
-
-                            {{field}}
-                            {% endfor %}
-
-                            <button type="button" id="createQuestionGroupButton" class="btn btn-outline-success mx-1">
-                                create
-                            </button>
-
-                        </form>
-                    </div>
-
-                    <div class="menu-box">
-                        <ul class="menu-list sortable question-group-list mx-1 accordion" id="question-group-list-id">
-                            {% for question_group in question_qroups %}
-                            <li class="question-group " data-id="{{question_group.id}}">
-                                <div class="d-flex tag-btn">
-                                    <a class="nest">{{question_group.name}}</a>
-                                    <button type="button" class="close float-right" data-id="{{question_group.id}}">
-                                        <span aria-hidden="true">&times;</span>
-                                    </button>
-                                </div>
-
-                                <ul class="question-list mr-2 inner" data-id="{{question_group.id}}">
-                                    <li class="question"></li>
-                                    {% for question in question_group.question_group_questions.all %}
-                                    <li class="question" data-id="{{question.id}}">
-                                        <a>{{question.description}}</a>
-                                    </li>
-                                    {% endfor %}
-                                </ul>
-                            </li>
-                            {% endfor %}
-                        </ul>
-                    </div>
+                <div class="dropdown-menu" id="dropdown-menu-id" aria-labelledby="dropdownMenuButton">
+                    <a class="dropdown-item" id="trueFalseDropDown">
+                        <i class="fa fa-remove"></i>/<i class="fa fa-check"></i> true/false</a>
+                    <a class="dropdown-item" id="multipleDropDown">Multiple</a>
+                    <a class="dropdown-item" id="matchingDropDown">Matching</a>
                 </div>
             </div>
+
         </div>
-        <!--MIDDLE BAR-->
-        <div class="card middle-bar col-12 col-md-9 col-lg-6 py-md-3  bd-content background-border" role="main">
-            <div class="card-body bg-light  shadow   rounded" style="z-index: 100">
+
+        <div class="mt-3 mr-1 ">
+            <a href="#" class="btn btn-light btn-sm  btn-outline-secondary  " role="button" aria-disabled="true">
+                <i class='fa-solid fa-file-export'></i> Publish
+            </a></div>
+        <div class="mt-3 mr-1 ">
+            <a href="#" class="btn btn-light btn-sm  btn-outline-secondary" role="button" aria-disabled="true">
+                <i class="fa fa-cog" aria-hidden="true"></i> Setting
+            </a></div>
+    </div>
+    <div id="mmenu_screen" class="container-fluid" style="height: 100%">
+        <div class="row flex-fill modal-body flex-lg-nowrap">
+            <!--LEFT BAR-->
+            <div class="left-bar col-12 col-md-3 col-lg-3 bd-sidebar   border-secondary">
 
                 <div class="container">
-                    <form data-url="{% url  'createQuestion' %}" method="post" id="createQuestionForm"
-                          enctype="multipart/form-data">
+                    <div class=" justify-content-center">
 
-                        {% csrf_token %}
+                        <div class=" mt-5">
+                            <form class="form-inline justify-content-center"
+                                  id="createQuestionGroupForm" method="post">
+                                {% csrf_token %}
 
-                        <div class="font-weight-bold"> True/ False Question:</div>
-                        <div class="form-outline">
+                                {% for field in question_qroups_form %}
+
+                                    {{ field }}
+
+                                {% endfor %}
+
+                                <button type="button" id="createQuestionGroupButton"
+                                        class="btn btn-outline-success mx-1">
+                                    create
+                                </button>
+
+
+                            </form>
+                        </div>
+
+                        <div class="alert alert-danger custom-alert mt-2 mx-4" id="invalidQGNameAlert"
+                             style="display: none;">
+                            please fill feild
+                        </div>
+                        <div class="menu-box">
+                            <ul class="menu-list sortable question-group-list mx-1 accordion"
+                                id="question-group-list-id">
+                                {% for question_group in question_qroups %}
+                                    <li class="question-group" data-id="{{ question_group.id }}">
+                                        <div class="d-flex tag-btn select-btn">
+                                            <a class="nest">{{ question_group.name }}</a>
+                                            <button type="button" class="close float-right" name="question_group"
+                                                    data-id="{{ question_group.id }}">
+                                                <span aria-hidden="true">&times;</span>
+                                            </button>
+                                        </div>
+
+                                        <ul class="question-list mr-2 inner" data-id="{{ question_group.id }}">
+                                            <li class="question"></li>
+                                            {% for question in question_group.question_group_questions.all %}
+                                                <li class="question " data-id="{{ question.id }}">
+                                                    <div class="d-flex tag-btn select-btn">
+                                                        <a class="flex-grow-1 ">True/False</a>
+                                                        <button type="button" class="close float-right" name="question"
+                                                                data-id="{{ question.id }}">
+                                                            <span aria-hidden="true">&times;</span>
+                                                        </button>
+                                                    </div>
+
+                                                </li>
+                                            {% endfor %}
+                                        </ul>
+                                    </li>
+                                {% endfor %}
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!--MIDDLE BAR-->
+            <div class="card middle-bar col-12 col-md-9 col-lg-6 py-md-3  bd-content background-border" role="main">
+                <div class="card-body bg-light  shadow   rounded" style="z-index: 100">
+
+                    <div class="container">
+                        <form data-url="{% url  'question:true_false_question' %}" method="post" id="createQuestionForm"
+                              enctype="multipart/form-data">
+                            {% csrf_token %}
+
+                            <div class="font-weight-bold mb-2" id="tfLableId"> True/ False Question:</div>
+                            <div class="font-weight-bold mb-2" id="multiLableId" hidden="hidden"> Multiple Question:
+                            </div>
+                            <div class="form-outline">
                             <textarea class="form-control" id="questionTextarea" placeholder="Description"
                                       rows="4"></textarea>
-                            <label class="form-label" for="questionTextarea"></label>
-                        </div>
-                        <div class="row">
-                            <div class="col-sm-5 col-md-6">
-                                <div class="custom-file">
-                                    <input type="file" class="custom-file-input" id="questionImageId" lang="pl-Pl">
-                                    <label class="custom-file-label" for="questionImageId"><i class="fa fa-picture-o"
-                                                                                              aria-hidden="true"></i></label>
+                                <label class="form-label" for="questionTextarea"></label>
+                                <div class="alert alert-danger custom-alert" id="invalidDescriptionAlert"
+                                     style="display: none;">
+                                    please fill descriptiion before submit
                                 </div>
                             </div>
-                            <div class="col-sm-5 offset-sm-2 col-md-6 offset-md-0">
-                                <div class="custom-file ">
-                                    <input type="file" class="custom-file-input" id="questionAudioId" lang="pl-Pl">
-                                    <label class="custom-file-label" for="questionAudioId"> <i class="fa fa-volume-up"
-                                                                                               aria-hidden="true"></i></label>
-                                </div>
-                            </div>
-                        </div>
-                        <hr>
-                        <div class="font-weight-bold">Choices:</div>
-
-
-                        <table class="table table-striped table-bordered mt-1">
-                            <thead>
-                            <tr>
-                                <th scope="col" style="width: 16.66%">Correct</th>
-                                <th scope="col">Choice</th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            <tr>
-                                <th scope="row">
-                                    <div class="custom-control custom-radio">
-                                        <input type="radio" id="questionTrueId" name="questionTrueFalse"
-                                               class="custom-control-input">
-                                        <label class="custom-control-label" for="questionTrueId"></label>
+                            <div class="row">
+                                <div class="col-sm-5 col-md-6">
+                                    <div class="custom-file">
+                                        <input type="file" class="custom-file-input" id="questionImageId" lang="pl-Pl">
+                                        <label class="custom-file-label" for="questionImageId"><i
+                                                class="fa fa-picture-o"
+                                                aria-hidden="true"></i></label>
+                                        <div class="alert alert-danger mt-3 custom-alert" id="invalidImageAlert"
+                                             style="display: none;">
+                                            Selected file is not a valid image.
+                                        </div>
                                     </div>
-                                </th>
-                                <th>True</th>
-                            </tr>
-                            <tr>
-                                <th scope="row">
-                                    <div class="custom-control custom-radio">
-                                        <input type="radio" id="questionFalseId" name="questionTrueFalse"
-                                               class="custom-control-input">
-                                        <label class="custom-control-label" for="questionFalseId"></label>
+                                </div>
+                                <div class="col-sm-5 offset-sm-2 col-md-6 offset-md-0">
+                                    <div class="custom-file ">
+                                        <input type="file" class="custom-file-input" id="questionAudioId" lang="pl-Pl">
+                                        <label class="custom-file-label" for="questionAudioId"> <i
+                                                class="fa fa-volume-up"
+                                                aria-hidden="true"></i></label>
+                                        <div class="alert alert-danger mt-3 custom-alert" id="invalidAudioAlert"
+                                             style="display: none;">
+                                            Selected file is not a valid audio.
+                                        </div>
                                     </div>
-
-                                </th>
-                                <th>False</th>
-                            </tr>
-                            </tbody>
-                        </table>
-                        <hr>
-                        <div class="row">
-                            <div class="col-auto mr-auto">
-                                <div class="form-outline ">
-                                    <input type="number" class="form-control" id="baremId" lang="pl-Pl"
-                                           placeholder="Barem">
                                 </div>
                             </div>
-                            <div class="col-auto">
-                                <button type="submit" class="btn btn-outline-success" id="create_question_button">
-                                    Success
-                                </button>
+                            <hr>
+
+                            <div id="MathingQuestionTable" hidden="hidden">
+                                <div class="row">
+                                    <div class=" col-auto mr-auto font-weight-bold ">
+                                        Choices:
+                                    </div>
+                                    <div class="col-auto">
+                                        <button type="button" class="btn btn-outline-success" id="addMatchingId">
+                                            <i class="fa fa-plus" aria-hidden="true"></i>
+                                        </button>
+                                    </div>
+                                </div>
+
+                                <table class="table table-striped table-bordered mt-1">
+                                    <thead>
+                                    <tr>
+                                        <th scope="col">Item</th>
+                                        <th scope="col">Match</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody id="tbodyMatchingQ">
+                                    <tr class="q-option">
+                                        <td>
+
+                                            <div class="input-group">
+                                                <input type="text" class="form-control"
+                                                       aria-label="Text input with segmented dropdown button">
+                                            </div>
+
+                                        </td>
+                                        <td>
+                                            <div class="input-group">
+                                                <input type="text" class="form-control"
+                                                       aria-label="Text input with segmented dropdown button">
+                                                <div class="input-group-append">
+                                                    <button type="button" class="btn btn-outline-danger remove-option">
+                                                        <i
+                                                                class='fa fa-trash'></i></button>
+                                                </div>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <tr class="q-option">
+                                        <td>
+
+
+                                            <div class="input-group">
+                                                <input type="text" class="form-control"
+                                                       aria-label="Text input with segmented dropdown button">
+                                            </div>
+
+                                        </td>
+                                        <td>
+                                            <div class="input-group">
+                                                <input type="text" class="form-control"
+                                                       aria-label="Text input with segmented dropdown button">
+                                                <div class="input-group-append">
+                                                    <button type="button" class="btn btn-outline-danger  remove-option">
+                                                        <i
+                                                                class='fa fa-trash'></i></button>
+
+                                                </div>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+
                             </div>
-                        </div>
-                    </form>
+
+
+                            <div id="TrueFalseQuestionTable">
+                                <div class="font-weight-bold">Choices:</div>
+
+
+                                <table class="table table-striped table-bordered mt-1">
+                                    <thead>
+                                    <tr>
+                                        <th scope="col" style="width: 16.66%">Correct</th>
+                                        <th scope="col">Choice</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <tr>
+                                        <th scope="row">
+                                            <div class="custom-control custom-radio">
+                                                <input type="radio" id="questionTrueId" name="questionTrueFalse"
+                                                       class="custom-control-input">
+                                                <label class="custom-control-label" for="questionTrueId"></label>
+                                            </div>
+                                        </th>
+                                        <th>
+                                            True
+
+                                        </th>
+                                    </tr>
+                                    <tr>
+                                        <th scope="row">
+                                            <div class="custom-control custom-radio">
+                                                <input type="radio" id="questionFalseId" name="questionTrueFalse"
+                                                       class="custom-control-input">
+                                                <label class="custom-control-label" for="questionFalseId"></label>
+                                            </div>
+
+                                        </th>
+                                        <th>False</th>
+                                    </tr>
+                                    </tbody>
+                                </table>
+
+                                <div class="alert alert-danger custom-alert" id="invalidTFAlert"
+                                     style="display: none;">
+                                    please choose True or False
+                                </div>
+                            </div>
+
+                            <div id="multiQuestionTable" hidden="hidden">
+                                <div class="row">
+                                    <div class=" col-auto mr-auto font-weight-bold ">
+                                        Choices:
+                                    </div>
+                                    <div class="col-auto">
+                                        <button type="button" class="btn btn-outline-success" id="addOptionId">
+                                            <i class="fa fa-plus" aria-hidden="true"></i>
+                                        </button>
+                                    </div>
+                                </div>
+
+                                <table class="table table-striped table-bordered mt-1">
+                                    <thead>
+                                    <tr>
+                                        <th scope="col" style="width: 16.66%">Correct</th>
+                                        <th scope="col">multipleEE</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody id="tbodyMultiQ">
+                                    <tr class="q-option">
+                                        <th scope="row">
+                                            <div class="custom-control custom-radio">
+                                                <input type="radio" id="questionTrueId2" name="questionTrueFalse"
+                                                       class="custom-control-input">
+                                                <label class="custom-control-label" for="questionTrueId2"></label>
+                                            </div>
+                                        </th>
+                                        <td>
+                                            <div class="input-group">
+                                                <input type="text" class="form-control"
+                                                       aria-label="Text input with segmented dropdown button">
+                                                <div class="input-group-append">
+                                                    <button type="button" class="btn btn-outline-danger remove-option">
+                                                        <i
+                                                                class='fa fa-trash'></i></button>
+                                                </div>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <tr class="q-option">
+                                        <th scope="row">
+                                            <div class="custom-control custom-radio">
+                                                <input type="radio" id="questionFalseId3" name="questionTrueFalse"
+                                                       class="custom-control-input">
+                                                <label class="custom-control-label" for="questionFalseId3"></label>
+                                            </div>
+
+                                        </th>
+                                        <td>
+                                            <div class="input-group">
+                                                <input type="text" class="form-control"
+                                                       aria-label="Text input with segmented dropdown button">
+                                                <div class="input-group-append">
+                                                    <button type="button" class="btn btn-outline-danger  remove-option">
+                                                        <i
+                                                                class='fa fa-trash'></i></button>
+
+                                                </div>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+
+                            </div>
+
+
+                            <hr>
+                            <div class="row">
+                                <div class="col-auto mr-auto">
+                                    <div class="form-outline ">
+                                        <input type="number" class="form-control" id="baremId" lang="pl-Pl"
+                                               placeholder="Barem">
+                                    </div>
+                                </div>
+                                <div class="col-auto">
+                                    <button type="submit" class="btn btn-outline-success" id="create_question_button">
+                                        Success
+                                    </button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
                 </div>
             </div>
-        </div>
-        <!--RIGHT BAR-->
-        <div class="right-bar d-none d-lg-block col-lg-3 bd-toc   border-secondary">
-            Question Group Options
-            <div class=" border-secondary border-bottom mt-2 mb-2"></div>
-            <div class="form-check">
-                <input class="form-check-input" type="radio" name="exampleRadios" id="exampleRadios1"
-                       value="option1" checked>
-                <label class="form-check-label" for="exampleRadios1">
-                    <small class="text-muted">include all question from the group</small>
-                </label>
-            </div>
-            <div class="form-check">
-                <input class="form-check-input" type="radio" name="exampleRadios" id="exampleRadios2"
-                       value="option2">
-                <label class="form-check-label" for="exampleRadios2">
-                    <small class="text-muted">select random questions</small>
-                    <select class="form-select form-select-sm" aria-label=".form-select-sm example">
-                        <option selected>1</option>
-                        <option value="1">One</option>
-                        <option value="2">Two</option>
-                        <option value="3">Three</option>
-                    </select>
+            <!--RIGHT BAR-->
+            <div class="right-bar d-none d-lg-block col-lg-3 bd-toc   border-secondary">
+                Question Group Options
+                <div class=" border-secondary border-bottom mt-2 mb-2"></div>
+                <div class="form-check">
+                    <input class="form-check-input" type="radio" name="exampleRadios" id="exampleRadios1"
+                           value="option1" checked>
+                    <label class="form-check-label" for="exampleRadios1">
+                        <small class="text-muted">include all question from the group</small>
+                    </label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="radio" name="exampleRadios" id="exampleRadios2"
+                           value="option2">
+                    <label class="form-check-label" for="exampleRadios2">
+                        <small class="text-muted">select random questions</small>
+                        <select class="form-select form-select-sm" aria-label=".form-select-sm example">
+                            <option selected>1</option>
+                            <option value="1">One</option>
+                            <option value="2">Two</option>
+                            <option value="3">Three</option>
+                        </select>
 
-                </label>
-            </div>
-            <div class="form-check">
-                <input class="form-check-input" type="radio" name="exampleRadios" id="exampleRadios3"
-                       value="option3" disabled>
-                <label class="form-check-label" for="exampleRadios3">
-                    <small class="text-muted">Do not use question of group</small>
+                    </label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="radio" name="exampleRadios" id="exampleRadios3"
+                           value="option3" disabled>
+                    <label class="form-check-label" for="exampleRadios3">
+                        <small class="text-muted">Do not use question of group</small>
 
-                </label>
-            </div>
-            <hr class="mt-3">
-            <div class="text-center " hidden="hidden" id="imageHandler">
+                    </label>
+                </div>
+                <hr class="mt-3">
+                <div class="text-center " hidden="hidden" id="imageHandler">
 
-                <img src="#" class="img-thumbnail" id="showImageId">
-                <div class="mt-3 mr-1 ">
-                    <a id="deleteImageId" class="btn btn-light btn-sm  btn-outline-secondary " role="button"
-                       aria-disabled="true">
-                        <i class='fa fa-trash'></i> Delete
-                    </a></div>
-            </div>
-
-            <!-- Content -->
-            <div class="container d-flex justify-content-center my-4 mb-5">
-
-                <div id="audioHidden" hidden="hidden" class="text-center">
-                    <div id="audioQuestionBase">
-
-                    </div>
+                    <img src="#" class="img-thumbnail" id="showImageId">
                     <div class="mt-3 mr-1 ">
-                        <a id="deleteAudioId" class="btn btn-light btn-sm  btn-outline-secondary " role="button"
-                           aria-disabled="true">
-                            <i class='fa fa-trash'></i> Delete
-                        </a>
+                        <button type="button" id="deleteImageId" class="btn    btn-outline-danger " role="button"
+                                aria-disabled="true">
+                            <i class='fa fa-trash'></i>
+                        </button>
+                    </div>
+
+                </div>
+
+                <!-- Content -->
+                <div class="container d-flex justify-content-center my-4 mb-5">
+
+                    <div id="audioHidden" hidden="hidden" class="text-center">
+                        <div id="audioQuestionBase">
+
+                        </div>
+                        <div class="mt-3 mr-1 ">
+                            <button type="button" id="deleteAudioId" class="btn  btn-outline-danger ">
+                                <i class='fa fa-trash'></i>
+                            </button>
+                        </div>
                     </div>
                 </div>
+
             </div>
 
         </div>
 
     </div>
 
-</div>
-
 {% endblock body_content %}
+
+
+{% block javascripts %}
+
+    <script>
+        var questionGroupsData = JSON.parse('{{ questionGroupsData|safe }}');
+    </script>
+    <script src="{% static 'js/builder.js' %}"></script>
+{% endblock javascripts %}
+

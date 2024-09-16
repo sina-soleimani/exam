@@ -1,12 +1,31 @@
 body {
     font-family: 'Open Sans', sans-serif;
 }
-.builder-color{
+
+.card {
+    border: 1px solid #ddd;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.card-body {
+    padding: 20px; /* Adjust as needed */
+
+}
+
+
+.q_selected {
+    border: 3px dashed transparent; /* Set the initial border to transparent */
+    background-clip: padding-box; /* Ensure the background doesn't extend into the border area */
+    border-image: linear-gradient(45deg, #3498db, #8e44ad); /* Gradient border */
+    border-image-slice: 1; /* Slice the gradient border */
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+}
+.builder-color {
     background: #F5F5F5;
 
 }
 
-.taker-color{
+.taker-color {
     background: #DCDCDC;
 
 }
@@ -15,9 +34,6 @@ body {
     min-height: 100vh;
 }
 
-.full_height {
-    min-height: 100vh;
-}
 
 .flex-fill {
     flex: 1 1 auto;
@@ -27,60 +43,97 @@ body {
     background-color: #DCDCDC;
 }
 
-.float_list {
-    float: left;
-    margin: 0 20px;
-}
+
 .menu-box {
-  margin: 10px;
-  padding: 10px;
+    margin: 10px;
+    padding: 10px;
 }
+
 .menu-box ul {
-  margin: 0;
-  padding: 0;
-  list-style: none;
+    margin: 0;
+    padding: 0;
+    list-style: none;
 }
+
 .menu-box ul.menu-list li {
-  display: block;
-  margin-bottom: 5px;
-  border: 1px solid #eee;
-  background: darkgray;
+    display: block;
+    margin-bottom: 5px;
+    /*border: 1px solid #eee;*/
+    background:#888888;
 }
+
 .menu-box ul.menu-list > li a {
-  background: #DFDFDF;
-  display: block;
-  font-size: 14px;
-  color: black;
-  text-transform: uppercase;
-  text-decoration: none;
-  padding: 10px;
+    background: #DFDFDF;
+    display: block;
+    font-size: 14px;
+    color: black;
+    text-transform: uppercase;
+    text-decoration: none;
+    padding: 10px;
 }
+
 .menu-box ul.menu-list > li a:hover {
-  cursor: move;
+    cursor: move;
 }
+
 .menu-box ul.menu-list ul {
-  margin-left: 20px;
-  margin-top: 5px;
+    margin-left: 20px;
+    margin-top: 5px;
 }
+
 .menu-box ul.menu-list ul li a {
-  color: black;
+    color: black;
 }
 
 li a.nest {
- width: 100%;
- display: block;
- margin: 0;
- padding: 1%;
- color: white;
- cursor: pointer;
+    width: 100%;
+    display: block;
+    margin: 0;
+    padding: 1%;
+    color: white;
+    cursor: pointer;
+}
+
+li a.sub-nest {
+    width: 10%;
+    display: block;
+    margin: 0;
+    padding: 1%;
+    color: white;
+    cursor: pointer;
 }
 
 ul.accordion .inner {
- padding-left: 1em;
- overflow: hidden;
- display: none;
- list-style: none;
+    padding-left: 1em;
+    overflow: hidden;
+    display: none;
+    list-style: none;
 }
-.tag-btn{
+
+.tag-btn {
     background: #DFDFDF;
+}
+
+.custom-alert {
+    padding: 0.5rem 1rem; /* Adjust padding as needed */
+    font-size: 0.875rem; /* Adjust font size as needed */
+}
+.btn {
+    font-weight: bold;
+    border-radius: 5px; /* Rounded corners */
+    /* Add more button styling as needed */
+}
+
+.custom-file-label::after {
+    content: "Upload"; /* Adjust label text as needed */
+}
+/*.alert {*/
+/*    margin-top: 10px; !* Adjust spacing *!*/
+/*    border-radius: 5px; !* Rounded corners *!*/
+/*}*/
+
+hr {
+    border: none;
+    border-top: 3px solid #888; /* Adjust the color and thickness as needed */
+    margin: 20px 0; /* Adjust spacing */
 }
