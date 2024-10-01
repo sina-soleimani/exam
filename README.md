@@ -78,7 +78,24 @@ docker save -o python.tar exam-web
 <h1 align="center">Contributing</h1>
 
 
+<h2 align="center">Login Page</h2>
+
 ![Screenshot 2024-10-01 181942](https://github.com/user-attachments/assets/0149f330-b4ff-4fd3-80ea-598c48e62ecb)
+
+
+
+<h2 align="center">Question Bank</h2>
+![Screenshot 2024-10-01 183018](https://github.com/user-attachments/assets/69d8efd5-e993-4b1a-9481-c1f49238bdc2)
+
+
+<h2 align="center">ٍExam Session</h2>
+![Screenshot 2024-10-01 184656](https://github.com/user-attachments/assets/d88aad76-d183-4e9f-8bdc-cc3fd0f99aac)
+
+
+<h2 align="center">Reporting</h2>
+![Screenshot 2024-10-01 183732](https://github.com/user-attachments/assets/aa5fd5b4-1eb5-47db-abf6-bf735463881c)
+
+
 
 
 
