@@ -2,6 +2,9 @@
 
 In this program, every effort has been made to design and implement a program that meets all the needs of the electronic exam day. The site admin can easily manage all issues, such as reviewing and managing classes, managing system students, managing students in each class, managing and designing exams, reviewing exam results, and reporting some of the admin's capabilities. On the other hand, teachers can also use this system for ease in designing questions, designing exams, and obtaining exam results. As mentioned, this system is very suitable for saving teachers' time. In such a way that even with a few clicks in the system, questions and exams can be designed, and by simply clicking once, all exam results can be viewed. Students can also take their exams in a suitable environment. A list of questions, remaining exam time, and a beautiful and suitable environment for the ease and tranquility of students during the exam have been provided. 
 
+
+<h1 align="center">Instalation</h1>
+
 <h3 align="center">python/django developer</h3>
 
 <p align="left"> <a href="https://github.com/ryo-ma/github-profile-trophy"><img src="https://github-profile-trophy.vercel.app/?username=sina-soleimani" alt="sina-soleimani" /></a> </p>
